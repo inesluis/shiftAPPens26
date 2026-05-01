@@ -1,0 +1,448 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+#app{background:#0E0D0B;width:100%;height:700px;display:flex;flex-direction:column;font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,sans-serif);color:#F0EDE6;border-radius:16px;overflow:hidden;}
+.sbar{height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:11px;color:#4A4845;flex-shrink:0;}
+.screen{display:none;flex:1;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
+.scroller{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 16px 20px;}
+.scroller::-webkit-scrollbar{width:0;}
+.shdr{padding:6px 16px 10px;flex-shrink:0;}
+.stitle{font-size:21px;font-weight:600;color:#F0EDE6;}
+.ssub{font-size:12px;color:#7A7874;margin-top:2px;}
+.tabbar{height:58px;background:#110F0D;border-top:0.5px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-around;flex-shrink:0;}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 14px;transition:opacity .18s;}
+.tab svg{width:20px;height:20px;}
+.tab span{font-size:10px;}
+.tab.on{color:#E8A820;opacity:1;}
+.tab:not(.on){color:#5A5855;opacity:0.6;}
+.card{background:#1A1815;border:0.5px solid rgba(255,255,255,0.06);border-radius:13px;padding:14px;}
+.slabel{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#4A4845;margin-bottom:8px;}
+.divider{height:.5px;background:rgba(255,255,255,0.05);margin:12px 0;}
+.chip-row{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;}
+.chip-row::-webkit-scrollbar{display:none;}
+.chip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap;cursor:pointer;border:.5px solid rgba(255,255,255,0.09);color:#7A7874;background:transparent;transition:all .15s;}
+.chip.on{background:#E8A820;border-color:#E8A820;color:#1A1000;}
+.sbar-search{display:flex;align-items:center;background:#1A1815;border:.5px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px 12px;gap:8px;margin-bottom:14px;cursor:text;}
+.sbar-search svg{flex-shrink:0;width:15px;height:15px;color:#5A5855;}
+.sbar-search input{background:none;border:none;outline:none;color:#F0EDE6;font-size:13px;flex:1;font-family:inherit;}
+.sbar-search input::placeholder{color:#4A4845;}
+.tag{display:inline-flex;align-items:center;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:500;}
+.tg{background:rgba(72,165,90,.14);color:#58C47A;}
+.ta{background:rgba(220,152,12,.13);color:#DDAA30;}
+.tb{background:rgba(74,138,220,.13);color:#6AAAE8;}
+.tc{background:rgba(210,85,65,.13);color:#EE7060;}
+.pbar{height:5px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;margin-top:5px;}
+.pfill{height:100%;border-radius:3px;}
+.apin{background:#1A1815;border:.5px solid rgba(255,255,255,0.09);border-radius:8px;padding:9px 11px;color:#F0EDE6;font-size:13px;font-family:inherit;outline:none;}
+.apin:focus{border-color:rgba(232,168,32,.4);}
+.btn1{background:#E8A820;color:#1A1000;border:none;border-radius:10px;padding:12px 18px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;width:100%;text-align:center;}
+.btn2{background:#1A1815;color:#F0EDE6;border:.5px solid rgba(255,255,255,0.09);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;width:100%;text-align:center;}
+.backbtn{display:flex;align-items:center;gap:5px;font-size:12px;color:#E8A820;cursor:pointer;margin-bottom:4px;}
+.mkgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:9px;}
+.mcard{background:#242018;border-radius:9px;padding:9px 7px;text-align:center;border:.5px solid transparent;}
+.mcard.cheap{border-color:rgba(72,165,90,.4);}
+.avatar{width:66px;height:66px;border-radius:50%;background:#3A2A10;border:.5px solid rgba(232,168,32,.3);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:600;color:#E8A820;}
+</style>
+
+<h2 class="sr-only">NutriCost app prototype — 5 interactive screens: Home, Recipes, Ingredient search, Tracking with budget chart, and Profile with macro goal sliders.</h2>
+
+<div style="padding:0;">
+<div id="app">
+
+<div class="sbar"><span>9:41</span><span style="letter-spacing:.06em;">● ▲ ■</span></div>
+
+<!-- HOME -->
+<div id="s-home" class="screen active">
+  <div class="shdr">
+    <div style="font-size:11px;color:#7A7874;margin-bottom:1px;">Good afternoon</div>
+    <div class="stitle">João</div>
+  </div>
+  <div class="scroller">
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <div><div style="font-size:10px;color:#7A7874;font-weight:600;letter-spacing:.07em;text-transform:uppercase;">Today</div><div style="font-size:22px;font-weight:600;margin-top:3px;">1,430 <span style="font-size:13px;color:#7A7874;">kcal</span></div></div>
+      <div style="text-align:right;"><div style="font-size:10px;color:#7A7874;font-weight:600;letter-spacing:.07em;text-transform:uppercase;">Spent</div><div style="font-size:22px;font-weight:600;margin-top:3px;color:#E8A820;">€4.60</div></div>
+    </div>
+    <div class="slabel">Compare Prices</div>
+    <div class="sbar-search" onclick="go('s-ingredient-search')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span style="font-size:13px;color:#4A4845;">Search ingredients…</span>
+    </div>
+    <div class="slabel">Quick Actions</div>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:14px;">
+      <div class="card" style="cursor:pointer;padding:15px 13px;" onclick="go('s-recipes')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8A820" stroke-width="1.8" style="margin-bottom:9px;"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <div style="font-size:13px;font-weight:500;">Browse Recipes</div><div style="font-size:11px;color:#7A7874;margin-top:2px;">Curated meals</div>
+      </div>
+      <div class="card" style="cursor:pointer;padding:15px 13px;" onclick="go('s-create')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#58C47A" stroke-width="1.8" style="margin-bottom:9px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <div style="font-size:13px;font-weight:500;">New Recipe</div><div style="font-size:11px;color:#7A7874;margin-top:2px;">Build your own</div>
+      </div>
+    </div>
+    <div class="slabel">Recent</div>
+    <div class="card" style="margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+      <div><div style="font-size:13px;font-weight:500;">Quinoa Power Bowl</div><div style="font-size:11px;color:#7A7874;margin-top:2px;">Lunch · 480 kcal</div><div style="display:flex;gap:5px;margin-top:7px;"><span class="tag tg">Vegan</span><span class="tag ta">€3.40</span></div></div>
+      <span style="color:#4A4845;font-size:18px;">›</span>
+    </div>
+    <div class="card" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+      <div><div style="font-size:13px;font-weight:500;">Greek Chicken Bowl</div><div style="font-size:11px;color:#7A7874;margin-top:2px;">Dinner · 640 kcal</div><div style="display:flex;gap:5px;margin-top:7px;"><span class="tag tb">High Protein</span><span class="tag ta">€4.80</span></div></div>
+      <span style="color:#4A4845;font-size:18px;">›</span>
+    </div>
+  </div>
+</div>
+
+<!-- RECIPES -->
+<div id="s-recipes" class="screen">
+  <div class="shdr"><div class="stitle">Recipes</div><div class="ssub">Curated meals for every goal</div></div>
+  <div class="scroller">
+    <div class="chip-row" id="recipe-chips">
+      <div class="chip on" onclick="rfilter(this)">All</div>
+      <div class="chip" onclick="rfilter(this)">Vegan</div>
+      <div class="chip" onclick="rfilter(this)">High Protein</div>
+      <div class="chip" onclick="rfilter(this)">Keto</div>
+      <div class="chip" onclick="rfilter(this)">Mediterranean</div>
+      <div class="chip" onclick="rfilter(this)">Low Carb</div>
+    </div>
+    <div id="rlist"></div>
+  </div>
+</div>
+
+<!-- INGREDIENT SEARCH -->
+<div id="s-ingredient-search" class="screen">
+  <div class="shdr">
+    <div class="backbtn" onclick="go('s-home')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back
+    </div>
+    <div class="stitle">Compare Prices</div>
+  </div>
+  <div class="scroller">
+    <div class="sbar-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="isearch" placeholder="e.g. Coconut milk, salmon, rice…" oninput="isearch(this.value)" autofocus>
+    </div>
+    <div id="iresults">
+      <div style="text-align:center;padding:50px 20px;color:#4A4845;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="margin:0 auto 14px;display:block;opacity:.5;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <div style="font-size:13px;">Search to compare prices<br>across Continente, Pingo Doce &amp; Lidl</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE RECIPE -->
+<div id="s-create" class="screen">
+  <div class="shdr">
+    <div class="backbtn" onclick="go('s-home')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back
+    </div>
+    <div class="stitle">New Recipe</div>
+  </div>
+  <div class="scroller">
+    <div style="margin-bottom:12px;"><div style="font-size:11px;color:#7A7874;margin-bottom:6px;">Recipe name</div><input type="text" class="apin" style="width:100%;" placeholder="e.g. My Protein Bowl" value="Salmon &amp; Rice Bowl"></div>
+    <div style="margin-bottom:12px;"><div style="font-size:11px;color:#7A7874;margin-bottom:6px;">Meal type</div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;" id="mealtypes">
+        <div class="chip" style="text-align:center;padding:9px;" onclick="selMeal(this)">Breakfast</div>
+        <div class="chip" style="text-align:center;padding:9px;" onclick="selMeal(this)">Lunch</div>
+        <div class="chip on" style="text-align:center;padding:9px;" onclick="selMeal(this)">Dinner</div>
+        <div class="chip" style="text-align:center;padding:9px;" onclick="selMeal(this)">Snack</div>
+      </div>
+    </div>
+    <div style="margin-bottom:12px;"><div style="font-size:11px;color:#7A7874;margin-bottom:6px;">Diet tags</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <div class="chip on" onclick="this.classList.toggle('on')" style="padding:5px 10px;">High Protein</div>
+        <div class="chip" onclick="this.classList.toggle('on')" style="padding:5px 10px;">Gluten Free</div>
+        <div class="chip" onclick="this.classList.toggle('on')" style="padding:5px 10px;">Low Carb</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="slabel">Ingredients</div>
+    <div class="card" style="margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div><div style="font-size:13px;font-weight:500;">Atlantic Salmon Fillet</div><div style="font-size:11px;color:#7A7874;margin-top:1px;">Continente · €6.49/kg</div></div>
+        <span class="tag tg" style="font-size:10px;">Cheapest</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:9px;">
+        <input type="number" class="apin" value="200" style="width:80px;padding:7px 9px;font-size:12px;">
+        <span style="font-size:12px;color:#7A7874;">g</span>
+        <span style="margin-left:auto;font-size:12px;font-weight:600;color:#E8A820;">€1.30</span>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div><div style="font-size:13px;font-weight:500;">Jasmine Rice</div><div style="font-size:11px;color:#7A7874;margin-top:1px;">Lidl · €1.09/kg</div></div>
+        <span class="tag tg" style="font-size:10px;">Cheapest</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:9px;">
+        <input type="number" class="apin" value="120" style="width:80px;padding:7px 9px;font-size:12px;">
+        <span style="font-size:12px;color:#7A7874;">g</span>
+        <span style="margin-left:auto;font-size:12px;font-weight:600;color:#E8A820;">€0.13</span>
+      </div>
+    </div>
+    <button class="btn2" style="margin-bottom:10px;" onclick="go('s-ingredient-search')">+ Add Ingredient</button>
+    <div class="divider"></div>
+    <div class="card" style="margin-bottom:12px;">
+      <div class="slabel">Estimated Nutrition</div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
+        <div><div style="font-size:11px;color:#7A7874;">Calories</div><div style="font-size:18px;font-weight:600;margin-top:2px;">580 <span style="font-size:11px;color:#7A7874;">kcal</span></div></div>
+        <div><div style="font-size:11px;color:#7A7874;">Total Cost</div><div style="font-size:18px;font-weight:600;margin-top:2px;color:#E8A820;">€1.43</div></div>
+        <div><div style="font-size:11px;color:#7A7874;">Protein</div><div style="font-size:16px;font-weight:500;margin-top:2px;color:#58C47A;">48g</div></div>
+        <div><div style="font-size:11px;color:#7A7874;">Carbs</div><div style="font-size:16px;font-weight:500;margin-top:2px;color:#6AAAE8;">95g</div></div>
+      </div>
+    </div>
+    <button class="btn1">Save Recipe</button>
+    <div style="height:12px;"></div>
+  </div>
+</div>
+
+<!-- TRACKING -->
+<div id="s-tracking" class="screen">
+  <div class="shdr"><div class="stitle">Today's Log</div><div class="ssub">Friday, 1 May 2026</div></div>
+  <div class="scroller">
+    <div class="card" style="margin-bottom:12px;">
+      <div class="slabel">Macros</div>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <svg width="78" height="78" viewBox="0 0 78 78">
+          <circle cx="39" cy="39" r="31" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
+          <circle cx="39" cy="39" r="31" fill="none" stroke="#E8A820" stroke-width="7" stroke-dasharray="194.8" stroke-dashoffset="68" stroke-linecap="round" transform="rotate(-90 39 39)"/>
+          <text x="39" y="36" text-anchor="middle" font-size="11" font-weight="600" fill="#F0EDE6">1,430</text>
+          <text x="39" y="49" text-anchor="middle" font-size="9" fill="#7A7874">/ 2200 kcal</text>
+        </svg>
+        <div style="flex:1;">
+          <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#58C47A;font-weight:500;">Protein</span><span>95 / 160g</span></div><div class="pbar"><div class="pfill" style="background:#58C47A;width:59%;"></div></div></div>
+          <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#6AAAE8;font-weight:500;">Carbs</span><span>142 / 220g</span></div><div class="pbar"><div class="pfill" style="background:#6AAAE8;width:65%;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:#EE7060;font-weight:500;">Fat</span><span>42 / 65g</span></div><div class="pbar"><div class="pfill" style="background:#EE7060;width:65%;"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slabel">Meals Logged</div>
+    <div class="card" style="margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:.5px solid rgba(255,255,255,.05);">
+        <div style="width:34px;height:34px;background:rgba(232,168,32,.12);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8A820" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div style="flex:1;"><div style="font-size:11px;color:#7A7874;font-weight:500;">Breakfast</div><div style="font-size:13px;font-weight:500;margin-top:1px;">Greek Yogurt &amp; Oats</div></div>
+        <div style="text-align:right;"><div style="font-size:12px;font-weight:500;">350 kcal</div><div style="font-size:11px;color:#E8A820;">€1.20</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding-top:10px;">
+        <div style="width:34px;height:34px;background:rgba(106,170,232,.1);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6AAAE8" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div style="flex:1;"><div style="font-size:11px;color:#7A7874;font-weight:500;">Lunch</div><div style="font-size:13px;font-weight:500;margin-top:1px;">Quinoa Power Bowl</div></div>
+        <div style="text-align:right;"><div style="font-size:12px;font-weight:500;">480 kcal</div><div style="font-size:11px;color:#E8A820;">€3.40</div></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:14px;">
+      <button class="btn2" style="padding:9px;font-size:12px;">+ Log Dinner</button>
+      <button class="btn2" style="padding:9px;font-size:12px;">+ Log Snack</button>
+    </div>
+
+    <div class="slabel">Budget</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:11px;">
+        <div><div style="font-size:11px;color:#7A7874;margin-bottom:3px;">Spent Today</div><div style="font-size:22px;font-weight:600;color:#E8A820;">€4.60</div></div>
+        <div style="text-align:right;"><div style="font-size:11px;color:#7A7874;margin-bottom:3px;">Daily Limit</div><div style="font-size:22px;font-weight:600;color:#4A4845;">€10.00</div></div>
+      </div>
+      <div class="pbar"><div class="pfill" style="background:#E8A820;width:46%;"></div></div>
+      <div style="font-size:11px;color:#7A7874;margin-top:5px;">€5.40 remaining today</div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div style="font-size:11px;color:#7A7874;font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px;">Weekly Spending</div>
+      <div style="display:flex;gap:12px;font-size:10px;color:#7A7874;margin-bottom:10px;flex-wrap:wrap;">
+        <span style="display:flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;background:#E8A820;border-radius:2px;display:inline-block;"></span>Breakfast</span>
+        <span style="display:flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;background:#6AAAE8;border-radius:2px;display:inline-block;"></span>Lunch</span>
+        <span style="display:flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;background:#58C47A;border-radius:2px;display:inline-block;"></span>Dinner</span>
+        <span style="display:flex;align-items:center;gap:3px;"><span style="width:9px;height:9px;background:#EE7060;border-radius:2px;display:inline-block;"></span>Snack</span>
+        <span style="display:flex;align-items:center;gap:3px;"><span style="width:16px;height:1px;border-top:2px dashed #E05850;display:inline-block;"></span>Limit</span>
+      </div>
+      <div style="position:relative;height:170px;"><canvas id="wchart" role="img" aria-label="Stacked bar chart of weekly food spending. Mon 8€, Tue 7.7€, Wed 10.8€ over limit, Thu 7.5€, Fri 4.6€ partial, weekend zero.">Weekly spend: Mon 8€, Tue 7.7€, Wed 10.8€, Thu 7.5€, Fri 4.6€.</canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div id="s-profile" class="screen">
+  <div class="shdr"><div class="stitle">Profile</div></div>
+  <div class="scroller">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+      <div class="avatar">JF</div>
+      <div>
+        <div style="font-size:17px;font-weight:600;">João Ferreira</div>
+        <div style="font-size:12px;color:#7A7874;margin-top:2px;">27 years · 78 kg · 182 cm</div>
+        <div style="margin-top:6px;"><span class="tag tb">Muscle Gain</span></div>
+      </div>
+    </div>
+
+    <div class="slabel">Body Info</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+        <div><div style="font-size:11px;color:#7A7874;">Age</div><div style="font-size:17px;font-weight:500;margin-top:2px;">27 <span style="font-size:11px;color:#7A7874;">yrs</span></div></div>
+        <div><div style="font-size:11px;color:#7A7874;">Weight</div><div style="font-size:17px;font-weight:500;margin-top:2px;">78 <span style="font-size:11px;color:#7A7874;">kg</span></div></div>
+        <div><div style="font-size:11px;color:#7A7874;">Height</div><div style="font-size:17px;font-weight:500;margin-top:2px;">182 <span style="font-size:11px;color:#7A7874;">cm</span></div></div>
+        <div><div style="font-size:11px;color:#7A7874;">BMI</div><div style="font-size:17px;font-weight:500;margin-top:2px;">23.5</div></div>
+      </div>
+    </div>
+
+    <div class="slabel">Weekly Budget</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div><div style="font-size:13px;font-weight:500;">Total Weekly</div><div style="font-size:11px;color:#7A7874;margin-top:1px;" id="dailylabel">Divides to €10/day</div></div>
+        <div style="font-size:22px;font-weight:600;color:#E8A820;" id="budgetval">€70</div>
+      </div>
+      <input type="range" min="20" max="200" value="70" step="5" style="width:100%;" oninput="updBudget(this.value)">
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:#4A4845;margin-top:3px;"><span>€20</span><span>€200</span></div>
+    </div>
+
+    <div class="slabel">Daily Macro Goals</div>
+    <div class="card" style="margin-bottom:14px;">
+      <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;"><span style="color:#E8A820;">Calories</span><span id="gcal" style="font-weight:500;">2,200 kcal</span></div><input type="range" min="1200" max="4000" value="2200" step="50" style="width:100%;" oninput="document.getElementById('gcal').textContent=Number(this.value).toLocaleString()+' kcal'"></div>
+      <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;"><span style="color:#58C47A;">Protein</span><span id="gpro" style="font-weight:500;">160g</span></div><input type="range" min="40" max="300" value="160" style="width:100%;" oninput="document.getElementById('gpro').textContent=this.value+'g'"></div>
+      <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;"><span style="color:#6AAAE8;">Carbs</span><span id="gcar" style="font-weight:500;">220g</span></div><input type="range" min="50" max="500" value="220" style="width:100%;" oninput="document.getElementById('gcar').textContent=this.value+'g'"></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;"><span style="color:#EE7060;">Fat</span><span id="gfat" style="font-weight:500;">65g</span></div><input type="range" min="20" max="200" value="65" style="width:100%;" oninput="document.getElementById('gfat').textContent=this.value+'g'"></div>
+    </div>
+    <button class="btn1">Save Profile</button>
+    <div style="height:12px;"></div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tabbar">
+  <div class="tab on" id="tab-home" onclick="tabGo('s-home','tab-home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9.5L12 3l9 6.5V21H3V9.5z"/></svg>
+    <span>Home</span>
+  </div>
+  <div class="tab" id="tab-recipes" onclick="tabGo('s-recipes','tab-recipes')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+    <span>Recipes</span>
+  </div>
+  <div class="tab" id="tab-tracking" onclick="tabGo('s-tracking','tab-tracking')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span>Track</span>
+  </div>
+  <div class="tab" id="tab-profile" onclick="tabGo('s-profile','tab-profile')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>Profile</span>
+  </div>
+</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const recipes=[
+  {name:'Quinoa Power Bowl',meal:'Lunch',kcal:480,p:22,c:65,f:12,cost:3.40,diet:['Vegan','High Protein']},
+  {name:'Greek Chicken Bowl',meal:'Dinner',kcal:640,p:52,c:45,f:18,cost:4.80,diet:['High Protein','Mediterranean']},
+  {name:'Avocado Toast',meal:'Breakfast',kcal:320,p:12,c:34,f:16,cost:2.10,diet:['Vegan','Low Carb']},
+  {name:'Salmon & Sweet Potato',meal:'Dinner',kcal:580,p:44,c:52,f:22,cost:5.60,diet:['High Protein','Keto']},
+  {name:'Overnight Oats',meal:'Breakfast',kcal:380,p:14,c:60,f:8,cost:1.20,diet:['Vegan']},
+  {name:'Egg & Veggie Scramble',meal:'Breakfast',kcal:290,p:20,c:8,f:18,cost:1.80,diet:['Keto','Low Carb']},
+  {name:'Lentil Soup',meal:'Lunch',kcal:360,p:18,c:58,f:5,cost:1.50,diet:['Vegan','Mediterranean']},
+  {name:'Tuna Rice Bowl',meal:'Lunch',kcal:430,p:38,c:48,f:7,cost:2.80,diet:['High Protein','Low Carb']},
+];
+const tagcls={Vegan:'tg','High Protein':'tb',Keto:'tc',Mediterranean:'ta','Low Carb':'tb'};
+
+function renderR(filter){
+  const list=document.getElementById('rlist');
+  const arr=filter==='All'?recipes:recipes.filter(r=>r.diet.includes(filter));
+  list.innerHTML=arr.map(r=>`
+    <div class="card" style="margin-bottom:9px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;">
+        <div><div style="font-size:13px;font-weight:500;">${r.name}</div><div style="font-size:11px;color:#7A7874;margin-top:1px;">${r.meal} · ${r.kcal} kcal</div></div>
+        <div style="font-size:15px;font-weight:600;color:#E8A820;">€${r.cost.toFixed(2)}</div>
+      </div>
+      <div style="display:flex;gap:10px;font-size:11px;color:#7A7874;margin-bottom:9px;">
+        <span>P <strong style="color:#58C47A;">${r.p}g</strong></span>
+        <span>C <strong style="color:#6AAAE8;">${r.c}g</strong></span>
+        <span>F <strong style="color:#EE7060;">${r.f}g</strong></span>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
+        ${r.diet.map(d=>`<span class="tag ${tagcls[d]||'tb'}">${d}</span>`).join('')}
+        <button class="btn2" style="margin-left:auto;padding:4px 11px;font-size:11px;width:auto;border-radius:7px;" onclick="event.stopPropagation()">Log Meal</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+const ingdb={
+  'coconut milk':[{brand:'Naturas Coconut Milk',c:1.49,p:1.65,l:1.39},{brand:'Blue Dragon Coconut Milk',c:2.19,p:1.99,l:null}],
+  'oat milk':[{brand:'Oatly Barista',c:2.79,p:2.99,l:null},{brand:'Continente Bio Oat',c:1.99,p:null,l:null},{brand:'Biotrends Oat Milk',c:null,p:null,l:1.69}],
+  'salmon':[{brand:'Atlantic Salmon Fillet (per kg)',c:14.99,p:13.50,l:12.99}],
+  'rice':[{brand:'Jasmine Rice (1kg)',c:1.49,p:1.39,l:1.09},{brand:'Basmati Rice (1kg)',c:1.89,p:1.99,l:1.49}],
+  'olive oil':[{brand:'Gallo Extra Virgin (750ml)',c:5.49,p:5.99,l:4.99},{brand:'Continente Bio Olive Oil',c:4.29,p:null,l:null}],
+  'eggs':[{brand:'Free Range Eggs (12)',c:2.99,p:2.79,l:2.49}],
+};
+
+function isearch(q){
+  const el=document.getElementById('iresults');
+  if(!q||q.length<2){el.innerHTML='<div style="text-align:center;padding:50px 20px;color:#4A4845;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="margin:0 auto 14px;display:block;opacity:.5;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><div style="font-size:13px;">Search to compare prices across stores</div></div>';return;}
+  const key=q.toLowerCase();
+  const found=Object.entries(ingdb).find(([k])=>k.includes(key)||key.includes(k.split(' ')[0]));
+  if(!found){el.innerHTML=`<div style="text-align:center;padding:50px 20px;color:#4A4845;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 12px;display:block;opacity:.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><div style="font-size:13px;">No results for "${q}"</div><div style="font-size:11px;margin-top:6px;color:#4A4845;">Try: coconut milk, oat milk, salmon, rice, eggs</div></div>`;return;}
+  const items=found[1];
+  el.innerHTML=items.map(it=>{
+    const ps=[it.c,it.p,it.l].filter(Boolean);
+    const mn=Math.min(...ps);
+    const cell=(v,name)=>v!=null?`<div class="mcard${v===mn?' cheap':''}" style="text-align:center;"><div style="font-size:9px;color:#7A7874;font-weight:600;margin-bottom:4px;">${name}</div><div style="font-size:14px;font-weight:600;color:${v===mn?'#58C47A':'#F0EDE6'};">€${v.toFixed(2)}</div>${v===mn?'<div style="font-size:9px;color:#58C47A;margin-top:2px;font-weight:600;">BEST</div>':''}</div>`:`<div class="mcard" style="text-align:center;"><div style="font-size:9px;color:#7A7874;font-weight:600;margin-bottom:4px;">${name}</div><div style="font-size:13px;color:#4A4845;">—</div></div>`;
+    return`<div class="card" style="margin-bottom:9px;"><div style="font-size:13px;font-weight:500;margin-bottom:10px;">${it.brand}</div><div class="mkgrid">${cell(it.c,'Continente')}${cell(it.p,'Pingo Doce')}${cell(it.l,'Lidl')}</div><button class="btn2" style="margin-top:9px;font-size:12px;padding:8px;">+ Add to Recipe</button></div>`;
+  }).join('');
+}
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+const tabMap={'s-home':'tab-home','s-recipes':'tab-recipes','s-tracking':'tab-tracking','s-profile':'tab-profile'};
+function tabGo(sid,tid){
+  go(sid);
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(tid).classList.add('on');
+  if(sid==='s-tracking'&&!window._chartDone) initChart();
+}
+
+function rfilter(el){
+  el.closest('.chip-row').querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  renderR(el.textContent.trim());
+}
+
+function selMeal(el){
+  const meals=['Breakfast','Lunch','Dinner','Snack'];
+  document.getElementById('mealtypes').querySelectorAll('.chip').forEach(c=>{if(meals.includes(c.textContent.trim()))c.classList.remove('on');});
+  el.classList.add('on');
+}
+
+function updBudget(v){
+  document.getElementById('budgetval').textContent='€'+v;
+  document.getElementById('dailylabel').textContent='Divides to €'+Math.round(v/7)+'/day';
+}
+
+function initChart(){
+  window._chartDone=true;
+  const ctx=document.getElementById('wchart').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets:[
+        {label:'Breakfast',data:[1.5,2.0,1.8,1.2,1.2,0,0],backgroundColor:'#E8A820',stack:'a'},
+        {label:'Lunch',data:[3.2,0,5.2,2.8,3.4,0,0],backgroundColor:'#6AAAE8',stack:'a'},
+        {label:'Dinner',data:[2.8,4.5,3.0,3.5,0,0,0],backgroundColor:'#58C47A',stack:'a'},
+        {label:'Snack',data:[0.5,1.2,0.8,0,0,0,0],backgroundColor:'#EE7060',stack:'a'},
+        {label:'Daily Limit',type:'line',data:[10,10,10,10,10,10,10],borderColor:'#E05850',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false,tension:0,order:0},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      scales:{
+        x:{stacked:true,grid:{display:false},ticks:{color:'#7A7874',font:{size:10}},border:{display:false}},
+        y:{stacked:true,max:14,grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#7A7874',font:{size:10},callback:v=>'€'+v},border:{display:false}}
+      },
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': €'+c.parsed.y.toFixed(2)}}}
+    }
+  });
+}
+
+renderR('All');
+</script>
