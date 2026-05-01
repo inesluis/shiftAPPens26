@@ -1,58 +1,80 @@
-# shiftAPPens26
+# shiftAPPens26 
 
-## MyMobileApp
+## 
 
-A React Native mobile app built with **TypeScript** and **Java** native modules.
+A React Native mobile app built with **TypeScript** and **Expo**, designed to help track nutritional costs and recipe management.
 
 ### Tech Stack
 
 | Layer         | Technology                  |
 |---------------|-----------------------------|
 | UI / Logic    | React Native + TypeScript   |
-| Navigation    | React Navigation v6         |
-| State         | Zustand                     |
-| HTTP          | Axios                       |
-| Native (Android) | Java                     |
-| CI            | GitHub Actions              |
+| Framework     | Expo                        |
+| Navigation    | React Navigation v7         |
+| Storage       | AsyncStorage                |
+| Icons         | Expo Vector Icons           |
 
 ### Project Structure
 
 ```
-MyMobileApp/
-├── src/
-│   ├── components/       # Reusable UI components
-│   ├── screens/          # Screen-level components
-│   ├── navigation/       # React Navigation setup
-│   ├── hooks/            # Custom React hooks
-│   ├── services/         # API client & service layer
-│   ├── store/            # Zustand global store
-│   ├── utils/            # Pure utility functions
-│   └── types/            # Shared TypeScript types
-├── android/
-│   └── app/src/main/java/com/mymobileapp/
-│       ├── MainActivity.java
-│       ├── MainApplication.java
-│       ├── modules/      # Custom native modules
-│       └── utils/        # Android utility classes
-├── assets/               # Images, fonts
-└── .github/workflows/    # CI pipelines
+NutriCost/
+├── App.tsx                        
+└── src/
+    ├── types/index.ts
+    ├── theme/index.ts
+    ├── data/
+    │   ├── recipes.ts
+    │   └── ingredients.ts
+    ├── utils/
+    │   └── ingredientPicker.ts
+    ├── context/
+    │   └── AppContext.tsx
+    ├── components/
+    │   ├── Card.tsx
+    │   ├── MacroRing.tsx
+    │   ├── MacroBar.tsx
+    │   ├── RecipeCard.tsx
+    │   └── WeeklyBudgetChart.tsx
+    ├── navigation/
+    │   ├── types.ts
+    │   ├── TabNavigator.tsx
+    │   └── RootNavigator.tsx
+    └── screens/
+        ├── HomeScreen.tsx
+        ├── RecipesScreen.tsx
+        ├── IngredientSearchScreen.tsx
+        ├── CreateRecipeScreen.tsx
+        ├── TrackingScreen.tsx
+        └── ProfileScreen.tsx
 ```
 
 ### Getting Started
 
+1. **Install dependencies:**
+   ```bash
+   cd NutriCost
+   npm install
+   ```
+
+2. **Start the app:**
+   ```bash
+   npm start
+    ```
+
+### Available Commands
+
+| Command              | Description                          |
+|----------------------|--------------------------------------|
+| `npm start`          | Start Expo development server        |
+| `npm run android`    | Build & run on Android device/emulator |
+
+### Running the App
+
+**For Android:**
 ```bash
-yarn install
-yarn android   # Run on Android
-yarn ios       # Run on iOS
+cd NutriCost
+npm install
+npm run android
 ```
 
-### Available Scripts
 
-| Command          | Description                  |
-|------------------|------------------------------|
-| `yarn start`     | Start Metro bundler          |
-| `yarn android`   | Build & run on Android       |
-| `yarn ios`       | Build & run on iOS           |
-| `yarn lint`      | Lint TypeScript files        |
-| `yarn type-check`| TypeScript compiler check    |
-| `yarn test`      | Run Jest test suite          |
