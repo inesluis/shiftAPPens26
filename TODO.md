@@ -4,7 +4,7 @@ This document outlines suggested improvements for the NutriCost mobile applicati
 
 ## Home
 
-- [ ] "Good Evening @User"
+- [x] "Good Evening @User"
 
 ### Compare Prices
 - [ ] It shows the lowest price in each supermarket, it should show possible different brands in each supermarket

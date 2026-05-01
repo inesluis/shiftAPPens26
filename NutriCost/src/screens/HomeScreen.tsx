@@ -9,7 +9,7 @@ import { C, R, MEAL_COLOR } from '../theme';
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   const insets = useSafeAreaInsets();
-  const { getTodayLogs } = useApp();
+  const { getTodayLogs, state } = useApp();
   const todayLogs = getTodayLogs();
 
   const totalCal  = todayLogs.reduce((a, l) => a + l.macros.calories, 0);
@@ -27,7 +27,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       <StatusBar barStyle="light-content" />
       <View style={s.hdr}>
         <Text style={s.greeting}>{greeting()}</Text>
-        <Text style={s.name}>NutriCost</Text>
+        <Text style={s.name}>{state.profile.name}</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={s.scroll}>
