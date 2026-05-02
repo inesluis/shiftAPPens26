@@ -13,13 +13,13 @@ export type RootStackParamList = {
 };
 
 export type TabParamList = {
-  Home: undefined;
-  Recipes: undefined;
-  Tracking: undefined;
-  Profile: undefined;
+  Menu: undefined;
+  Receitas: undefined;
+  Registo: undefined;
+  Perfil: undefined;
 };
 
 export type HomeScreenProps = CompositeScreenProps<
-  BottomTabScreenProps<TabParamList, 'Home'>,
+  BottomTabScreenProps<TabParamList, 'Menu'>,
   NativeStackScreenProps<RootStackParamList>
 >;
