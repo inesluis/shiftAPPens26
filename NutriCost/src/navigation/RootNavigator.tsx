@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
 import IngredientSearchScreen from '../screens/IngredientSearchScreen';
 import CreateRecipeScreen from '../screens/CreateRecipeScreen';
+import RecipeDetailScreen from '../screens/RecipeDetailScreen';
 import { RootStackParamList } from './types';
 import { C } from '../theme';
 
@@ -14,6 +15,7 @@ export default function RootNavigator() {
       <Stack.Screen name="Tabs"             component={TabNavigator} />
       <Stack.Screen name="IngredientSearch" component={IngredientSearchScreen} options={{ presentation: 'modal' }} />
       <Stack.Screen name="CreateRecipe"     component={CreateRecipeScreen}     options={{ presentation: 'modal' }} />
+      <Stack.Screen name="RecipeDetail"     component={RecipeDetailScreen} />
     </Stack.Navigator>
   );
 }

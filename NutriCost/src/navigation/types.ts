@@ -6,6 +6,7 @@ export type RootStackParamList = {
   Tabs:             undefined;
   IngredientSearch: { mode?: 'search' | 'addToRecipe' };
   CreateRecipe:     undefined;
+  RecipeDetail:     { recipeId: string };
 };
 
 export type TabParamList = {

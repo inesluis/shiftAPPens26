@@ -12,13 +12,16 @@ This document outlines suggested improvements for the NutriCost mobile applicati
 
 ### Browse Recipes
 - [x] Improve the diet filter, in "All" half the tags are cut in half
-- [ ] Go inside the meal and see a new interface
+- [X] Go inside the meal and see a new interface
+    - [ ] Edit fields
+    - [ ] Save edits
+    - [ ] Change meal type
     - [ ] See the total by different supermarkets
 - [ ] Ability to define the type of recipe ["Breakfast", "Lunch", "Dinner", "Snack]
 
 ### New Recipe
-- [ ] Create Recipe + Create & Log Recipe
-- [ ] Instructions 
+- [x] Create Recipe + Create & Log Recipe
+- [x] Instructions 
 
 ## Tracking
 - [ ] In "Meals Logged", snack is always available to add a new one

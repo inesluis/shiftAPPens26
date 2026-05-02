@@ -34,6 +34,7 @@ export interface Recipe {
   macros: Macros;
   cost: number;
   ingredients: RecipeIngredient[];
+  instructions?: string;
   isCustom: boolean;
 }
 

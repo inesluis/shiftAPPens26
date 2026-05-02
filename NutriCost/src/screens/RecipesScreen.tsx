@@ -1,10 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
 import RecipeCard from '../components/RecipeCard';
 import { DietTag, MealLog } from '../types';
 import { C } from '../theme';
+import { RootStackParamList } from '../navigation/types';
 
 const FILTERS: (DietTag | 'All')[] = [
   'All', 'Vegan', 'High Protein', 'Keto', 'Mediterranean', 'Low Carb', 'Gluten Free',
@@ -13,6 +16,7 @@ const FILTERS: (DietTag | 'All')[] = [
 export default function RecipesScreen() {
   const insets = useSafeAreaInsets();
   const { state, dispatch, todayDate } = useApp();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [active, setActive] = useState<DietTag | 'All'>('All');
 
   const filtered = useMemo(
@@ -61,7 +65,12 @@ export default function RecipesScreen() {
 
       <ScrollView contentContainerStyle={s.list} showsVerticalScrollIndicator={false}>
         {filtered.map(r => (
-          <RecipeCard key={r.id} recipe={r} onLog={() => handleLog(r.id)} />
+          <RecipeCard
+            key={r.id}
+            recipe={r}
+            onLog={() => handleLog(r.id)}
+            onPress={() => navigation.navigate('RecipeDetail', { recipeId: r.id })}
+          />
         ))}
         <View style={{ height: 20 }} />
       </ScrollView>
