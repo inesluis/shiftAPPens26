@@ -1,50 +1,82 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
 import RecipeCard from '../components/RecipeCard';
-import { DietTag, MealLog } from '../types';
+import MealTypePicker from '../components/MealTypePicker';
+import { DietTag, MealLog, MealType } from '../types';
 import { C } from '../theme';
 import { RootStackParamList } from '../navigation/types';
 
-const FILTERS: (DietTag | 'All')[] = [
-  'All', 'Vegan', 'High Protein', 'Keto', 'Mediterranean', 'Low Carb', 'Gluten Free',
+const FILTERS: (DietTag | 'Todas')[] = [
+  'Todas', 'Vegan', 'Proteica', 'Keto', 'Mediterrânica', 'Low Carb', 'Sem Glúten',
 ];
 
 export default function RecipesScreen() {
   const insets = useSafeAreaInsets();
-  const { state, dispatch, todayDate } = useApp();
+  const { state, dispatch, todayDate, reloadRecipes } = useApp();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [active, setActive] = useState<DietTag | 'All'>('All');
+  const [active, setActive] = useState<DietTag | 'Todas'>('Todas');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const [pendingRecipeId, setPendingRecipeId] = useState<string | null>(null);
 
   const filtered = useMemo(
-    () => active === 'All' ? state.recipes : state.recipes.filter(r => r.dietTags.includes(active)),
+    () => active === 'Todas' ? state.recipes : state.recipes.filter(r => r.dietTags.includes(active)),
     [state.recipes, active],
   );
 
   const handleLog = (recipeId: string) => {
-    const recipe = state.recipes.find(r => r.id === recipeId);
+    setPendingRecipeId(recipeId);
+    setPickerVisible(true);
+  };
+
+  const handleMealSelect = (mealType: MealType) => {
+    const recipe = pendingRecipeId ? state.recipes.find(r => r.id === pendingRecipeId) : null;
     if (!recipe) return;
     const log: MealLog = {
-      id:          `log_${Date.now()}`,
-      date:        todayDate,
-      recipeId:    recipe.id,
-      recipeName:  recipe.name,
-      mealType:    recipe.mealType,
-      macros:      recipe.macros,
-      cost:        recipe.cost,
+      id:         `log_${Date.now()}`,
+      date:       todayDate,
+      recipeId:   recipe.id,
+      recipeName: recipe.name,
+      mealType,
+      macros:     recipe.macros,
+      cost:       recipe.cost,
     };
     dispatch({ type: 'ADD_MEAL_LOG', payload: log });
-    Alert.alert('Logged!', `${recipe.name} added to today's log.`);
+    setPickerVisible(false);
+    setPendingRecipeId(null);
+    Alert.alert('Registada!', `${recipe.name} adicionada ao registo de ${mealType}.`);
+  };
+
+  const handleRefresh = async () => {
+    if (isRefreshing) return;
+    try {
+      setIsRefreshing(true);
+      await reloadRecipes();
+    } catch {
+      Alert.alert('Erro', 'Não foi possível atualizar as receitas.');
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   return (
     <View style={[s.container, { paddingTop: insets.top }]}>
       <View style={s.hdr}>
-        <Text style={s.title}>Recipes</Text>
-        <Text style={s.sub}>Curated meals for every goal</Text>
+        <View style={s.hdrTop}>
+          <View>
+            <Text style={s.title}>Receitas</Text>
+            <Text style={s.sub}>Receitas adaptadas para cada objetivo</Text>
+          </View>
+          <TouchableOpacity style={s.refreshBtn} onPress={handleRefresh} disabled={isRefreshing}>
+            <Ionicons name="refresh" size={16} color={C.accent} />
+            <Text style={s.refreshTxt}>{isRefreshing ? 'Atualizando…' : 'Atualizar'}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView
@@ -74,6 +106,12 @@ export default function RecipesScreen() {
         ))}
         <View style={{ height: 20 }} />
       </ScrollView>
+
+      <MealTypePicker
+        visible={pickerVisible}
+        onSelect={handleMealSelect}
+        onClose={() => { setPickerVisible(false); setPendingRecipeId(null); }}
+      />
     </View>
   );
 }
@@ -81,8 +119,11 @@ export default function RecipesScreen() {
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: C.bg },
   hdr:       { paddingHorizontal: 16, paddingBottom: 10 },
+  hdrTop:    { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
   title:     { fontSize: 21, fontWeight: '600', color: C.text },
   sub:       { fontSize: 12, color: C.textSub, marginTop: 2 },
+  refreshBtn:{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 14, borderWidth: 0.5, borderColor: C.borderMed },
+  refreshTxt:{ fontSize: 12, color: C.accent, fontWeight: '600' },
   chipsScroll: { flexGrow: 0, flexShrink: 0 },
   chips:     { paddingHorizontal: 16, paddingBottom: 12, paddingRight: 24, flexDirection: 'row', alignItems: 'center' },
   chip:      { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20, borderWidth: 0.5, borderColor: C.borderMed, marginRight: 8, flexShrink: 0 },

@@ -17,9 +17,9 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
   const greeting = () => {
     const h = new Date().getHours();
-    if (h < 12) return 'Good morning';
-    if (h < 17) return 'Good afternoon';
-    return 'Good evening';
+    if (h < 12) return 'Bom dia';
+    if (h < 20) return 'Boa tarde';
+    return 'Boa noite';
   };
 
   return (
@@ -35,46 +35,46 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         <Card style={{ marginBottom: 14 }}>
           <View style={s.row}>
             <View>
-              <Text style={s.slabel}>Today</Text>
+              <Text style={s.slabel}>Hoje</Text>
               <Text style={s.bigNum}>{Math.round(totalCal)} <Text style={s.unit}>kcal</Text></Text>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
-              <Text style={s.slabel}>Spent</Text>
+              <Text style={s.slabel}>Gasto</Text>
               <Text style={[s.bigNum, { color: C.accent }]}>€{totalCost.toFixed(2)}</Text>
             </View>
           </View>
         </Card>
 
         {/* Price search */}
-        <Text style={s.sectionLabel}>Compare Prices</Text>
+        <Text style={s.sectionLabel}>Comparar Preços</Text>
         <TouchableOpacity
           style={s.searchBar}
           onPress={() => navigation.navigate('IngredientSearch', { mode: 'search' })}
           activeOpacity={0.8}
         >
           <Ionicons name="search-outline" size={15} color={C.textMuted} />
-          <Text style={s.searchPH}>Search ingredients…</Text>
+          <Text style={s.searchPH}>Procurar ingredientes…</Text>
         </TouchableOpacity>
 
         {/* Quick actions */}
-        <Text style={s.sectionLabel}>Quick Actions</Text>
+        <Text style={s.sectionLabel}>Ações Rápidas</Text>
         <View style={s.grid}>
-          <TouchableOpacity style={s.actionCard} onPress={() => navigation.navigate('Recipes')} activeOpacity={0.75}>
+          <TouchableOpacity style={s.actionCard} onPress={() => navigation.navigate('Receitas')} activeOpacity={0.75}>
             <Ionicons name="document-text-outline" size={22} color={C.accent} style={{ marginBottom: 9 }} />
-            <Text style={s.actionTitle}>Browse Recipes</Text>
-            <Text style={s.actionSub}>Curated meals</Text>
+            <Text style={s.actionTitle}>Ver Receitas</Text>
+            <Text style={s.actionSub}>Receitas selecionadas</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.actionCard} onPress={() => navigation.navigate('CreateRecipe')} activeOpacity={0.75}>
             <Ionicons name="add-circle-outline" size={22} color={C.protein} style={{ marginBottom: 9 }} />
-            <Text style={s.actionTitle}>New Recipe</Text>
-            <Text style={s.actionSub}>Build your own</Text>
+            <Text style={s.actionTitle}>Nova Receita</Text>
+            <Text style={s.actionSub}>Criar uma nova receita</Text>
           </TouchableOpacity>
         </View>
 
         {/* Today's meals */}
         {todayLogs.length > 0 && (
           <>
-            <Text style={s.sectionLabel}>Today's Meals</Text>
+            <Text style={s.sectionLabel}>Refeições de Hoje</Text>
             {todayLogs.map(log => (
               <Card key={log.id} style={{ marginBottom: 8 }}>
                 <View style={s.logRow}>

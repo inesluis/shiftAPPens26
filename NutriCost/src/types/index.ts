@@ -1,6 +1,6 @@
-export type DietTag = 'Vegan' | 'High Protein' | 'Keto' | 'Mediterranean' | 'Low Carb' | 'Gluten Free';
-export type MealType = 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack';
-export type Store = 'continente' | 'pingo_doce' | 'lidl';
+export type DietTag = 'Vegan' | 'Proteica' | 'Keto' | 'Mediterrânica' | 'Low Carb' | 'Sem Glúten';
+export type MealType = 'Pequeno-Almoço' | 'Almoço' | 'Jantar' | 'Snack';
+export type Store = 'continente' | 'pingo_doce';
 
 export interface Macros {
   calories: number;
@@ -19,11 +19,13 @@ export interface Ingredient {
 
 export interface RecipeIngredient {
   ingredientId: string;
+  productId?: string;
   name: string;
   brand: string;
   weightG: number;
   selectedStore: Store;
   pricePerKg: number;
+  macrosPer100g?: Macros;
 }
 
 export interface Recipe {

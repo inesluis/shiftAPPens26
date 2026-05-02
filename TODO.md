@@ -24,7 +24,7 @@ This document outlines suggested improvements for the NutriCost mobile applicati
 - [x] Instructions 
 
 ## Tracking
-- [ ] In "Meals Logged", snack is always available to add a new one
+- [x] In "Meals Logged", snack is always available to add a new one -> Removed buttons
 - [x] In the stacked bar chart
     - [x] When hovering in the bars the values show up
     - [x] The Y axis

@@ -10,6 +10,7 @@ import org.example.jakartapp.dto.RecipeResponse;
 import java.util.List;
 
 @ApplicationScoped
+//@Alternative
 public class CloudAiService implements AiService {
     private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     

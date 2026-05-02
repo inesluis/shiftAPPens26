@@ -18,11 +18,11 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
 
     const handleReset = async () => {
         if (!email.trim()) {
-            setError('Email is required.');
+            setError('O email é obrigatório.');
             return;
         }
         if (!isEmailValid(email)) {
-            setError('Enter a valid email.');
+            setError('Introduza um email válido.');
             return;
         }
 
@@ -44,8 +44,8 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
             <View style={s.hdr}>
-                <Text style={s.title}>Forgot Password</Text>
-                <Text style={s.sub}>We will send a reset link to your email</Text>
+                <Text style={s.title}>Esqueceu a palavra-passe?</Text>
+                <Text style={s.sub}>Enviaremos uma ligação para repor a sua palavra-passe</Text>
             </View>
 
             <View style={s.body}>
@@ -54,7 +54,7 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
                     style={[s.input, error && s.inputError]}
                     value={email}
                     onChangeText={handleEmailChange}
-                    placeholder="you@email.com"
+                    placeholder="utilizador@email.com"
                     placeholderTextColor={C.textMuted}
                     autoCapitalize="none"
                     keyboardType="email-address"
@@ -62,12 +62,12 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
                 {error && <Text style={s.errorText}>{error}</Text>}
 
                 <TouchableOpacity style={[s.primaryBtn, loading && s.primaryBtnDisabled]} onPress={handleReset} disabled={loading}>
-                    <Text style={s.primaryTxt}>{loading ? 'Sending...' : 'Send Reset Link'}</Text>
+                    <Text style={s.primaryTxt}>{loading ? 'A enviar...' : 'Enviar ligação para repor password.'}</Text>
                 </TouchableOpacity>
 
                 <View style={s.footerRow}>
                     <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                        <Text style={s.linkTxt}>Back to login</Text>
+                        <Text style={s.linkTxt}>Voltar ao login</Text>
                     </TouchableOpacity>
                 </View>
             </View>
