@@ -14,6 +14,7 @@ type Action =
   | { type: 'HYDRATE'; payload: Partial<Omit<State, 'isLoading'>> }
   | { type: 'SET_PROFILE'; payload: UserProfile }
   | { type: 'ADD_RECIPE'; payload: Recipe }
+  | { type: 'UPDATE_RECIPE'; payload: Recipe }
   | { type: 'DELETE_RECIPE'; payload: string }
   | { type: 'ADD_MEAL_LOG'; payload: MealLog }
   | { type: 'REMOVE_MEAL_LOG'; payload: string };
@@ -43,6 +44,11 @@ function reducer(state: State, action: Action): State {
       return { ...state, profile: action.payload };
     case 'ADD_RECIPE':
       return { ...state, recipes: [...state.recipes, action.payload] };
+    case 'UPDATE_RECIPE':
+      return {
+        ...state,
+        recipes: state.recipes.map(r => r.id === action.payload.id ? action.payload : r),
+      };
     case 'DELETE_RECIPE':
       return { ...state, recipes: state.recipes.filter(r => r.id !== action.payload) };
     case 'ADD_MEAL_LOG':
