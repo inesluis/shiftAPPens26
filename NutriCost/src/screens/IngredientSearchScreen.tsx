@@ -164,13 +164,20 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
           byIngredient[productId] = {
             id: productId,
             name: ingredientName,
+            productName: product.product_name ?? ingredientName,
             brand,
             prices: { [store]: pricePerKg },
             macrosPer100g,
           };
         });
 
-        const nextGroups = Object.values(grouped).map(productMap => Object.values(productMap));
+        const nextGroups = Object.values(grouped).map(productMap =>
+          Object.values(productMap).sort((a, b) => {
+            const priceA = cheapestPrice([a]) ?? Infinity;
+            const priceB = cheapestPrice([b]) ?? Infinity;
+            return priceA - priceB;
+          }),
+        );
         if (isMounted) setGroups(nextGroups);
       } catch {
         if (isMounted) setGroups([]);
@@ -264,9 +271,14 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
                           >
                             <Image source={STORE_META[store].logo} style={s.logo} />
 
-                            <Text style={s.storeName}>
-                              {item.brand}
-                            </Text>
+                            <View style={s.storeName}>
+                              <Text style={s.productNameRow} numberOfLines={1}>
+                                {item.productName}
+                              </Text>
+                              <Text style={s.brandRow} numberOfLines={1}>
+                                {item.brand}
+                              </Text>
+                            </View>
 
                             <View style={s.priceWrap}>
                               {isBest && (
@@ -343,7 +355,23 @@ const s = StyleSheet.create({
     resizeMode: 'contain',
   },
 
-  storeName: { flex: 1, color: C.text,},
+  storeName: { 
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+
+  productNameRow: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: C.text,
+    marginBottom: 2,
+  },
+
+  brandRow: {
+    fontSize: 11,
+    color: C.textMuted,
+  },
 
   priceWrap: { flexDirection: 'row', alignItems: 'center', gap: 8 },
 

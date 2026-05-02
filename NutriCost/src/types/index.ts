@@ -12,6 +12,7 @@ export interface Macros {
 export interface Ingredient {
   id: string;
   name: string;
+  productName?: string;
   brand: string;
   prices: Partial<Record<Store, number>>; // price per kg
   macrosPer100g: Macros;
