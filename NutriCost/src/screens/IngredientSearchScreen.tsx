@@ -52,7 +52,6 @@ function resolveStore(name: string): Store | null {
   const value = name.toLowerCase();
   if (value.includes('continente')) return 'continente';
   if (value.includes('pingo')) return 'pingo_doce';
-  if (value.includes('lidl')) return 'lidl';
   return null;
 }
 

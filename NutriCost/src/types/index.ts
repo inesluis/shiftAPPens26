@@ -19,6 +19,7 @@ export interface Ingredient {
 
 export interface RecipeIngredient {
   ingredientId: string;
+  productId?: string;
   name: string;
   brand: string;
   weightG: number;

@@ -11,7 +11,7 @@ import { C } from '../theme';
 import { RootStackParamList } from '../navigation/types';
 
 const FILTERS: (DietTag | 'All')[] = [
-  'All', 'Vegan', 'High Protein', 'Keto', 'Mediterranean', 'Low Carb', 'Gluten Free',
+  'All', 'Vegan', 'Proteica', 'Keto', 'Mediterrânica', 'Low Carb', 'Sem Glúten',
 ];
 
 export default function RecipesScreen() {

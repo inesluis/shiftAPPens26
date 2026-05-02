@@ -27,4 +27,7 @@ export const MEAL_COLOR: Record<string, string> = {
   Lunch:     C.lunch,
   Dinner:    C.dinner,
   Snack:     C.snack,
+  'Pequeno-Almoço': C.breakfast,
+  'Almoço':         C.lunch,
+  'Jantar':         C.dinner,
 };

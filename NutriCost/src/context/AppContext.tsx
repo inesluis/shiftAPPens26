@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DietTag, MealLog, MealType, Recipe, UserProfile } from '../types';
+import { DietTag, MealLog, MealType, Recipe, Store, UserProfile } from '../types';
 import { supabase } from '../supabase';
 
 interface State {
@@ -82,25 +82,33 @@ const RECIPE_ID_PREFIX = {
 
 const DIET_TAG_MAP: Record<string, DietTag> = {
   vegan: 'Vegan',
-  high_protein: 'High Protein',
+  high_protein: 'Proteica',
+  proteica: 'Proteica',
   keto: 'Keto',
-  mediterranean: 'Mediterranean',
+  mediterranean: 'Mediterrânica',
+  mediterranica: 'Mediterrânica',
   low_carb: 'Low Carb',
-  gluten_free: 'Gluten Free',
+  gluten_free: 'Sem Glúten',
+  sem_gluten: 'Sem Glúten',
 };
 
 function normalizeMealType(value?: string | null): MealType {
-  const v = (value ?? '').toLowerCase();
-  if (v === 'breakfast') return 'Breakfast';
-  if (v === 'lunch') return 'Lunch';
-  if (v === 'dinner') return 'Dinner';
+  const raw = (value ?? '').toLowerCase();
+  const v = raw.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (v === 'breakfast' || v === 'pequeno-almoco') return 'Pequeno-Almoço';
+  if (v === 'lunch' || v === 'almoco') return 'Almoço';
+  if (v === 'dinner' || v === 'jantar') return 'Jantar';
   if (v === 'snack') return 'Snack';
-  return 'Lunch';
+  return 'Almoço';
 }
 
 function normalizeDietTags(value?: string | null): DietTag[] {
   if (!value) return [];
-  const key = value.toLowerCase().replace(/\s+/g, '_');
+  const key = value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '_');
   const mapped = DIET_TAG_MAP[key];
   return mapped ? [mapped] : [];
 }
@@ -118,8 +126,122 @@ function parseUserRecipeId(id: string) {
   return null;
 }
 
+function resolveStore(name: string) {
+  const value = name.toLowerCase();
+  if (value.includes('continente')) return 'continente';
+  if (value.includes('pingo')) return 'pingo_doce';
+  return null;
+}
+
+function toPricePerKg(price?: number | null, pricePerUnit?: number | null, weight?: number | null) {
+  if (pricePerUnit && pricePerUnit > 0) return pricePerUnit;
+  if (price && weight && weight > 0) return (price / weight) * 1000;
+  return null;
+}
+
+function parseQuantityToGrams(value?: string | null): number {
+  if (!value) return 100;
+  const num = parseFloat(value.replace(',', '.').match(/[0-9.]+/)?.[0] ?? '');
+  if (!Number.isFinite(num)) return 100;
+  const lower = value.toLowerCase();
+  if (lower.includes('kg')) return num * 1000;
+  if (lower.includes('g')) return num;
+  if (lower.includes('ml')) return num;
+  return num;
+}
+
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const computeCuratedRecipeCosts = async (recipeIds: number[]) => {
+    if (!recipeIds.length) return new Map<number, number>();
+
+    const { data: recipeIngredients, error: recipeIngError } = await supabase
+      .from('fact_recipeingredient')
+      .select('recipe_id, ingredient_id, ingredient_quantity')
+      .in('recipe_id', recipeIds);
+
+    if (recipeIngError || !recipeIngredients?.length) return new Map<number, number>();
+
+    const ingredientIds = Array.from(new Set(recipeIngredients.map(r => r.ingredient_id)));
+    const { data: priceRows, error: priceError } = await supabase
+      .from('fact_productprice')
+      .select('ingredient_id, price, price_per_unit, product:dim_product(weight), supermarket:dim_supermarket(supermarket_name)')
+      .in('ingredient_id', ingredientIds);
+
+    if (priceError || !priceRows) return new Map<number, number>();
+
+    const bestPriceByIngredientStore = new Map<string, number>();
+
+    (priceRows as Array<{ ingredient_id: number; price: number | null; price_per_unit: number | null; product: { weight: number | null } | { weight: number | null }[] | null; supermarket: { supermarket_name: string | null } | { supermarket_name: string | null }[] | null; }>).forEach(row => {
+      const product = Array.isArray(row.product) ? row.product[0] : row.product;
+      const supermarket = Array.isArray(row.supermarket) ? row.supermarket[0] : row.supermarket;
+      if (!product || !supermarket) return;
+
+      const store = resolveStore(supermarket.supermarket_name ?? '');
+      if (!store) return;
+
+      const pricePerKg = toPricePerKg(row.price, row.price_per_unit, product.weight);
+      if (pricePerKg == null) return;
+
+      const key = `${row.ingredient_id}:${store}`;
+      const existing = bestPriceByIngredientStore.get(key);
+      if (existing == null || pricePerKg < existing) {
+        bestPriceByIngredientStore.set(key, pricePerKg);
+      }
+    });
+
+    const totalsByRecipe = new Map<number, { totals: Record<Store, number>; counts: Record<Store, number> }>();
+    const totalIngredientsByRecipe = new Map<number, number>();
+
+    recipeIngredients.forEach(ri => {
+      const weightG = parseQuantityToGrams(ri.ingredient_quantity);
+      const entry = totalsByRecipe.get(ri.recipe_id) ?? {
+        totals: { continente: 0, pingo_doce: 0 },
+        counts: { continente: 0, pingo_doce: 0 },
+      };
+
+      totalIngredientsByRecipe.set(ri.recipe_id, (totalIngredientsByRecipe.get(ri.recipe_id) ?? 0) + 1);
+
+      (['continente', 'pingo_doce'] as Store[]).forEach(store => {
+        const pricePerKg = bestPriceByIngredientStore.get(`${ri.ingredient_id}:${store}`);
+        if (pricePerKg == null) {
+          return;
+        }
+        entry.totals[store] = (entry.totals[store] ?? 0) + (pricePerKg / 1000) * weightG;
+        entry.counts[store] = (entry.counts[store] ?? 0) + 1;
+      });
+
+      totalsByRecipe.set(ri.recipe_id, entry);
+    });
+
+    const result = new Map<number, number>();
+    totalsByRecipe.forEach((entry, recipeId) => {
+      const totalIngredients = totalIngredientsByRecipe.get(recipeId) ?? 0;
+      const candidates = (Object.entries(entry.totals) as Array<[Store, number]>).map(([store, total]) => ({
+        store,
+        total,
+        count: entry.counts[store] ?? 0,
+      }));
+
+      const fullCoverage = candidates.filter(c => c.count === totalIngredients && totalIngredients > 0);
+      const shortlist = fullCoverage.length ? fullCoverage : candidates.filter(c => c.count > 0);
+      if (!shortlist.length) return;
+
+      const best = shortlist.reduce((acc, cur) => {
+        if (!acc) return cur;
+        if (cur.count !== acc.count) return cur.count > acc.count ? cur : acc;
+        return cur.total < acc.total ? cur : acc;
+      }, null as typeof shortlist[number] | null);
+
+      if (best) {
+        const rounded = Math.round(best.total * 100) / 100;
+        result.set(recipeId, rounded);
+      }
+    });
+
+    return result;
+  };
 
   const fetchSupabaseRecipes = async () => {
     const { data: authData, error: authError } = await supabase.auth.getUser();
@@ -140,10 +262,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (curatedRes.error) throw curatedRes.error;
     if (userRes.error) throw userRes.error;
 
+    const curatedCosts = await computeCuratedRecipeCosts((curatedRes.data ?? []).map(r => r.recipe_id));
+
     const curated = (curatedRes.data ?? []).map(r => ({
       id: toCuratedId(r.recipe_id),
       name: r.recipe_name ?? 'Recipe',
-      mealType: 'Lunch' as MealType,
+      mealType: 'Almoço' as MealType,
       dietTags: [],
       macros: {
         calories: Math.round(r.nutritional_value ?? 0),
@@ -151,7 +275,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         carbs: Math.round(r.carbs ?? 0),
         fat: Math.round(r.fat ?? 0),
       },
-      cost: 0,
+      cost: curatedCosts.get(r.recipe_id) ?? 0,
       ingredients: [],
       instructions: r.instructions ?? undefined,
       isCustom: false,
@@ -208,6 +332,22 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     if (error) throw error;
 
+    const productRows = recipe.ingredients
+      .map(ing => ({
+        user_recipe_id: data.user_recipe_id,
+        product_id: ing.productId ?? ing.ingredientId,
+        quantity_used: ing.weightG,
+        quantity_unit: 'g',
+      }))
+      .filter(row => row.product_id);
+
+    if (productRows.length) {
+      const { error: productError } = await supabase
+        .from('fact_user_recipe_product')
+        .insert(productRows);
+      if (productError) throw productError;
+    }
+
     const saved: Recipe = {
       id: toUserId(data.user_recipe_id),
       name: data.recipe_name ?? recipe.name,
@@ -255,12 +395,41 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       .eq('user_recipe_id', userRecipeId);
 
     if (error) throw error;
+
+    const { error: clearError } = await supabase
+      .from('fact_user_recipe_product')
+      .delete()
+      .eq('user_recipe_id', userRecipeId);
+    if (clearError) throw clearError;
+
+    const productRows = recipe.ingredients
+      .map(ing => ({
+        user_recipe_id: userRecipeId,
+        product_id: ing.productId ?? ing.ingredientId,
+        quantity_used: ing.weightG,
+        quantity_unit: 'g',
+      }))
+      .filter(row => row.product_id);
+
+    if (productRows.length) {
+      const { error: productError } = await supabase
+        .from('fact_user_recipe_product')
+        .insert(productRows);
+      if (productError) throw productError;
+    }
+
     dispatch({ type: 'UPDATE_RECIPE', payload: recipe });
   };
 
   const deleteRecipe = async (recipeId: string) => {
     const userRecipeId = parseUserRecipeId(recipeId);
     if (!userRecipeId) return;
+
+    const { error: productError } = await supabase
+      .from('fact_user_recipe_product')
+      .delete()
+      .eq('user_recipe_id', userRecipeId);
+    if (productError) throw productError;
 
     const { error } = await supabase
       .from('fact_user_recipe')

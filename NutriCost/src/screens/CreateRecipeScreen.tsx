@@ -15,9 +15,9 @@ import { C, R } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CreateRecipe'>;
 
-const MEAL_TYPES: MealType[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
-const DIET_TAGS: DietTag[] = ['Vegan', 'High Protein', 'Keto', 'Mediterranean', 'Low Carb', 'Gluten Free'];
-const STORE_LABEL: Record<Store, string> = { continente: 'Continente', pingo_doce: 'Pingo Doce', lidl: 'Lidl' };
+const MEAL_TYPES: MealType[] = ['Pequeno-Almoço', 'Almoço', 'Jantar', 'Snack'];
+const DIET_TAGS: DietTag[] = ['Vegan', 'Proteica', 'Keto', 'Mediterrânica', 'Low Carb', 'Sem Glúten'];
+const STORE_LABEL: Record<Store, string> = { continente: 'Continente', pingo_doce: 'Pingo Doce' };
 
 interface Draft {
   ingredient: Ingredient;
@@ -49,7 +49,7 @@ export default function CreateRecipeScreen({ navigation }: Props) {
   const { addRecipe, dispatch, todayDate } = useApp();
 
   const [name, setName] = useState('');
-  const [mealType, setMealType] = useState<MealType>('Lunch');
+  const [mealType, setMealType] = useState<MealType>('Almoço');
   const [tags, setTags] = useState<DietTag[]>([]);
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [instructions, setInstructions] = useState('');
@@ -92,6 +92,7 @@ export default function CreateRecipeScreen({ navigation }: Props) {
       cost: parseFloat(totalCost.toFixed(2)),
       ingredients: drafts.map(d => ({
         ingredientId: d.ingredient.id,
+        productId: d.ingredient.id,
         name: d.ingredient.name,
         brand: d.ingredient.brand,
         weightG: d.weightG,
