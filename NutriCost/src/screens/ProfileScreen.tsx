@@ -14,6 +14,7 @@ import { useApp } from '../context/AppContext';
 import Card from '../components/Card';
 import { UserProfile } from '../types';
 import { C } from '../theme';
+import { supabase } from '../supabase';
 
 // ─── Factory defaults (never mutated) ───────────────────────────────────────
 const DEFAULT_PRESETS = {
@@ -194,6 +195,19 @@ export default function ProfileScreen() {
     Alert.alert('Saved!', 'Profile updated.');
   };
 
+  const handleLogout = () => {
+    Alert.alert('Log out', 'Do you want to log out?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Log out',
+        style: 'destructive',
+        onPress: async () => {
+          await supabase.auth.signOut();
+        },
+      },
+    ]);
+  };
+
   // ── Derived ───────────────────────────────────────────────────────────────
   const h = parseFloat(height);
   const w = parseFloat(weight);
@@ -325,6 +339,10 @@ export default function ProfileScreen() {
           <Text style={s.saveBtnTxt}>Save Profile</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity style={s.logoutBtn} onPress={handleLogout}>
+          <Text style={s.logoutTxt}>Log out</Text>
+        </TouchableOpacity>
+
         <View style={{ height: 30 }} />
       </ScrollView>
     </View>
@@ -379,4 +397,6 @@ const s = StyleSheet.create({
 
   saveBtn:    { backgroundColor: C.accent, paddingVertical: 14, borderRadius: 10, alignItems: 'center', marginTop: 10 },
   saveBtnTxt: { fontSize: 15, fontWeight: '600', color: '#000' },
+  logoutBtn:  { borderWidth: 0.5, borderColor: C.borderMed, paddingVertical: 12, borderRadius: 10, alignItems: 'center', marginTop: 10 },
+  logoutTxt:  { fontSize: 14, fontWeight: '600', color: C.textSub },
 });

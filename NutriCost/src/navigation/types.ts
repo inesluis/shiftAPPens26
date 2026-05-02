@@ -3,17 +3,20 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { CompositeScreenProps } from '@react-navigation/native';
 
 export type RootStackParamList = {
-  Tabs:             undefined;
+  Tabs: undefined;
+  Login: undefined;
+  Register: undefined;
+  ForgotPassword: undefined;
   IngredientSearch: { mode?: 'search' | 'addToRecipe' };
-  CreateRecipe:     undefined;
-  RecipeDetail:     { recipeId: string };
+  CreateRecipe: undefined;
+  RecipeDetail: { recipeId: string };
 };
 
 export type TabParamList = {
-  Home:     undefined;
-  Recipes:  undefined;
+  Home: undefined;
+  Recipes: undefined;
   Tracking: undefined;
-  Profile:  undefined;
+  Profile: undefined;
 };
 
 export type HomeScreenProps = CompositeScreenProps<

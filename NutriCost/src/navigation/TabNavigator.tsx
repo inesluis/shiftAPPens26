@@ -26,14 +26,15 @@ export default function TabNavigator() {
           backgroundColor: '#110F0D',
           borderTopColor: 'rgba(255,255,255,0.05)',
           borderTopWidth: 0.5,
-          height: 58,
-          paddingBottom: 8,
+          height: 76,
+          paddingBottom: 14,
+          paddingTop: 8,
         },
         tabBarActiveTintColor:   C.accent,
         tabBarInactiveTintColor: '#5A5855',
-        tabBarLabelStyle: { fontSize: 10 },
+        tabBarLabelStyle: { fontSize: 12 },
         tabBarIcon: ({ color }) => (
-          <Ionicons name={ICONS[route.name] as any} size={20} color={color} />
+          <Ionicons name={ICONS[route.name] as any} size={26} color={color} />
         ),
       })}
     >
