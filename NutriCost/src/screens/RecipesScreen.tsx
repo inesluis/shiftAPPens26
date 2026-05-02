@@ -12,25 +12,26 @@ import { DietTag, MealLog, MealType } from '../types';
 import { C } from '../theme';
 import { RootStackParamList } from '../navigation/types';
 
-const FILTERS: (DietTag | 'Todas')[] = [
-  'Todas', 'Vegan', 'Proteica', 'Keto', 'Mediterrânica', 'Low Carb', 'Sem Glúten',
+const FILTERS: (DietTag | 'Todas' | 'Criadas')[] = [
+  'Todas', 'Criadas', 'Vegan', 'Proteica', 'Keto', 'Mediterrânica', 'Low Carb', 'Sem Glúten',
 ];
 
 export default function RecipesScreen() {
   const insets = useSafeAreaInsets();
   const { state, dispatch, todayDate, reloadRecipes } = useApp();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [active, setActive] = useState<DietTag | 'Todas'>('Todas');
+  const [active, setActive] = useState<DietTag | 'Todas' | 'Criadas'>('Todas');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [pickerVisible, setPickerVisible] = useState(false);
   const [pendingRecipeId, setPendingRecipeId] = useState<string | null>(null);
   const [successModal, setSuccessModal] = useState<{ title: string; message: string } | null>(null);
   const [errorModal, setErrorModal] = useState<{ title: string; message: string } | null>(null);
 
-  const filtered = useMemo(
-    () => active === 'Todas' ? state.recipes : state.recipes.filter(r => r.dietTags.includes(active)),
-    [state.recipes, active],
-  );
+  const filtered = useMemo(() => {
+    if (active === 'Todas') return state.recipes;
+    if (active === 'Criadas') return state.recipes.filter(r => r.isCustom);
+    return state.recipes.filter(r => r.dietTags.includes(active as DietTag));
+  }, [state.recipes, active]);
 
   const handleLog = (recipeId: string) => {
     setPendingRecipeId(recipeId);
