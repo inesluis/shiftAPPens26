@@ -11,7 +11,7 @@ This document outlines suggested improvements for the NutriCost mobile applicati
 - [ ] User can choose which supermarket and brand they get the product from 
 
 ### Browse Recipes
-- [ ] Improve the diet filter, in "All" half the tags are cut in half
+- [x] Improve the diet filter, in "All" half the tags are cut in half
 - [ ] Go inside the meal and see a new interface
     - [ ] See the total by different supermarkets
 - [ ] Ability to define the type of recipe ["Breakfast", "Lunch", "Dinner", "Snack]

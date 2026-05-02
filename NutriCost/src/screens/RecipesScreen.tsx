@@ -45,7 +45,8 @@ export default function RecipesScreen() {
 
       <ScrollView
         horizontal showsHorizontalScrollIndicator={false}
-        contentContainerStyle={s.chips} style={{ flexGrow: 0 }}
+        contentContainerStyle={s.chips} style={s.chipsScroll}
+        nestedScrollEnabled
       >
         {FILTERS.map(f => (
           <TouchableOpacity
@@ -73,8 +74,9 @@ const s = StyleSheet.create({
   hdr:       { paddingHorizontal: 16, paddingBottom: 10 },
   title:     { fontSize: 21, fontWeight: '600', color: C.text },
   sub:       { fontSize: 12, color: C.textSub, marginTop: 2 },
-  chips:     { paddingHorizontal: 16, paddingBottom: 12, gap: 6 },
-  chip:      { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20, borderWidth: 0.5, borderColor: C.borderMed },
+  chipsScroll: { flexGrow: 0, flexShrink: 0 },
+  chips:     { paddingHorizontal: 16, paddingBottom: 12, paddingRight: 24, flexDirection: 'row', alignItems: 'center' },
+  chip:      { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20, borderWidth: 0.5, borderColor: C.borderMed, marginRight: 8, flexShrink: 0 },
   chipOn:    { backgroundColor: C.accent, borderColor: C.accent },
   chipTxt:   { fontSize: 12, fontWeight: '500', color: C.textSub },
   chipTxtOn: { color: '#1A1000' },
