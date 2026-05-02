@@ -242,50 +242,49 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
 
           return (
             <Card key={gi} style={s.groupCard}>
-              <Text style={s.productName}>{items[0].name}</Text>
+              <Text style={s.productName}>{items[0].name.charAt(0).toUpperCase() + items[0].name.slice(1)}</Text>
 
-              {items.map((item, idx) => (
-                <View key={item.id}>
-                  {idx > 0 && <View style={s.divider} />}
-                  <Text style={s.brand}>{item.brand}</Text>
+              {items.map((item, idx) => {
+                const availableStores = STORES.filter(store => item.prices[store] != null);
+                
+                return (
+                  <View key={item.id}>
+                    {availableStores.map((store, renderedIdx) => {
+                      const price = item.prices[store] ?? 0;
+                      const isBest = price === best;
 
-                  {STORES.map((store, i) => {
-                    const price = item.prices[store];
-                    if (price == null) return null;
+                      return (
+                        <View key={store} style={{ width: '100%' }}>
+                          {/* 👇 Divider between stores */}
+                          {renderedIdx > 0 && <View style={s.rowDivider} />}
 
-                    const isBest = price === best;
+                          <TouchableOpacity
+                            style={[s.row, isBest && s.rowBest]}
+                            onPress={() => handleAdd(item, store)}
+                          >
+                            <Image source={STORE_META[store].logo} style={s.logo} />
 
-                    return (
-                      <View key={store}>
-                        {/* 👇 Divider between stores */}
-                        {i > 0 && <View style={s.rowDivider} />}
-
-                        <TouchableOpacity
-                          style={[s.row, isBest && s.rowBest]}
-                          onPress={() => handleAdd(item, store)}
-                        >
-                          <Image source={STORE_META[store].logo} style={s.logo} />
-
-                          <Text style={s.storeName}>
-                            {STORE_META[store].label}
-                          </Text>
-
-                          <View style={s.priceWrap}>
-                            {isBest && (
-                              <View style={s.bestBadge}>
-                                <Text style={s.bestTxt}>MELHOR</Text>
-                              </View>
-                            )}
-                            <Text style={[s.price, isBest && s.priceBest]}>
-                              €{price.toFixed(2)}
+                            <Text style={s.storeName}>
+                              {item.brand}
                             </Text>
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                    );
-                  })}
-                </View>
-              ))}
+
+                            <View style={s.priceWrap}>
+                              {isBest && (
+                                <View style={s.bestBadge}>
+                                  <Text style={s.bestTxt}>MELHOR</Text>
+                                </View>
+                              )}
+                              <Text style={[s.price, isBest && s.priceBest]}>
+                                €{price.toFixed(2)}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        </View>
+                      );
+                    })}
+                  </View>
+                );
+              })}
             </Card>
           );
         })}
@@ -317,7 +316,9 @@ const s = StyleSheet.create({
   productName: {
     fontSize: 14,
     fontWeight: '700',
-    padding: 14,
+    paddingLeft: 0,
+    paddingRight: 14,
+    paddingVertical: 10,
     color: C.text,
   },
 
@@ -326,8 +327,10 @@ const s = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    gap: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    gap: 8,
+    marginHorizontal: -14,
   },
 
   rowBest: {
@@ -363,7 +366,8 @@ const s = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: '#222',
-    marginVertical: 10,
+    marginVertical: 4,
+    marginHorizontal: -14,
   },
   input: {
   flex: 1,
@@ -384,8 +388,10 @@ const s = StyleSheet.create({
 },
 
   rowDivider: {
-    height: 0.5,
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    marginHorizontal: 14,
+    width: '100%',
+    height: 1.5,
+    backgroundColor: '#ffffff',
+    marginHorizontal: -14,
+    marginVertical: 0,
   },
 });

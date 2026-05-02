@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
-  StyleSheet, Alert, KeyboardAvoidingView, Platform,
+  StyleSheet, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
 import Card from '../components/Card';
+import ConfirmModal from '../components/ConfirmModal';
 import { ingredientPicker } from '../utils/ingredientPicker';
 import { RootStackParamList } from '../navigation/types';
 import { Ingredient, MealType, DietTag, Recipe, Store } from '../types';
@@ -53,6 +54,7 @@ export default function CreateRecipeScreen({ navigation }: Props) {
   const [tags, setTags] = useState<DietTag[]>([]);
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [instructions, setInstructions] = useState('');
+  const [modal, setModal] = useState<{ type: 'error' | 'success'; title: string; message: string; action?: () => void } | null>(null);
 
   // Register picker callback so IngredientSearch can call back with the selection
   useEffect(() => {
@@ -75,8 +77,8 @@ export default function CreateRecipeScreen({ navigation }: Props) {
     setDrafts(prev => prev.filter((_, i) => i !== idx));
 
   const buildRecipe = () => {
-    if (!name.trim()) { Alert.alert('Erro', 'Adiciona um nome para a receita.'); return null; }
-    if (!drafts.length) { Alert.alert('Erro', 'Adiciona pelo menos um ingrediente.'); return null; }
+    if (!name.trim()) { setModal({ type: 'error', title: 'Erro', message: 'Adiciona um nome para a receita.' }); return null; }
+    if (!drafts.length) { setModal({ type: 'error', title: 'Erro', message: 'Adiciona pelo menos um ingrediente.' }); return null; }
 
     const recipe: Recipe = {
       id: `custom_${Date.now()}`,
@@ -114,11 +116,9 @@ export default function CreateRecipeScreen({ navigation }: Props) {
     try {
       const saved = await addRecipe(recipe);
       if (!saved) return;
-      Alert.alert('Guardado!', `${saved.name} adicionada às tuas receitas.`, [
-        { text: 'OK', onPress: () => navigation.goBack() },
-      ]);
+      setModal({ type: 'success', title: 'Guardado!', message: `${saved.name} adicionada às tuas receitas.`, action: () => navigation.goBack() });
     } catch {
-      Alert.alert('Erro', 'Não foi possível guardar a receita no Supabase.');
+      setModal({ type: 'error', title: 'Erro', message: 'Não foi possível guardar a receita no Supabase.' });
     }
   };
 
@@ -142,11 +142,9 @@ export default function CreateRecipeScreen({ navigation }: Props) {
         },
       });
 
-      Alert.alert('Guardado & registado!', `${saved.name} foi adicionada e registada.`, [
-        { text: 'OK', onPress: () => navigation.goBack() },
-      ]);
+      setModal({ type: 'success', title: 'Guardado & registado!', message: `${saved.name} foi adicionada e registada.`, action: () => navigation.goBack() });
     } catch {
-      Alert.alert('Erro', 'Não foi possível guardar a receita no Supabase.');
+      setModal({ type: 'error', title: 'Erro', message: 'Não foi possível guardar a receita no Supabase.' });
     }
   };
 
@@ -270,6 +268,18 @@ export default function CreateRecipeScreen({ navigation }: Props) {
         </View>
         <View style={{ height: 40 }} />
       </ScrollView>
+
+      <ConfirmModal
+        visible={modal !== null}
+        title={modal?.title || ''}
+        message={modal?.message || ''}
+        confirmText="OK"
+        onCancel={() => setModal(null)}
+        onConfirm={() => {
+          if (modal?.action) modal.action();
+          setModal(null);
+        }}
+      />
     </KeyboardAvoidingView>
   );
 }

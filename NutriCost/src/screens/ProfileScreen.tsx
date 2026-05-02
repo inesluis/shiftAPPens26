@@ -5,13 +5,13 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   TextInput,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider';
 import { useApp } from '../context/AppContext';
 import Card from '../components/Card';
+import ConfirmModal from '../components/ConfirmModal';
 import { UserProfile } from '../types';
 import { C } from '../theme';
 import { supabase } from '../supabase';
@@ -127,6 +127,7 @@ export default function ProfileScreen() {
   const [fat,     setFat]     = useState(current.fat);
   const [budget,  setBudget]  = useState(current.budget);
   const [tempBudget, setTempBudget] = useState(current.budget);
+  const [modal, setModal] = useState<{ type: 'reset' | 'save' | 'logout'; title?: string; message?: string } | null>(null);
 
   // ── Persist slider edits back into the per-goal map ──────────────────────
   // We use a ref so we can call it inside onSlidingComplete without stale closure issues
@@ -157,28 +158,7 @@ export default function ProfileScreen() {
   };
 
   // ── Reset active goal to factory defaults ────────────────────────────────
-  const handleReset = () => {
-    Alert.alert(
-      'Resetar configurações',
-      `Resetar configurações para "${goal}"?`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Resetar',
-          style: 'destructive',
-          onPress: () => {
-            const def = DEFAULT_PRESETS[goal];
-            setCal(def.calories);
-            setProtein(def.protein);
-            setCarbs(def.carbs);
-            setFat(def.fat);
-            setBudget(def.budget);
-            setCustomPresets(prev => ({ ...prev, [goal]: { ...def } }));
-          },
-        },
-      ],
-    );
-  };
+  const handleReset = () => setModal({ type: 'reset', title: 'Resetar', message: `Resetar configurações para "${goal}"?` });
 
   // ── Save to app context ───────────────────────────────────────────────────
   const handleSave = () => {
@@ -192,21 +172,10 @@ export default function ProfileScreen() {
       macroGoals: { calories: cal, protein, carbs, fat },
     };
     dispatch({ type: 'SET_PROFILE', payload: updated });
-    Alert.alert('Guardado!', 'Perfil atualizado.');
+    setModal({ type: 'save', title: 'Guardado!', message: 'Perfil atualizado.' });
   };
 
-  const handleLogout = () => {
-    Alert.alert('Sair', 'Deseja sair?', [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Sair',
-        style: 'destructive',
-        onPress: async () => {
-          await supabase.auth.signOut();
-        },
-      },
-    ]);
-  };
+  const handleLogout = () => setModal({ type: 'logout', title: 'Sair', message: 'Deseja terminar sessão?' });
 
   // ── Derived ───────────────────────────────────────────────────────────────
   const h = parseFloat(height);
@@ -345,6 +314,56 @@ export default function ProfileScreen() {
 
         <View style={{ height: 30 }} />
       </ScrollView>
+
+      {/* ─── MODALS ───────────────────────── */}
+
+      {modal?.type === 'reset' && (
+        <ConfirmModal
+          visible={true}
+          title={modal.title || 'Resetar'}
+          message={modal.message || ''}
+          confirmText="Resetar"
+          danger
+          onCancel={() => setModal(null)}
+          onConfirm={() => {
+            const def = DEFAULT_PRESETS[goal];
+            setCal(def.calories);
+            setProtein(def.protein);
+            setCarbs(def.carbs);
+            setFat(def.fat);
+            setBudget(def.budget);
+            setTempBudget(def.budget);
+            setCustomPresets(prev => ({ ...prev, [goal]: { ...def } }));
+            setModal(null);
+          }}
+        />
+      )}
+
+      {modal?.type === 'save' && (
+        <ConfirmModal
+          visible={true}
+          title={modal.title || 'Guardado!'}
+          message={modal.message || ''}
+          confirmText="OK"
+          onCancel={() => setModal(null)}
+          onConfirm={() => setModal(null)}
+        />
+      )}
+
+      {modal?.type === 'logout' && (
+        <ConfirmModal
+          visible={true}
+          title={modal.title || 'Sair'}
+          message={modal.message || ''}
+          confirmText="Sair"
+          danger
+          onCancel={() => setModal(null)}
+          onConfirm={async () => {
+            await supabase.auth.signOut();
+            setModal(null);
+          }}
+        />
+      )}
     </View>
   );
 }
