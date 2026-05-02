@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View, Text, TextInput, ScrollView, TouchableOpacity,
   StyleSheet, KeyboardAvoidingView, Platform, Image,
@@ -6,14 +6,38 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { INGREDIENTS_DB } from '../data/ingredients';
 import { Ingredient, Store } from '../types';
 import Card from '../components/Card';
 import { ingredientPicker } from '../utils/ingredientPicker';
 import { RootStackParamList } from '../navigation/types';
+import { supabase } from '../supabase';
 import { C, R } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'IngredientSearch'>;
+
+type SupabaseProduct = {
+  product_id: string | null;
+  product_name: string | null;
+  product_brand: string | null;
+  energy_kcal: number | null;
+  protein: number | null;
+  carbohydrates: number | null;
+  fats: number | null;
+  weight: number | null;
+};
+
+type SupabaseSupermarket = {
+  supermarket_id: number | null;
+  supermarket_name: string | null;
+};
+
+type PriceRow = {
+  ingredient_id: number;
+  price: number | null;
+  price_per_unit: number | null;
+  product: SupabaseProduct | SupabaseProduct[] | null;
+  supermarket: SupabaseSupermarket | SupabaseSupermarket[] | null;
+};
 
 // ─── Store metadata with logos ───────────────────────────────────────────────
 const STORE_META: Record<Store, { label: string; logo: any }> = {
@@ -25,11 +49,25 @@ const STORE_META: Record<Store, { label: string; logo: any }> = {
 const STORES: Store[] = ['continente', 'pingo_doce', 'lidl'];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
-const GROUPS = INGREDIENTS_DB.reduce<Record<string, Ingredient[]>>((acc, ing) => {
-  const k = ing.name.toLowerCase();
-  acc[k] = [...(acc[k] ?? []), ing];
-  return acc;
-}, {});
+function resolveStore(name: string): Store | null {
+  const value = name.toLowerCase();
+  if (value.includes('continente')) return 'continente';
+  if (value.includes('pingo')) return 'pingo_doce';
+  if (value.includes('lidl')) return 'lidl';
+  return null;
+}
+
+function toPer100g(value?: number | null, weight?: number | null) {
+  if (value == null) return 0;
+  if (weight && weight > 0) return (value / weight) * 100;
+  return value;
+}
+
+function toPricePerKg(price?: number | null, pricePerUnit?: number | null, weight?: number | null) {
+  if (pricePerUnit && pricePerUnit > 0) return pricePerUnit;
+  if (price && weight && weight > 0) return (price / weight) * 1000;
+  return null;
+}
 
 function cheapestPrice(items: Ingredient[]): number | null {
   const prices = items.flatMap(i =>
@@ -38,18 +76,115 @@ function cheapestPrice(items: Ingredient[]): number | null {
   return prices.length ? Math.min(...prices) : null;
 }
 
+function firstOrNull<T>(value: T | T[] | null | undefined): T | null {
+  if (!value) return null;
+  return Array.isArray(value) ? value[0] ?? null : value;
+}
+
 // ─── Main screen ─────────────────────────────────────────────────────────────
 export default function IngredientSearchScreen({ navigation, route }: Props) {
   const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
+  const [groups, setGroups] = useState<Ingredient[][]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const isAddMode = route.params?.mode === 'addToRecipe';
 
-  const results = useMemo(() => {
-    if (query.length < 2) return [];
-    const q = query.toLowerCase();
-    return Object.entries(GROUPS)
-      .filter(([k]) => k.includes(q) || q.includes(k.split(' ')[0]))
-      .map(([, items]) => items);
+  useEffect(() => {
+    let isMounted = true;
+
+    const load = async () => {
+      if (query.length < 2) {
+        setGroups([]);
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const search = `%${query}%`;
+        const { data: ingredients, error: ingredientError } = await supabase
+          .from('dim_ingredient')
+          .select('ingredient_id, ingredient_name, ingredient_search_term')
+          .or(`ingredient_name.ilike.${search},ingredient_search_term.ilike.${search}`)
+          .limit(40);
+
+        if (ingredientError) throw ingredientError;
+
+        const ingredientIds = (ingredients ?? []).map(i => i.ingredient_id);
+        if (!ingredientIds.length) {
+          if (isMounted) setGroups([]);
+          return;
+        }
+
+        const ingredientNameById = new Map(
+          (ingredients ?? []).map(i => [i.ingredient_id, i.ingredient_name ?? 'Ingredient']),
+        );
+
+        const { data: priceRows, error: priceError } = await supabase
+          .from('fact_productprice')
+          .select('ingredient_id, price, price_per_unit, product:dim_product(product_id, product_name, product_brand, energy_kcal, protein, carbohydrates, fats, weight), supermarket:dim_supermarket(supermarket_id, supermarket_name)')
+          .in('ingredient_id', ingredientIds);
+
+        if (priceError) throw priceError;
+
+        const grouped: Record<string, Record<string, Ingredient>> = {};
+
+        ((priceRows ?? []) as unknown as PriceRow[]).forEach(row => {
+          const product = firstOrNull(row.product);
+          const supermarket = firstOrNull(row.supermarket);
+          if (!product || !supermarket) return;
+
+          const store = resolveStore(supermarket.supermarket_name ?? '');
+          if (!store) return;
+
+          const ingredientName = ingredientNameById.get(row.ingredient_id) ?? product.product_name ?? 'Ingredient';
+          const productId = product.product_id;
+          if (!productId) return;
+
+          const pricePerKg = toPricePerKg(row.price, row.price_per_unit, product.weight);
+          if (pricePerKg == null) return;
+
+          const macrosPer100g = {
+            calories: toPer100g(product.energy_kcal, product.weight),
+            protein: toPer100g(product.protein, product.weight),
+            carbs: toPer100g(product.carbohydrates, product.weight),
+            fat: toPer100g(product.fats, product.weight),
+          };
+
+          const brand = product.product_brand ?? product.product_name ?? ingredientName;
+          const byIngredient = grouped[ingredientName] ?? (grouped[ingredientName] = {});
+          const existing = byIngredient[productId];
+
+          if (existing) {
+            const current = existing.prices[store];
+            if (current == null || pricePerKg < current) {
+              existing.prices[store] = pricePerKg;
+            }
+            return;
+          }
+
+          byIngredient[productId] = {
+            id: productId,
+            name: ingredientName,
+            brand,
+            prices: { [store]: pricePerKg },
+            macrosPer100g,
+          };
+        });
+
+        const nextGroups = Object.values(grouped).map(productMap => Object.values(productMap));
+        if (isMounted) setGroups(nextGroups);
+      } catch {
+        if (isMounted) setGroups([]);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
   }, [query]);
 
   
@@ -91,18 +226,20 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
       </View>
 
       <ScrollView contentContainerStyle={s.list} showsVerticalScrollIndicator={false}>
-        {results.length === 0 && (
+        {groups.length === 0 && (
           <View style={s.empty}>
             <Ionicons name="cart-outline" size={34} color={C.textMuted} />
             <Text style={s.emptyTxt}>
               {query.length < 2
                 ? 'Search to compare prices'
-                : `No results for "${query}"`}
+                : isLoading
+                  ? 'Loading results…'
+                  : `No results for "${query}"`}
             </Text>
           </View>
         )}
 
-        {results.map((items, gi) => {
+        {groups.map((items, gi) => {
           const best = cheapestPrice(items);
 
           return (
