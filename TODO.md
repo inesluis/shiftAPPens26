@@ -8,7 +8,7 @@ This document outlines suggested improvements for the NutriCost mobile applicati
 
 ### Compare Prices
 - [ ] It shows the lowest price in each supermarket, it should show possible different brands in each supermarket
-- [ ] User can choose which supermarket and brand they get the product from 
+- [x] User can choose which supermarket and brand they get the product from 
 
 ### Browse Recipes
 - [x] Improve the diet filter, in "All" half the tags are cut in half
@@ -25,9 +25,9 @@ This document outlines suggested improvements for the NutriCost mobile applicati
 
 ## Tracking
 - [ ] In "Meals Logged", snack is always available to add a new one
-- [ ] In the stacked bar chart
-    - [ ] When hovering in the bars the values show up
-    - [ ] The Y axis
+- [x] In the stacked bar chart
+    - [x] When hovering in the bars the values show up
+    - [x] The Y axis
 
 ## Profile
 - [x] The body info using slide bar?

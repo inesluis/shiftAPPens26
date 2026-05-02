@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import {
   View, Text, TextInput, ScrollView, TouchableOpacity,
-  StyleSheet, KeyboardAvoidingView, Platform,
+  StyleSheet, KeyboardAvoidingView, Platform, Image,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,26 +15,30 @@ import { C, R } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'IngredientSearch'>;
 
-const STORE_LABEL: Record<Store, string> = {
-  continente: 'Continente',
-  pingo_doce: 'Pingo Doce',
-  lidl:       'Lidl',
+// ─── Store metadata with logos ───────────────────────────────────────────────
+const STORE_META: Record<Store, { label: string; logo: any }> = {
+  continente: { label: 'Continente', logo: require('../../assets/supermarkets/continente.png') },
+  pingo_doce: { label: 'Pingo Doce', logo: require('../../assets/supermarkets/pingoDoce.png') },
+  lidl:       { label: 'Lidl',       logo: require('../../assets/supermarkets/lidl.png') },
 };
+
 const STORES: Store[] = ['continente', 'pingo_doce', 'lidl'];
 
-// Group ingredients by canonical name
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 const GROUPS = INGREDIENTS_DB.reduce<Record<string, Ingredient[]>>((acc, ing) => {
   const k = ing.name.toLowerCase();
   acc[k] = [...(acc[k] ?? []), ing];
   return acc;
 }, {});
 
-function cheapestStore(ing: Ingredient): Store | null {
-  const entries = Object.entries(ing.prices) as [Store, number][];
-  if (!entries.length) return null;
-  return entries.reduce((a, b) => a[1] < b[1] ? a : b)[0];
+function cheapestPrice(items: Ingredient[]): number | null {
+  const prices = items.flatMap(i =>
+    (Object.entries(i.prices) as [Store, number][]).map(([, p]) => p),
+  );
+  return prices.length ? Math.min(...prices) : null;
 }
 
+// ─── Main screen ─────────────────────────────────────────────────────────────
 export default function IngredientSearchScreen({ navigation, route }: Props) {
   const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
@@ -48,8 +52,8 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
       .map(([, items]) => items);
   }, [query]);
 
-  const handleAdd = (ing: Ingredient) => {
-    const store = cheapestStore(ing) ?? 'continente';
+  
+  const handleAdd = (ing: Ingredient, store: Store) => {
     ingredientPicker.call(ing, 100, store);
     navigation.goBack();
   };
@@ -59,6 +63,7 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
       style={[s.container, { paddingTop: insets.top }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
+      {/* Header */}
       <View style={s.hdr}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={s.back}>
           <Ionicons name="arrow-back" size={14} color={C.accent} />
@@ -67,6 +72,7 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
         <Text style={s.title}>Compare Prices</Text>
       </View>
 
+      {/* Search */}
       <View style={s.searchWrap}>
         <Ionicons name="search-outline" size={15} color={C.textMuted} />
         <TextInput
@@ -84,87 +90,157 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
         )}
       </View>
 
-      <ScrollView
-        contentContainerStyle={s.list}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView contentContainerStyle={s.list} showsVerticalScrollIndicator={false}>
         {results.length === 0 && (
           <View style={s.empty}>
-            <Ionicons name="cart-outline" size={34} color={C.textMuted} style={{ marginBottom: 12 }} />
+            <Ionicons name="cart-outline" size={34} color={C.textMuted} />
             <Text style={s.emptyTxt}>
               {query.length < 2
-                ? 'Search to compare prices\nacross Continente, Pingo Doce & Lidl'
+                ? 'Search to compare prices'
                 : `No results for "${query}"`}
             </Text>
           </View>
         )}
 
-        {results.map((items, gi) => (
-          <Card key={gi} style={{ marginBottom: 10 }}>
-            <Text style={s.productName}>{items[0].name}</Text>
-            {items.map(item => {
-              const cheap = cheapestStore(item);
-              return (
-                <View key={item.id} style={{ marginBottom: 10 }}>
+        {results.map((items, gi) => {
+          const best = cheapestPrice(items);
+
+          return (
+            <Card key={gi} style={s.groupCard}>
+              <Text style={s.productName}>{items[0].name}</Text>
+
+              {items.map((item, idx) => (
+                <View key={item.id}>
+                  {idx > 0 && <View style={s.divider} />}
                   <Text style={s.brand}>{item.brand}</Text>
-                  <View style={s.priceRow}>
-                    {STORES.map(store => {
-                      const price = item.prices[store];
-                      const isBest = cheap === store && price != null;
-                      return (
-                        <View key={store} style={[s.cell, isBest && s.cellBest]}>
-                          <Text style={s.storeLabel}>{STORE_LABEL[store]}</Text>
-                          {price != null ? (
-                            <>
-                              <Text style={[s.price, isBest && { color: C.protein }]}>
-                                €{price.toFixed(2)}
-                              </Text>
-                              {isBest && <Text style={s.best}>BEST</Text>}
-                            </>
-                          ) : (
-                            <Text style={s.na}>—</Text>
+
+                  {STORES.map(store => {
+                    const price = item.prices[store];
+                    if (price == null) return null;
+
+                    const isBest = price === best;
+
+                    return (
+                      <TouchableOpacity
+                        key={store}
+                        style={[s.row, isBest && s.rowBest]}
+                        onPress={() => handleAdd(item, store)}
+                      >
+                        {/* 🔥 LOGO */}
+                        <Image source={STORE_META[store].logo} style={s.logo} />
+
+                        <Text style={s.storeName}>
+                          {STORE_META[store].label}
+                        </Text>
+
+                        <View style={s.priceWrap}>
+                          {isBest && (
+                            <View style={s.bestBadge}>
+                              <Text style={s.bestTxt}>BEST</Text>
+                            </View>
                           )}
+                          <Text style={[s.price, isBest && s.priceBest]}>
+                            €{price.toFixed(2)}
+                          </Text>
                         </View>
-                      );
-                    })}
-                  </View>
-                  {isAddMode && (
-                    <TouchableOpacity style={s.addBtn} onPress={() => handleAdd(item)}>
-                      <Text style={s.addBtnTxt}>+ Add to Recipe</Text>
-                    </TouchableOpacity>
-                  )}
+                      </TouchableOpacity>
+                    );
+                  })}
                 </View>
-              );
-            })}
-          </Card>
-        ))}
-        <View style={{ height: 40 }} />
+              ))}
+            </Card>
+          );
+        })}
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const s = StyleSheet.create({
-  container:   { flex: 1, backgroundColor: C.bg },
-  hdr:         { paddingHorizontal: 16, paddingBottom: 8 },
-  back:        { flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 4 },
-  backTxt:     { fontSize: 12, color: C.accent },
-  title:       { fontSize: 21, fontWeight: '600', color: C.text },
-  searchWrap:  { flexDirection: 'row', alignItems: 'center', backgroundColor: C.surface, borderWidth: 0.5, borderColor: 'rgba(255,255,255,0.07)', borderRadius: R.md, padding: 10, gap: 8, marginHorizontal: 16, marginBottom: 14 },
-  input:       { flex: 1, fontSize: 13, color: C.text },
-  list:        { paddingHorizontal: 16 },
-  empty:       { alignItems: 'center', paddingTop: 60 },
-  emptyTxt:    { fontSize: 13, color: C.textMuted, textAlign: 'center', lineHeight: 20 },
-  productName: { fontSize: 14, fontWeight: '600', color: C.text, marginBottom: 10 },
-  brand:       { fontSize: 12, color: C.textSub, marginBottom: 8 },
-  priceRow:    { flexDirection: 'row', gap: 6, marginBottom: 8 },
-  cell:        { flex: 1, backgroundColor: C.surface2, borderRadius: 9, padding: 8, alignItems: 'center', borderWidth: 0.5, borderColor: 'transparent' },
-  cellBest:    { borderColor: 'rgba(88,196,122,0.4)' },
-  storeLabel:  { fontSize: 9, fontWeight: '600', color: C.textMuted, marginBottom: 4 },
-  price:       { fontSize: 14, fontWeight: '600', color: C.text },
-  best:        { fontSize: 9, color: C.protein, fontWeight: '600', marginTop: 2 },
-  na:          { fontSize: 13, color: C.textMuted },
-  addBtn:      { backgroundColor: C.surface, borderWidth: 0.5, borderColor: C.borderMed, borderRadius: 8, padding: 8, alignItems: 'center' },
-  addBtnTxt:   { fontSize: 12, fontWeight: '500', color: C.text },
+  container: { flex: 1, backgroundColor: C.bg },
+  hdr: { paddingHorizontal: 16, paddingBottom: 8 },
+  back: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  backTxt: { fontSize: 12, color: C.accent },
+  title: { fontSize: 21, fontWeight: '600', color: C.text },
+
+  searchWrap: {
+    flexDirection: 'row',
+    backgroundColor: C.surface,
+    borderRadius: R.md,
+    padding: 10,
+    margin: 16,
+  },
+
+  list: { paddingHorizontal: 16 },
+
+  groupCard: { marginBottom: 12 },
+
+  productName: {
+    fontSize: 14,
+    fontWeight: '700',
+    padding: 14,
+    color: C.text,
+  },
+
+  brand: { fontSize: 11, color: C.textMuted, paddingHorizontal: 14 },
+
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    gap: 12,
+  },
+
+  rowBest: {
+    backgroundColor: 'rgba(88,196,122,0.08)',
+  },
+
+  logo: {
+    width: 28,
+    height: 28,
+    resizeMode: 'contain',
+  },
+
+  storeName: { flex: 1, color: C.text,},
+
+  priceWrap: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+
+  price: { fontWeight: '600', color: C.text },
+
+  priceBest: { color: C.protein },
+
+  bestBadge: {
+    backgroundColor: 'rgba(88,196,122,0.2)',
+    paddingHorizontal: 6,
+    borderRadius: 4,
+  },
+
+  bestTxt: {
+    fontSize: 10,
+    color: C.protein,
+    fontWeight: '700',
+  },
+
+  divider: {
+    height: 1,
+    backgroundColor: '#222',
+    marginVertical: 10,
+  },
+  input: {
+  flex: 1,
+  fontSize: 13,
+  color: C.text,
+},
+
+  empty: {
+    alignItems: 'center',
+    paddingTop: 60,
+  },
+
+  emptyTxt: {
+    fontSize: 13,
+    color: C.textMuted,
+    textAlign: 'center',
+    marginTop: 10,
+},
 });
