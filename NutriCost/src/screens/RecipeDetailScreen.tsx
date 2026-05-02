@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
@@ -446,7 +446,9 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                 )}
 
                 <Card style={{ marginBottom: 12 }}>
-                    <Text style={s.sectionTitle}>Ingredientes</Text>
+                    <View style={s.sectionHeader}>
+                        <Text style={s.sectionTitle}>Ingredientes</Text>
+                    </View>
                     {Object.keys(storeGroups).length > 0 ? (
                         (Object.entries(storeGroups) as [Store, RecipeIngredient[]][]).map(([store, items]) => (
                             <View key={store} style={s.storeGroup}>
@@ -518,7 +520,14 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                 </Card>
 
                 <Card>
-                    <Text style={s.sectionTitle}>Instruções</Text>
+                    <View style={s.sectionHeader}>
+                        <Text style={s.sectionTitle}>Instruções</Text>
+                        {recipe.isCustom && (
+                            <TouchableOpacity activeOpacity={0.7}>
+                                <MaterialCommunityIcons name="robot" size={18} color={C.accent} />
+                            </TouchableOpacity>
+                        )}
+                    </View>
                     {isEditing && canEdit ? (
                         <TextInput
                             style={[s.instructionsInput, s.textInput]}
@@ -571,7 +580,8 @@ const s = StyleSheet.create({
     meta: { fontSize: 12, color: C.textSub, marginTop: 2 },
     sub: { fontSize: 12, color: C.textSub, marginTop: 4 },
     scroll: { paddingHorizontal: 16, paddingBottom: 20 },
-    sectionTitle: { fontSize: 10, color: C.textMuted, fontWeight: '600', letterSpacing: 0.7, textTransform: 'uppercase', marginBottom: 8 },
+    sectionTitle: { fontSize: 10, color: C.textMuted, fontWeight: '600', letterSpacing: 0.7, textTransform: 'uppercase' },
+    sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
     chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
     chip: { paddingHorizontal: 12, paddingVertical: 7, borderRadius: R.md, borderWidth: 0.5, borderColor: C.borderMed },
     chipOn: { backgroundColor: C.accent, borderColor: C.accent },
