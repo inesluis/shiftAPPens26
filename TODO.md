@@ -32,7 +32,7 @@ This document outlines suggested improvements for the NutriCost mobile applicati
 ## Profile
 - [x] The body info using slide bar?
 - [x] Weekly Budget and Daily Macro Goals also being possible to write the number instead of only +/-
-- [ ] Preset Macro Goals based on the type of profile
+- [x] Preset Macro Goals based on the type of profile
 
 ---
 
