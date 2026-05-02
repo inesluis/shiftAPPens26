@@ -8,8 +8,9 @@ import Card from '../components/Card';
 import { RootStackParamList } from '../navigation/types';
 import { C, R } from '../theme';
 import { ingredientPicker } from '../utils/ingredientPicker';
-import { MealType, RecipeIngredient, Store } from '../types';
+import { MealType, RecipeIngredient, Store, MealLog } from '../types';
 import { supabase } from '../supabase';
+import MealTypePicker from '../components/MealTypePicker';
 
 const STORE_LABEL: Record<Store, string> = {
     continente: 'Continente',
@@ -128,7 +129,7 @@ function sumMacros(drafts: RecipeIngredient[]) {
 
 export default function RecipeDetailScreen({ navigation, route }: Props) {
     const insets = useSafeAreaInsets();
-    const { state, updateRecipe } = useApp();
+    const { state, updateRecipe, dispatch, todayDate } = useApp();
     const recipe = state.recipes.find(r => r.id === route.params.recipeId);
     const canEdit = recipe?.isCustom ?? false;
     const [isEditing, setIsEditing] = useState(false);
@@ -139,6 +140,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
     const [storeTotals, setStoreTotals] = useState<Record<Store, number>>({} as Record<Store, number>);
     const [storeMissing, setStoreMissing] = useState<Record<Store, number>>({} as Record<Store, number>);
     const [bestStore, setBestStore] = useState<Store | null>(null);
+    const [pickerVisible, setPickerVisible] = useState(false);
 
     useEffect(() => {
         if (recipe) {
@@ -392,6 +394,21 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
         }
     };
 
+    const handleLogMeal = (selectedMealType: MealType) => {
+        if (!recipe) return;
+        const log: MealLog = {
+            id:         `log_${Date.now()}`,
+            date:       todayDate,
+            recipeId:   recipe.id,
+            recipeName: recipe.name,
+            mealType:   selectedMealType,
+            macros:     recipe.macros,
+            cost:       recipe.cost,
+        };
+        dispatch({ type: 'ADD_MEAL_LOG', payload: log });
+        setPickerVisible(false);
+    };
+
     return (
         <View style={[s.container, { paddingTop: insets.top }]}>
             <View style={s.hdr}>
@@ -407,7 +424,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                     )}
                 </View>
                 <Text style={s.title}>{recipe.name}</Text>
-                <Text style={s.sub}>{mealType} · €{bestTotal.toFixed(2)}</Text>
+                <Text style={s.sub}>€{bestTotal.toFixed(2)}</Text>
             </View>
 
             <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
@@ -525,8 +542,20 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                     </TouchableOpacity>
                 )}
 
+                {!isEditing && (
+                    <TouchableOpacity style={s.logBtn} onPress={() => setPickerVisible(true)}>
+                        <Text style={s.logBtnTxt}>Registar Refeição</Text>
+                    </TouchableOpacity>
+                )}
+
                 <View style={{ height: 24 }} />
             </ScrollView>
+
+            <MealTypePicker
+                visible={pickerVisible}
+                onSelect={handleLogMeal}
+                onClose={() => setPickerVisible(false)}
+            />
         </View>
     );
 }
@@ -572,4 +601,6 @@ const s = StyleSheet.create({
     emptyText: { fontSize: 12, color: C.textSub },
     saveBtn: { backgroundColor: C.accent, borderRadius: R.md, padding: 14, alignItems: 'center', marginTop: 12 },
     saveBtnTxt: { fontSize: 14, fontWeight: '600', color: '#1A1000' },
+    logBtn: { backgroundColor: C.accent, borderRadius: R.md, padding: 14, alignItems: 'center', marginTop: 12 },
+    logBtnTxt: { fontSize: 14, fontWeight: '600', color: '#1A1000' },
 });

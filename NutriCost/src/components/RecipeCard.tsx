@@ -26,7 +26,7 @@ export default function RecipeCard({ recipe, onPress, onLog }: Props) {
         <View style={s.header}>
           <View style={{ flex: 1 }}>
             <Text style={s.name}>{recipe.name}</Text>
-            <Text style={s.sub}>{recipe.mealType} · {recipe.macros.calories} kcal</Text>
+            <Text style={s.sub}>{recipe.macros.calories} kcal</Text>
           </View>
           <Text style={s.cost}>€{recipe.cost.toFixed(2)}</Text>
         </View>

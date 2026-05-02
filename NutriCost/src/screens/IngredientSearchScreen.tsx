@@ -249,36 +249,39 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
                   {idx > 0 && <View style={s.divider} />}
                   <Text style={s.brand}>{item.brand}</Text>
 
-                  {STORES.map(store => {
+                  {STORES.map((store, i) => {
                     const price = item.prices[store];
                     if (price == null) return null;
 
                     const isBest = price === best;
 
                     return (
-                      <TouchableOpacity
-                        key={store}
-                        style={[s.row, isBest && s.rowBest]}
-                        onPress={() => handleAdd(item, store)}
-                      >
-                        {/* 🔥 LOGO */}
-                        <Image source={STORE_META[store].logo} style={s.logo} />
+                      <View key={store}>
+                        {/* 👇 Divider between stores */}
+                        {i > 0 && <View style={s.rowDivider} />}
 
-                        <Text style={s.storeName}>
-                          {STORE_META[store].label}
-                        </Text>
+                        <TouchableOpacity
+                          style={[s.row, isBest && s.rowBest]}
+                          onPress={() => handleAdd(item, store)}
+                        >
+                          <Image source={STORE_META[store].logo} style={s.logo} />
 
-                        <View style={s.priceWrap}>
-                          {isBest && (
-                            <View style={s.bestBadge}>
-                              <Text style={s.bestTxt}>MELHOR</Text>
-                            </View>
-                          )}
-                          <Text style={[s.price, isBest && s.priceBest]}>
-                            €{price.toFixed(2)}
+                          <Text style={s.storeName}>
+                            {STORE_META[store].label}
                           </Text>
-                        </View>
-                      </TouchableOpacity>
+
+                          <View style={s.priceWrap}>
+                            {isBest && (
+                              <View style={s.bestBadge}>
+                                <Text style={s.bestTxt}>MELHOR</Text>
+                              </View>
+                            )}
+                            <Text style={[s.price, isBest && s.priceBest]}>
+                              €{price.toFixed(2)}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
                     );
                   })}
                 </View>
@@ -379,4 +382,10 @@ const s = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10,
 },
+
+  rowDivider: {
+    height: 0.5,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    marginHorizontal: 14,
+  },
 });

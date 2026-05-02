@@ -6,7 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
 import RecipeCard from '../components/RecipeCard';
-import { DietTag, MealLog } from '../types';
+import MealTypePicker from '../components/MealTypePicker';
+import { DietTag, MealLog, MealType } from '../types';
 import { C } from '../theme';
 import { RootStackParamList } from '../navigation/types';
 
@@ -20,6 +21,8 @@ export default function RecipesScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [active, setActive] = useState<DietTag | 'Todas'>('Todas');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const [pendingRecipeId, setPendingRecipeId] = useState<string | null>(null);
 
   const filtered = useMemo(
     () => active === 'Todas' ? state.recipes : state.recipes.filter(r => r.dietTags.includes(active)),
@@ -27,19 +30,26 @@ export default function RecipesScreen() {
   );
 
   const handleLog = (recipeId: string) => {
-    const recipe = state.recipes.find(r => r.id === recipeId);
+    setPendingRecipeId(recipeId);
+    setPickerVisible(true);
+  };
+
+  const handleMealSelect = (mealType: MealType) => {
+    const recipe = pendingRecipeId ? state.recipes.find(r => r.id === pendingRecipeId) : null;
     if (!recipe) return;
     const log: MealLog = {
-      id:          `log_${Date.now()}`,
-      date:        todayDate,
-      recipeId:    recipe.id,
-      recipeName:  recipe.name,
-      mealType:    recipe.mealType,
-      macros:      recipe.macros,
-      cost:        recipe.cost,
+      id:         `log_${Date.now()}`,
+      date:       todayDate,
+      recipeId:   recipe.id,
+      recipeName: recipe.name,
+      mealType,
+      macros:     recipe.macros,
+      cost:       recipe.cost,
     };
     dispatch({ type: 'ADD_MEAL_LOG', payload: log });
-    Alert.alert('Registada!', `${recipe.name} adicionada ao registo diário.`);
+    setPickerVisible(false);
+    setPendingRecipeId(null);
+    Alert.alert('Registada!', `${recipe.name} adicionada ao registo de ${mealType}.`);
   };
 
   const handleRefresh = async () => {
@@ -96,6 +106,12 @@ export default function RecipesScreen() {
         ))}
         <View style={{ height: 20 }} />
       </ScrollView>
+
+      <MealTypePicker
+        visible={pickerVisible}
+        onSelect={handleMealSelect}
+        onClose={() => { setPickerVisible(false); setPendingRecipeId(null); }}
+      />
     </View>
   );
 }
