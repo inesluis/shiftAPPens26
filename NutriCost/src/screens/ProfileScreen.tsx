@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   TextInput,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Slider from '@react-native-community/slider';
 import { useApp } from '../context/AppContext';
 import Card from '../components/Card';
 import { UserProfile } from '../types';
@@ -32,11 +33,10 @@ export default function ProfileScreen() {
   const [carbs, setCarbs] = useState(p.macroGoals.carbs);
   const [fat, setFat] = useState(p.macroGoals.fat);
 
-  // safer BMI
   const h = parseFloat(height);
   const w = parseFloat(weight);
   const bmi =
-    h > 0 ? (w / ((h / 100) ** 2)).toFixed(1) : '—';
+    h > 0 && w > 0 ? (w / ((h / 100) ** 2)).toFixed(1) : '—';
 
   const initials =
     name.trim().split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?';
@@ -56,14 +56,13 @@ export default function ProfileScreen() {
     Alert.alert('Saved!', 'Profile updated.');
   };
 
-  const Stepper = ({
+  const SliderControl = ({
     label,
     value,
     set,
     color = C.text,
     min,
     max,
-    step,
     unit,
   }: {
     label: string;
@@ -72,44 +71,75 @@ export default function ProfileScreen() {
     color?: string;
     min: number;
     max: number;
-    step: number;
     unit: string;
-  }) => (
-    <View style={{ marginBottom: 14 }}>
-      <View style={s.stepRow}>
-        <Text style={[s.stepLabel, { color }]}>{label}</Text>
-        <Text style={s.stepVal}>{value} {unit}</Text>
+  }) => {
+    const [tempValue, setTempValue] = useState(value);
+    const [isEditing, setIsEditing] = useState(false);
+    const [inputValue, setInputValue] = useState(String(value));
+
+    // Sync slider when parent changes
+    useEffect(() => {
+      setTempValue(value);
+    }, [value]);
+
+    // Sync input when slider moves
+    useEffect(() => {
+      setInputValue(String(Math.round(tempValue)));
+    }, [tempValue]);
+
+    const commitValue = () => {
+      const num = Math.min(max, Math.max(min, Number(inputValue)));
+      setTempValue(num);
+      set(num);
+      setInputValue(String(num));
+      setIsEditing(false);
+    };
+
+    return (
+      <View style={{ marginBottom: 18 }}>
+        {/* Hide row if label is empty (budget case) */}
+        {label !== "" && (
+          <View style={s.stepRow}>
+            <Text style={[s.stepLabel, { color }]}>{label}</Text>
+
+            {isEditing ? (
+              <TextInput
+                style={[s.stepVal, { minWidth: 60 }]}
+                value={inputValue}
+                onChangeText={setInputValue}
+                keyboardType="numeric"
+                autoFocus
+                onBlur={commitValue}
+                onSubmitEditing={commitValue}
+              />
+            ) : (
+              <TouchableOpacity onPress={() => setIsEditing(true)}>
+                <Text style={[s.stepVal, { color }]}>
+                  {Math.round(tempValue)} {unit}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+
+        <Slider
+          style={{ height: 30 }}
+          value={tempValue}
+          onValueChange={(v) => setTempValue(v)}
+          onSlidingComplete={(v) => {
+            const rounded = Math.round(v);
+            setTempValue(rounded);
+            set(rounded);
+          }}
+          minimumValue={min}
+          maximumValue={max}
+          minimumTrackTintColor={color}
+          maximumTrackTintColor={C.surface}
+          thumbTintColor={color}
+        />
       </View>
-
-      <View style={s.stepCtrl}>
-        <TouchableOpacity
-          style={s.stepBtn}
-          onPress={() => set(Math.max(min, value - step))}
-        >
-          <Text style={s.stepBtnTxt}>−</Text>
-        </TouchableOpacity>
-
-        <View style={s.stepBar}>
-          <View
-            style={[
-              s.stepFill,
-              {
-                width: `${((value - min) / (max - min)) * 100}%`,
-                backgroundColor: color,
-              },
-            ]}
-          />
-        </View>
-
-        <TouchableOpacity
-          style={s.stepBtn}
-          onPress={() => set(Math.min(max, value + step))}
-        >
-          <Text style={s.stepBtnTxt}>+</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <View style={[s.container, { paddingTop: insets.top }]}>
@@ -118,6 +148,7 @@ export default function ProfileScreen() {
       </View>
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+
         {/* Avatar */}
         <View style={s.avatarRow}>
           <View style={s.avatar}>
@@ -196,21 +227,29 @@ export default function ProfileScreen() {
               </Text>
             </View>
 
-            <Text style={{ fontSize: 22, fontWeight: '600', color: C.accent }}>
+            <Text style={{ fontSize: 22, fontWeight: '700', color: C.accent }}>
               €{budget}
             </Text>
           </View>
 
-          <Stepper label="" value={budget} set={setBudget} color={C.accent} min={20} max={200} step={5} unit="" />
+          <SliderControl
+            label=""
+            value={budget}
+            set={setBudget}
+            color={C.accent}
+            min={20}
+            max={200}
+            unit=""
+          />
         </Card>
 
         {/* Macros */}
         <Text style={s.slabel}>Daily Macro Goals</Text>
         <Card style={{ marginBottom: 14 }}>
-          <Stepper label="Calories" value={cal} set={setCal} color={C.accent} min={1200} max={4000} step={50} unit="kcal" />
-          <Stepper label="Protein" value={protein} set={setProtein} color={C.protein} min={40} max={300} step={5} unit="g" />
-          <Stepper label="Carbs" value={carbs} set={setCarbs} color={C.carbs} min={50} max={500} step={5} unit="g" />
-          <Stepper label="Fat" value={fat} set={setFat} color={C.fat} min={20} max={200} step={5} unit="g" />
+          <SliderControl label="Calories" value={cal} set={setCal} color={C.accent} min={1200} max={4000} unit="kcal" />
+          <SliderControl label="Protein" value={protein} set={setProtein} color={C.protein} min={40} max={300} unit="g" />
+          <SliderControl label="Carbs" value={carbs} set={setCarbs} color={C.carbs} min={50} max={500} unit="g" />
+          <SliderControl label="Fat" value={fat} set={setFat} color={C.fat} min={20} max={200} unit="g" />
         </Card>
 
         <TouchableOpacity style={s.saveBtn} onPress={handleSave}>
@@ -229,7 +268,7 @@ const s = StyleSheet.create({
   title: { fontSize: 21, fontWeight: '600', color: C.text },
   scroll: { padding: 16, paddingTop: 0 },
 
-  avatarRow: { flexDirection: 'row', gap: 14, marginBottom: 18 },
+  avatarRow: { flexDirection: 'row', marginBottom: 18 },
   avatar: {
     width: 66,
     height: 66,
@@ -239,6 +278,7 @@ const s = StyleSheet.create({
     borderColor: C.accent + '50',
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 14,
   },
   avatarTxt: { fontSize: 22, fontWeight: '600', color: C.accent },
 
@@ -253,16 +293,23 @@ const s = StyleSheet.create({
 
   avatarSub: { fontSize: 12, color: C.textMuted, marginTop: 4 },
 
-  goalRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 6 },
-  goalChip: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10, backgroundColor: C.surface },
+  goalRow: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 6 },
+  goalChip: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 10,
+    backgroundColor: C.surface,
+    marginRight: 6,
+    marginBottom: 6,
+  },
   goalChipOn: { backgroundColor: C.accent },
   goalChipTxt: { fontSize: 11, color: C.textMuted },
   goalChipTxtOn: { color: '#000', fontWeight: '600' },
 
   slabel: { fontSize: 13, fontWeight: '600', color: C.text, marginBottom: 6 },
 
-  infoGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  infoItem: { width: '48%' },
+  infoGrid: { flexDirection: 'row', flexWrap: 'wrap' },
+  infoItem: { width: '48%', marginBottom: 10 },
   infoLabel: { fontSize: 11, color: C.textMuted },
   infoInput: {
     fontSize: 15,
@@ -276,21 +323,7 @@ const s = StyleSheet.create({
 
   stepRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
   stepLabel: { fontSize: 13 },
-  stepVal: { fontSize: 13, color: C.text },
-
-  stepCtrl: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  stepBtn: {
-    width: 30,
-    height: 30,
-    borderRadius: 6,
-    backgroundColor: C.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  stepBtnTxt: { fontSize: 18, color: C.text },
-
-  stepBar: { flex: 1, height: 6, backgroundColor: C.surface, borderRadius: 4 },
-  stepFill: { height: '100%', borderRadius: 4 },
+  stepVal: { fontSize: 16, fontWeight: '600' },
 
   saveBtn: {
     backgroundColor: C.accent,
