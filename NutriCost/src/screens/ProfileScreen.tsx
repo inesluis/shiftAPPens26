@@ -125,6 +125,7 @@ export default function ProfileScreen() {
   const [carbs,   setCarbs]   = useState(current.carbs);
   const [fat,     setFat]     = useState(current.fat);
   const [budget,  setBudget]  = useState(current.budget);
+  const [tempBudget, setTempBudget] = useState(current.budget);
 
   // ── Persist slider edits back into the per-goal map ──────────────────────
   // We use a ref so we can call it inside onSlidingComplete without stale closure issues
@@ -150,6 +151,7 @@ export default function ProfileScreen() {
     setCarbs(next.carbs);
     setFat(next.fat);
     setBudget(next.budget);
+    setTempBudget(next.budget);
     setGoal(newGoal);
   };
 
@@ -281,13 +283,25 @@ export default function ProfileScreen() {
           <View style={s.budgetHdr}>
             <View>
               <Text style={{ fontSize: 13, fontWeight: '500', color: C.text }}>Total Weekly</Text>
-              <Text style={{ fontSize: 11, color: C.textMuted }}>€{Math.round(budget / 7)}/day</Text>
+              <Text style={{ fontSize: 11, color: C.textMuted }}>€{Math.round(tempBudget / 7)}/day</Text>
             </View>
-            <Text style={{ fontSize: 22, fontWeight: '700', color: C.accent }}>€{budget}</Text>
+            <Text style={{ fontSize: 22, fontWeight: '700', color: C.accent }}>€{Math.round(tempBudget)}</Text>
           </View>
-          <SliderControl
-            label="" value={budget} set={(v) => { setBudget(v); updateCustomPreset({ budget: v }); }}
-            color={C.accent} min={20} max={200} unit=""
+          <Slider
+            style={{ height: 30 }}
+            value={tempBudget}
+            onValueChange={(v) => setTempBudget(v)} 
+            onSlidingComplete={(v) => {
+              const rounded = Math.round(v);
+              setTempBudget(rounded);
+              setBudget(rounded); 
+              updateCustomPreset({ budget: rounded });
+            }}
+            minimumValue={20}
+            maximumValue={200}
+            minimumTrackTintColor={C.accent}
+            maximumTrackTintColor={C.surface}
+            thumbTintColor={C.accent}
           />
         </Card>
 
