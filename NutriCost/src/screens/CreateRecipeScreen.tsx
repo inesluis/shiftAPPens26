@@ -97,6 +97,7 @@ export default function CreateRecipeScreen({ navigation }: Props) {
         weightG: d.weightG,
         selectedStore: d.store,
         pricePerKg: d.ingredient.prices[d.store] ?? 0,
+        macrosPer100g: d.ingredient.macrosPer100g,
       })),
       instructions: instructions.trim() ? instructions.trim() : undefined,
       isCustom: true,

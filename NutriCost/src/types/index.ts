@@ -24,6 +24,7 @@ export interface RecipeIngredient {
   weightG: number;
   selectedStore: Store;
   pricePerKg: number;
+  macrosPer100g?: Macros;
 }
 
 export interface Recipe {

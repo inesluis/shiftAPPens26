@@ -8,7 +8,6 @@ import Card from '../components/Card';
 import { RootStackParamList } from '../navigation/types';
 import { C, R } from '../theme';
 import { ingredientPicker } from '../utils/ingredientPicker';
-import { INGREDIENTS_DB } from '../data/ingredients';
 import { MealType, RecipeIngredient, Store } from '../types';
 
 const STORE_LABEL: Record<string, string> = {
@@ -28,14 +27,14 @@ function calcIngredientCost(weightG: number, pricePerKg: number) {
 function sumMacros(drafts: RecipeIngredient[]) {
     return drafts.reduce(
         (acc, d) => {
-            const source = INGREDIENTS_DB.find(i => i.id === d.ingredientId);
+            const source = d.macrosPer100g;
             if (!source) return acc;
             const f = d.weightG / 100;
             return {
-                calories: acc.calories + source.macrosPer100g.calories * f,
-                protein: acc.protein + source.macrosPer100g.protein * f,
-                carbs: acc.carbs + source.macrosPer100g.carbs * f,
-                fat: acc.fat + source.macrosPer100g.fat * f,
+                calories: acc.calories + source.calories * f,
+                protein: acc.protein + source.protein * f,
+                carbs: acc.carbs + source.carbs * f,
+                fat: acc.fat + source.fat * f,
             };
         },
         { calories: 0, protein: 0, carbs: 0, fat: 0 },
@@ -73,6 +72,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                     weightG,
                     selectedStore: store as Store,
                     pricePerKg: ingredient.prices[store as Store] ?? 0,
+                    macrosPer100g: ingredient.macrosPer100g,
                 },
             ]));
         });
