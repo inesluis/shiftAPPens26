@@ -33,6 +33,7 @@ CREATE TABLE public.dim_recipe (
   recipe_id bigint NOT NULL,
   recipe_name character varying,
   cuisine_type character varying, 
+  instructions text,
   nutritional_value double precision,
   protein double precision,
   carbs double precision,
