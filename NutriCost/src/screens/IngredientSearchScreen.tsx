@@ -165,6 +165,7 @@ const s = StyleSheet.create({
 
   searchWrap: {
     flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: C.surface,
     borderRadius: R.md,
     padding: 10,

@@ -96,17 +96,6 @@ export default function TrackingScreen() {
           </Card>
         ))}
 
-        {/* Add missing meals */}
-        <View style={s.addRow}>
-          {(['Breakfast','Lunch','Dinner','Snack'] as MealType[])
-            .filter(mt => !loggedTypes.has(mt))
-            .map(mt => (
-              <TouchableOpacity key={mt} style={s.addMealBtn}>
-                <Text style={s.addMealTxt}>+ {mt}</Text>
-              </TouchableOpacity>
-            ))}
-        </View>
-
         {/* Budget */}
         <Text style={[s.slabel, { marginTop: 4 }]}>Budget</Text>
         <Card style={{ marginBottom: 12 }}>
