@@ -19,6 +19,7 @@ const STORE_LABEL: Record<Store, string> = {
 
 const STORES: Store[] = ['continente', 'pingo_doce'];
 const MEAL_TYPES: MealType[] = ['Pequeno-Almoço', 'Almoço', 'Jantar', 'Snack'];
+const DIET_TAGS: DietTag[] = ['Vegan', 'Proteica', 'Keto', 'Mediterrânica', 'Low Carb', 'Sem Glúten'];
 
 type Props = NativeStackScreenProps<RootStackParamList, 'RecipeDetail'>;
 
@@ -134,6 +135,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
     const canEdit = recipe?.isCustom ?? false;
     const [isEditing, setIsEditing] = useState(false);
     const [mealType, setMealType] = useState<MealType>('Almoço');
+    const [tags, setTags] = useState<DietTag[]>([]);
     const [instructions, setInstructions] = useState('');
     const [drafts, setDrafts] = useState<RecipeIngredient[]>([]);
     const [storeGroups, setStoreGroups] = useState<Record<Store, RecipeIngredient[]>>({} as Record<Store, RecipeIngredient[]>);
@@ -145,6 +147,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
     useEffect(() => {
         if (recipe) {
             setMealType(recipe.mealType);
+            setTags(recipe.dietTags);
             setInstructions(recipe.instructions ?? '');
             setDrafts(recipe.ingredients);
             setIsEditing(false);
@@ -375,6 +378,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
         const updated = {
             ...recipe,
             mealType,
+            dietTags: tags,
             ingredients: drafts,
             cost: parseFloat(totalCost.toFixed(2)),
             macros: {
@@ -409,6 +413,9 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
         setPickerVisible(false);
     };
 
+    const toggleTag = (tag: DietTag) =>
+        setTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+
     return (
         <View style={[s.container, { paddingTop: insets.top + 20 }]}>
             <View style={s.hdr}>
@@ -430,15 +437,15 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
             <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
                 {isEditing && canEdit && (
                     <>
-                        <Text style={s.sectionTitle}>Tipo de refeição</Text>
+                        <Text style={s.sectionTitle}>Tipo de dieta</Text>
                         <View style={s.chipRow}>
-                            {MEAL_TYPES.map(mt => (
+                            {DIET_TAGS.map(tag => (
                                 <TouchableOpacity
-                                    key={mt}
-                                    style={[s.chip, mealType === mt && s.chipOn]}
-                                    onPress={() => setMealType(mt)}
+                                    key={tag}
+                                    style={[s.chip, tags.includes(tag) && s.chipOn]}
+                                    onPress={() => toggleTag(tag)}
                                 >
-                                    <Text style={[s.chipTxt, mealType === mt && s.chipTxtOn]}>{mt}</Text>
+                                    <Text style={[s.chipTxt, tags.includes(tag) && s.chipTxtOn]}>{tag}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
