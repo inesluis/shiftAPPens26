@@ -8,7 +8,7 @@ This document outlines suggested improvements for the NutriCost mobile applicati
 
 ### Compare Prices
 - [ ] It shows the lowest price in each supermarket, it should show possible different brands in each supermarket
-- [ ] User can choose which supermarket and brand they get the product from 
+- [x] User can choose which supermarket and brand they get the product from 
 
 ### Browse Recipes
 - [x] Improve the diet filter, in "All" half the tags are cut in half
