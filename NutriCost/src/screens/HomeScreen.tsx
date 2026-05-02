@@ -18,7 +18,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   const greeting = () => {
     const h = new Date().getHours();
     if (h < 12) return 'Bom dia';
-    if (h < 17) return 'Boa tarde';
+    if (h < 20) return 'Boa tarde';
     return 'Boa noite';
   };
 
@@ -35,7 +35,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         <Card style={{ marginBottom: 14 }}>
           <View style={s.row}>
             <View>
-              <Text style={s.slabel}>Today</Text>
+              <Text style={s.slabel}>Hoje</Text>
               <Text style={s.bigNum}>{Math.round(totalCal)} <Text style={s.unit}>kcal</Text></Text>
             </View>
             <View style={{ alignItems: 'flex-end' }}>

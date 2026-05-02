@@ -229,10 +229,10 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
             <Ionicons name="cart-outline" size={34} color={C.textMuted} />
             <Text style={s.emptyTxt}>
               {query.length < 2
-                ? 'Search to compare prices'
+                ? 'Procure um ingrediente para comparar preços'
                 : isLoading
-                  ? 'Loading results…'
-                  : `No results for "${query}"`}
+                  ? 'A carregar resultados...'
+                  : `Sem resultados para "${query}"`}
             </Text>
           </View>
         )}

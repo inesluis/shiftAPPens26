@@ -10,19 +10,19 @@ import { DietTag, MealLog } from '../types';
 import { C } from '../theme';
 import { RootStackParamList } from '../navigation/types';
 
-const FILTERS: (DietTag | 'All')[] = [
-  'All', 'Vegan', 'Proteica', 'Keto', 'Mediterrânica', 'Low Carb', 'Sem Glúten',
+const FILTERS: (DietTag | 'Todas')[] = [
+  'Todas', 'Vegan', 'Proteica', 'Keto', 'Mediterrânica', 'Low Carb', 'Sem Glúten',
 ];
 
 export default function RecipesScreen() {
   const insets = useSafeAreaInsets();
   const { state, dispatch, todayDate, reloadRecipes } = useApp();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [active, setActive] = useState<DietTag | 'All'>('All');
+  const [active, setActive] = useState<DietTag | 'Todas'>('Todas');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const filtered = useMemo(
-    () => active === 'All' ? state.recipes : state.recipes.filter(r => r.dietTags.includes(active)),
+    () => active === 'Todas' ? state.recipes : state.recipes.filter(r => r.dietTags.includes(active)),
     [state.recipes, active],
   );
 
@@ -39,7 +39,7 @@ export default function RecipesScreen() {
       cost:        recipe.cost,
     };
     dispatch({ type: 'ADD_MEAL_LOG', payload: log });
-    Alert.alert('Logged!', `${recipe.name} added to today's log.`);
+    Alert.alert('Registada!', `${recipe.name} adicionada ao registo diário.`);
   };
 
   const handleRefresh = async () => {
@@ -48,7 +48,7 @@ export default function RecipesScreen() {
       setIsRefreshing(true);
       await reloadRecipes();
     } catch {
-      Alert.alert('Error', 'Could not refresh recipes.');
+      Alert.alert('Erro', 'Não foi possível atualizar as receitas.');
     } finally {
       setIsRefreshing(false);
     }
@@ -59,12 +59,12 @@ export default function RecipesScreen() {
       <View style={s.hdr}>
         <View style={s.hdrTop}>
           <View>
-            <Text style={s.title}>Recipes</Text>
-            <Text style={s.sub}>Curated meals for every goal</Text>
+            <Text style={s.title}>Receitas</Text>
+            <Text style={s.sub}>Receitas adaptadas para cada objetivo</Text>
           </View>
           <TouchableOpacity style={s.refreshBtn} onPress={handleRefresh} disabled={isRefreshing}>
             <Ionicons name="refresh" size={16} color={C.accent} />
-            <Text style={s.refreshTxt}>{isRefreshing ? 'Refreshing…' : 'Refresh'}</Text>
+            <Text style={s.refreshTxt}>{isRefreshing ? 'Atualizando…' : 'Atualizar'}</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -217,7 +217,7 @@ export default function ProfileScreen() {
   return (
     <View style={[s.container, { paddingTop: insets.top }]}>
       <View style={s.hdr}>
-        <Text style={s.title}>Profile</Text>
+        <Text style={s.title}>Perfil</Text>
       </View>
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
@@ -233,11 +233,11 @@ export default function ProfileScreen() {
               style={s.nameInput}
               value={name}
               onChangeText={setName}
-              placeholder="Your name"
+              placeholder="O seu nome"
               placeholderTextColor={C.textMuted}
             />
             <Text style={s.avatarSub}>
-              {age} yrs · {weight} kg · {height} cm
+              {age} anos · {weight} kg · {height} cm
             </Text>
 
             {/* Goal chips — horizontal scroll so they never wrap */}
@@ -292,11 +292,11 @@ export default function ProfileScreen() {
         </Card>
 
         {/* ── Weekly Budget ─────────────────────────────────────────────── */}
-        <Text style={s.slabel}>Budget Semanal</Text>
+        <Text style={s.slabel}>Budget semanal</Text>
         <Card style={{ marginBottom: 14 }}>
           <View style={s.budgetHdr}>
             <View>
-              <Text style={{ fontSize: 13, fontWeight: '500', color: C.text }}>Total Semanal</Text>
+              <Text style={{ fontSize: 13, fontWeight: '500', color: C.text }}>Total </Text>
               <Text style={{ fontSize: 11, color: C.textMuted }}>€{Math.round(tempBudget / 7)}/dia</Text>
             </View>
             <Text style={{ fontSize: 22, fontWeight: '700', color: C.accent }}>€{Math.round(tempBudget)}</Text>

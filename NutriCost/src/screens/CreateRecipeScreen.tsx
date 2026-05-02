@@ -75,8 +75,8 @@ export default function CreateRecipeScreen({ navigation }: Props) {
     setDrafts(prev => prev.filter((_, i) => i !== idx));
 
   const buildRecipe = () => {
-    if (!name.trim()) { Alert.alert('Error', 'Add a recipe name.'); return null; }
-    if (!drafts.length) { Alert.alert('Error', 'Add at least one ingredient.'); return null; }
+    if (!name.trim()) { Alert.alert('Erro', 'Adiciona um nome para a receita.'); return null; }
+    if (!drafts.length) { Alert.alert('Erro', 'Adiciona pelo menos um ingrediente.'); return null; }
 
     const recipe: Recipe = {
       id: `custom_${Date.now()}`,
@@ -114,11 +114,11 @@ export default function CreateRecipeScreen({ navigation }: Props) {
     try {
       const saved = await addRecipe(recipe);
       if (!saved) return;
-      Alert.alert('Saved!', `${saved.name} added to your recipes.`, [
+      Alert.alert('Guardado!', `${saved.name} adicionada às tuas receitas.`, [
         { text: 'OK', onPress: () => navigation.goBack() },
       ]);
     } catch {
-      Alert.alert('Error', 'Could not save recipe to Supabase.');
+      Alert.alert('Erro', 'Não foi possível guardar a receita no Supabase.');
     }
   };
 
@@ -142,11 +142,11 @@ export default function CreateRecipeScreen({ navigation }: Props) {
         },
       });
 
-      Alert.alert('Saved & logged!', `${saved.name} was added and logged.`, [
+      Alert.alert('Guardado & registado!', `${saved.name} foi adicionada e registada.`, [
         { text: 'OK', onPress: () => navigation.goBack() },
       ]);
     } catch {
-      Alert.alert('Error', 'Could not save recipe to Supabase.');
+      Alert.alert('Erro', 'Não foi possível guardar a receita no Supabase.');
     }
   };
 
@@ -158,21 +158,21 @@ export default function CreateRecipeScreen({ navigation }: Props) {
       <View style={s.hdr}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={s.back}>
           <Ionicons name="arrow-back" size={14} color={C.accent} />
-          <Text style={s.backTxt}>Back</Text>
+          <Text style={s.backTxt}>Voltar</Text>
         </TouchableOpacity>
-        <Text style={s.title}>New Recipe</Text>
+        <Text style={s.title}>Nova receita</Text>
       </View>
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         {/* Name */}
-        <Text style={s.fieldLabel}>Recipe name</Text>
+        <Text style={s.fieldLabel}>Nome da receita</Text>
         <TextInput
           style={s.textInput} value={name} onChangeText={setName}
-          placeholder="e.g. My Protein Bowl" placeholderTextColor={C.textMuted}
+          placeholder="e.g. A minha salada de atum" placeholderTextColor={C.textMuted}
         />
 
         {/* Meal type */}
-        <Text style={[s.fieldLabel, { marginTop: 12 }]}>Meal type</Text>
+        <Text style={[s.fieldLabel, { marginTop: 12 }]}>Tipo de refeição</Text>
         <View style={s.chipRow}>
           {MEAL_TYPES.map(mt => (
             <TouchableOpacity
@@ -186,7 +186,7 @@ export default function CreateRecipeScreen({ navigation }: Props) {
         </View>
 
         {/* Diet tags */}
-        <Text style={[s.fieldLabel, { marginTop: 12 }]}>Diet tags</Text>
+        <Text style={[s.fieldLabel, { marginTop: 12 }]}>Tipo de dieta</Text>
         <View style={s.chipRow}>
           {DIET_TAGS.map(tag => (
             <TouchableOpacity
@@ -200,7 +200,7 @@ export default function CreateRecipeScreen({ navigation }: Props) {
         </View>
 
         <View style={s.divider} />
-        <Text style={s.sLabel}>Ingredients</Text>
+        <Text style={s.sLabel}>Ingredientes</Text>
 
         {drafts.map((d, idx) => (
           <Card key={idx} style={{ marginBottom: 9 }}>
@@ -230,15 +230,15 @@ export default function CreateRecipeScreen({ navigation }: Props) {
           style={s.addBtn}
           onPress={() => navigation.navigate('IngredientSearch', { mode: 'addToRecipe' })}
         >
-          <Text style={s.addBtnTxt}>+ Add Ingredient</Text>
+          <Text style={s.addBtnTxt}>+ Adicionar ingrediente</Text>
         </TouchableOpacity>
 
-        <Text style={[s.fieldLabel, { marginTop: 12 }]}>Instructions (optional)</Text>
+        <Text style={[s.fieldLabel, { marginTop: 12 }]}>Instruções (opcionais)</Text>
         <TextInput
           style={[s.textInput, s.instructionsInput]}
           value={instructions}
           onChangeText={setInstructions}
-          placeholder="e.g. Mix all ingredients and cook for 10 minutes"
+          placeholder="e.g. Mistura tudo e serve fresco"
           placeholderTextColor={C.textMuted}
           multiline
           textAlignVertical="top"
@@ -248,13 +248,13 @@ export default function CreateRecipeScreen({ navigation }: Props) {
           <>
             <View style={s.divider} />
             <Card style={{ marginBottom: 14 }}>
-              <Text style={s.sLabel}>Estimated Nutrition</Text>
+              <Text style={s.sLabel}>Nutrição Estimada</Text>
               <View style={s.summaryGrid}>
-                <View><Text style={s.sumLabel}>Calories</Text><Text style={s.sumVal}>{Math.round(macros.calories)} <Text style={s.sumUnit}>kcal</Text></Text></View>
-                <View><Text style={s.sumLabel}>Total Cost</Text><Text style={[s.sumVal, { color: C.accent }]}>€{totalCost.toFixed(2)}</Text></View>
-                <View><Text style={s.sumLabel}>Protein</Text><Text style={[s.sumVal, { fontSize: 16, color: C.protein }]}>{Math.round(macros.protein)}g</Text></View>
+                <View><Text style={s.sumLabel}>Calorias</Text><Text style={s.sumVal}>{Math.round(macros.calories)} <Text style={s.sumUnit}>kcal</Text></Text></View>
+                <View><Text style={s.sumLabel}>Custo Total</Text><Text style={[s.sumVal, { color: C.accent }]}>€{totalCost.toFixed(2)}</Text></View>
+                <View><Text style={s.sumLabel}>Proteína</Text><Text style={[s.sumVal, { fontSize: 16, color: C.protein }]}>{Math.round(macros.protein)}g</Text></View>
                 <View><Text style={s.sumLabel}>Carbs</Text><Text style={[s.sumVal, { fontSize: 16, color: C.carbs }]}>{Math.round(macros.carbs)}g</Text></View>
-                <View><Text style={s.sumLabel}>Fat</Text><Text style={[s.sumVal, { fontSize: 16, color: C.fat }]}>{Math.round(macros.fat)}g</Text></View>
+                <View><Text style={s.sumLabel}>Gordura</Text><Text style={[s.sumVal, { fontSize: 16, color: C.fat }]}>{Math.round(macros.fat)}g</Text></View>
               </View>
             </Card>
           </>
@@ -262,10 +262,10 @@ export default function CreateRecipeScreen({ navigation }: Props) {
 
         <View style={s.saveRow}>
           <TouchableOpacity style={[s.saveBtn, s.saveBtnSecondary]} onPress={handleSave}>
-            <Text style={s.saveBtnTxtSecondary}>Save Recipe</Text>
+            <Text style={s.saveBtnTxtSecondary}>Guardar receita</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.saveBtn} onPress={handleSaveAndLog}>
-            <Text style={s.saveBtnTxt}>Save & Log Recipe</Text>
+            <Text style={s.saveBtnTxt}>Guardar e registar</Text>
           </TouchableOpacity>
         </View>
         <View style={{ height: 40 }} />

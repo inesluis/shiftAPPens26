@@ -72,7 +72,7 @@ export default function TrackingScreen() {
         <Text style={s.slabel}>Refeições Registadas</Text>
         {todayLogs.length === 0 && (
           <Card style={{ marginBottom: 10, alignItems: 'center', paddingVertical: 24 }}>
-            <Text style={{ fontSize: 13, color: C.textMuted }}>Ainda não há refeições registadas para hoje</Text>
+            <Text style={{ fontSize: 13, color: C.textMuted }}>Ainda não há refeições registadas hoje</Text>
           </Card>
         )}
         {todayLogs.map(log => (
@@ -115,7 +115,7 @@ export default function TrackingScreen() {
           <Text style={s.budgetSub}>
             {overBudget
               ? `€${(todayCost - dailyLimit).toFixed(2)} acima do budget hoje`
-              : `€${(dailyLimit - todayCost).toFixed(2)} restantes para hoje`}
+              : `€${(dailyLimit - todayCost).toFixed(2)} restantes hoje`}
           </Text>
         </Card>
 

@@ -346,12 +346,12 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                 <View style={s.hdr}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={s.back}>
                         <Ionicons name="arrow-back" size={14} color={C.accent} />
-                        <Text style={s.backTxt}>Back</Text>
+                        <Text style={s.backTxt}>Voltar</Text>
                     </TouchableOpacity>
-                    <Text style={s.title}>Recipe</Text>
+                    <Text style={s.title}>Receita</Text>
                 </View>
                 <View style={s.emptyWrap}>
-                    <Text style={s.emptyText}>Recipe not found.</Text>
+                    <Text style={s.emptyText}>Receita não encontrada.</Text>
                 </View>
             </View>
         );
@@ -398,7 +398,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                 <View style={s.hdrTop}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={s.back}>
                         <Ionicons name="arrow-back" size={14} color={C.accent} />
-                        <Text style={s.backTxt}>Back</Text>
+                        <Text style={s.backTxt}>Voltar</Text>
                     </TouchableOpacity>
                     {canEdit && (
                         <TouchableOpacity style={s.editBtn} onPress={() => setIsEditing(prev => !prev)}>
@@ -413,7 +413,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
             <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
                 {isEditing && canEdit && (
                     <>
-                        <Text style={s.sectionTitle}>Tipo de refeicao</Text>
+                        <Text style={s.sectionTitle}>Tipo de refeição</Text>
                         <View style={s.chipRow}>
                             {MEAL_TYPES.map(mt => (
                                 <TouchableOpacity
@@ -495,33 +495,33 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                             style={s.addBtn}
                             onPress={() => navigation.navigate('IngredientSearch', { mode: 'addToRecipe' })}
                         >
-                            <Text style={s.addBtnTxt}>+ Add Ingredient</Text>
+                            <Text style={s.addBtnTxt}>+ Adicionar ingrediente</Text>
                         </TouchableOpacity>
                     )}
                 </Card>
 
                 <Card>
-                    <Text style={s.sectionTitle}>Instrucoes</Text>
+                    <Text style={s.sectionTitle}>Instruções</Text>
                     {isEditing && canEdit ? (
                         <TextInput
                             style={[s.instructionsInput, s.textInput]}
                             value={instructions}
                             onChangeText={setInstructions}
-                            placeholder="Adicionar instrucoes"
+                            placeholder="Adicionar instruções"
                             placeholderTextColor={C.textMuted}
                             multiline
                             textAlignVertical="top"
                         />
                     ) : (
                         <Text style={recipe.instructions ? s.instructions : s.muted}>
-                            {recipe.instructions?.trim() || 'Sem instrucoes.'}
+                            {recipe.instructions?.trim() || 'Sem instruções.'}
                         </Text>
                     )}
                 </Card>
 
                 {isEditing && canEdit && (
                     <TouchableOpacity style={s.saveBtn} onPress={handleSave}>
-                        <Text style={s.saveBtnTxt}>Guardar alteracoes</Text>
+                        <Text style={s.saveBtnTxt}>Guardar alterações</Text>
                     </TouchableOpacity>
                 )}
 
