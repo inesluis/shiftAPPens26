@@ -184,7 +184,7 @@ export default function ProfileScreen() {
   const initials = name.trim().split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?';
 
   return (
-    <View style={[s.container, { paddingTop: insets.top }]}>
+    <View style={[s.container, { paddingTop: insets.top + 20 }]}>
       <View style={s.hdr}>
         <Text style={s.title}>Perfil</Text>
       </View>

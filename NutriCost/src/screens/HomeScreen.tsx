@@ -23,7 +23,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   };
 
   return (
-    <View style={[s.container, { paddingTop: insets.top }]}>
+    <View style={[s.container, { paddingTop: insets.top + 20 }]}>
       <StatusBar barStyle="light-content" />
       <View style={s.hdr}>
         <Text style={s.greeting}>{greeting()}</Text>

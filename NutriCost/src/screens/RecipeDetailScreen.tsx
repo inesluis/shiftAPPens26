@@ -344,7 +344,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
 
     if (!recipe) {
         return (
-            <View style={[s.container, { paddingTop: insets.top }]}>
+            <View style={[s.container, { paddingTop: insets.top + 20 }]}>
                 <View style={s.hdr}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={s.back}>
                         <Ionicons name="arrow-back" size={14} color={C.accent} />
@@ -410,7 +410,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
     };
 
     return (
-        <View style={[s.container, { paddingTop: insets.top }]}>
+        <View style={[s.container, { paddingTop: insets.top + 20 }]}>
             <View style={s.hdr}>
                 <View style={s.hdrTop}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={s.back}>

@@ -46,7 +46,7 @@ export default function TrackingScreen() {
   const today = new Date().toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' });
 
   return (
-    <View style={[s.container, { paddingTop: insets.top }]}>
+    <View style={[s.container, { paddingTop: insets.top + 20 }]}>
       <View style={s.hdr}>
         <Text style={s.title}>Registo de hoje</Text>
         <Text style={s.sub}>{today}</Text>

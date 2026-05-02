@@ -52,7 +52,7 @@ export default function LoginScreen({ navigation }: Props) {
 
     return (
         <KeyboardAvoidingView
-            style={[s.container, { paddingTop: insets.top }]}
+            style={[s.container, { paddingTop: insets.top + 20 }]}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
             <View style={s.hdr}>

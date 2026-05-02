@@ -68,7 +68,7 @@ export default function RecipesScreen() {
   };
 
   return (
-    <View style={[s.container, { paddingTop: insets.top }]}>
+    <View style={[s.container, { paddingTop: insets.top + 20 }]}>
       <View style={s.hdr}>
         <View style={s.hdrTop}>
           <View>
