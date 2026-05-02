@@ -4,43 +4,60 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.example.jakartapp.dto.RecipeCostResponse;
 import org.example.jakartapp.dto.RecipeRequest;
 import org.example.jakartapp.dto.RecipeResponse;
+import org.example.jakartapp.entity.Recipe;
+import org.example.jakartapp.repository.RecipeCostRepository;
+import org.example.jakartapp.repository.RecipeRepository;
 import org.example.jakartapp.service.AiService;
-import org.example.jakartapp.util.DbUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-@Path("recipes")
+@Path("/recipes")
+@Produces(MediaType.APPLICATION_JSON)
 public class RecipeResource {
+
+    @Inject
+    private RecipeRepository recipeRepository;
+
+    @Inject
+    private RecipeCostRepository recipeCostRepository;
 
     @Inject
     private AiService aiService;
 
     @GET
-    @Path("/{name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getRecipe(@PathParam("name") String name) {
-        try (Connection conn = DbUtil.getConnection()) {
-            String sql = "SELECT * FROM recipes WHERE name = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, name);
-                ResultSet rs = pstmt.executeQuery();
-                List<String> recipes = new ArrayList<>();
-                while (rs.next()) {
-                    recipes.add(rs.getString("content"));
-                }
-                return Response.ok(recipes).build();
-            }
-        } catch (SQLException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Database error: " + e.getMessage()).build();
+    public Response getAllRecipes() {
+        List<Recipe> recipes = recipeRepository.findAll();
+        return Response.ok(recipes).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response getRecipeById(@PathParam("id") Long id) {
+        Recipe r = recipeRepository.findById(id);
+        if (r == null) return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.ok(r).build();
+    }
+
+    @GET
+    @Path("/search")
+    public Response searchRecipes(@QueryParam("term") String term) {
+        List<Recipe> recipes = recipeRepository.searchByName(term);
+        return Response.ok(recipes).build();
+    }
+
+    @GET
+    @Path("/{id}/costs")
+    public Response getRecipeCosts(@PathParam("id") Long id) {
+        Recipe recipe = recipeRepository.findById(id);
+        if (recipe == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
+
+        List<RecipeCostResponse> costs = recipeCostRepository.findCostsByRecipeId(id);
+        return Response.ok(costs).build();
     }
 
     @POST
