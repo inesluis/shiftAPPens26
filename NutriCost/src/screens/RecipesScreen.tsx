@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -7,6 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
 import RecipeCard from '../components/RecipeCard';
 import MealTypePicker from '../components/MealTypePicker';
+import ConfirmModal from '../components/ConfirmModal';
 import { DietTag, MealLog, MealType } from '../types';
 import { C } from '../theme';
 import { RootStackParamList } from '../navigation/types';
@@ -23,6 +24,8 @@ export default function RecipesScreen() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [pickerVisible, setPickerVisible] = useState(false);
   const [pendingRecipeId, setPendingRecipeId] = useState<string | null>(null);
+  const [successModal, setSuccessModal] = useState<{ title: string; message: string } | null>(null);
+  const [errorModal, setErrorModal] = useState<{ title: string; message: string } | null>(null);
 
   const filtered = useMemo(
     () => active === 'Todas' ? state.recipes : state.recipes.filter(r => r.dietTags.includes(active)),
@@ -49,7 +52,7 @@ export default function RecipesScreen() {
     dispatch({ type: 'ADD_MEAL_LOG', payload: log });
     setPickerVisible(false);
     setPendingRecipeId(null);
-    Alert.alert('Registada!', `${recipe.name} adicionada ao registo de ${mealType}.`);
+    setSuccessModal({ title: 'Registada!', message: `${recipe.name} adicionada ao registo de ${mealType}.` });
   };
 
   const handleRefresh = async () => {
@@ -58,7 +61,7 @@ export default function RecipesScreen() {
       setIsRefreshing(true);
       await reloadRecipes();
     } catch {
-      Alert.alert('Erro', 'Não foi possível atualizar as receitas.');
+      setErrorModal({ title: 'Erro', message: 'Não foi possível atualizar as receitas.' });
     } finally {
       setIsRefreshing(false);
     }
@@ -112,6 +115,28 @@ export default function RecipesScreen() {
         onSelect={handleMealSelect}
         onClose={() => { setPickerVisible(false); setPendingRecipeId(null); }}
       />
+
+      {successModal && (
+        <ConfirmModal
+          visible={true}
+          title={successModal.title}
+          message={successModal.message}
+          confirmText="OK"
+          onCancel={() => setSuccessModal(null)}
+          onConfirm={() => setSuccessModal(null)}
+        />
+      )}
+
+      {errorModal && (
+        <ConfirmModal
+          visible={true}
+          title={errorModal.title}
+          message={errorModal.message}
+          confirmText="OK"
+          onCancel={() => setErrorModal(null)}
+          onConfirm={() => setErrorModal(null)}
+        />
+      )}
     </View>
   );
 }

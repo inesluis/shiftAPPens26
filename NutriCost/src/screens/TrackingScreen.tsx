@@ -1,9 +1,10 @@
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
 import Card from '../components/Card';
+import ConfirmModal from '../components/ConfirmModal';
 import MacroRing from '../components/MacroRing';
 import MacroBar from '../components/MacroBar';
 import WeeklyBudgetChart from '../components/WeeklyBudgetChart';
@@ -20,6 +21,7 @@ const MEAL_ICON: Record<MealType, string> = {
 export default function TrackingScreen() {
   const insets = useSafeAreaInsets();
   const { state, dispatch, getTodayLogs, getWeekLogs, getDailyBudget } = useApp();
+  const [logIdToRemove, setLogIdToRemove] = useState<string | null>(null);
   const todayLogs  = getTodayLogs();
   const weekLogs   = getWeekLogs();
   const dailyLimit = getDailyBudget();
@@ -39,11 +41,7 @@ export default function TrackingScreen() {
   const overBudget  = todayCost > dailyLimit;
   const loggedTypes = new Set(todayLogs.map(l => l.mealType));
 
-  const removeLog = (id: string) =>
-    Alert.alert('Remover refeição', 'Tem certeza que deseja remover esta refeição do seu registo?', [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Remover', style: 'destructive', onPress: () => dispatch({ type: 'REMOVE_MEAL_LOG', payload: id }) },
-    ]);
+  const removeLog = (id: string) => setLogIdToRemove(id);
 
   const today = new Date().toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' });
 
@@ -125,6 +123,21 @@ export default function TrackingScreen() {
           <WeeklyBudgetChart logs={weekLogs} dailyLimit={dailyLimit} />
         </Card>
       </ScrollView>
+
+      <ConfirmModal
+        visible={logIdToRemove !== null}
+        title="Remover refeição"
+        message="Tem certeza que deseja remover esta refeição do seu registo?"
+        confirmText="Remover"
+        danger
+        onCancel={() => setLogIdToRemove(null)}
+        onConfirm={() => {
+          if (logIdToRemove) {
+            dispatch({ type: 'REMOVE_MEAL_LOG', payload: logIdToRemove });
+            setLogIdToRemove(null);
+          }
+        }}
+      />
     </View>
   );
 }
