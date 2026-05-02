@@ -11,10 +11,10 @@ import { MealType } from '../types';
 import { C, MEAL_COLOR } from '../theme';
 
 const MEAL_ICON: Record<MealType, string> = {
-  Breakfast: 'sunny-outline',
-  Lunch:     'partly-sunny-outline',
-  Dinner:    'moon-outline',
-  Snack:     'nutrition-outline',
+  'Pequeno-Almoço': 'sunny-outline',
+  'Almoço':     'partly-sunny-outline',
+  'Jantar':    'moon-outline',
+  'Snack':     'nutrition-outline',
 };
 
 export default function TrackingScreen() {
@@ -40,9 +40,9 @@ export default function TrackingScreen() {
   const loggedTypes = new Set(todayLogs.map(l => l.mealType));
 
   const removeLog = (id: string) =>
-    Alert.alert('Remove meal', 'Remove this from today\'s log?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Remove', style: 'destructive', onPress: () => dispatch({ type: 'REMOVE_MEAL_LOG', payload: id }) },
+    Alert.alert('Remover refeição', 'Tem certeza que deseja remover esta refeição do seu registo?', [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Remover', style: 'destructive', onPress: () => dispatch({ type: 'REMOVE_MEAL_LOG', payload: id }) },
     ]);
 
   const today = new Date().toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' });
@@ -50,7 +50,7 @@ export default function TrackingScreen() {
   return (
     <View style={[s.container, { paddingTop: insets.top }]}>
       <View style={s.hdr}>
-        <Text style={s.title}>Today's Log</Text>
+        <Text style={s.title}>Registo de hoje</Text>
         <Text style={s.sub}>{today}</Text>
       </View>
 
@@ -61,18 +61,18 @@ export default function TrackingScreen() {
           <View style={s.macroSection}>
             <MacroRing calories={todayMacros.calories} goalCalories={macroGoals.calories} />
             <View style={{ flex: 1, marginLeft: 12 }}>
-              <MacroBar label="Protein" value={todayMacros.protein} goal={macroGoals.protein} unit="g" color={C.protein} />
-              <MacroBar label="Carbs"   value={todayMacros.carbs}   goal={macroGoals.carbs}   unit="g" color={C.carbs} />
-              <MacroBar label="Fat"     value={todayMacros.fat}     goal={macroGoals.fat}     unit="g" color={C.fat} />
+              <MacroBar label="Proteína" value={todayMacros.protein} goal={macroGoals.protein} unit="g" color={C.protein} />
+              <MacroBar label="Carboidratos"   value={todayMacros.carbs}   goal={macroGoals.carbs}   unit="g" color={C.carbs} />
+              <MacroBar label="Gordura"     value={todayMacros.fat}     goal={macroGoals.fat}     unit="g" color={C.fat} />
             </View>
           </View>
         </Card>
 
         {/* Meal logs */}
-        <Text style={s.slabel}>Meals Logged</Text>
+        <Text style={s.slabel}>Refeições Registadas</Text>
         {todayLogs.length === 0 && (
           <Card style={{ marginBottom: 10, alignItems: 'center', paddingVertical: 24 }}>
-            <Text style={{ fontSize: 13, color: C.textMuted }}>No meals logged yet today</Text>
+            <Text style={{ fontSize: 13, color: C.textMuted }}>Ainda não há refeições registadas para hoje</Text>
           </Card>
         )}
         {todayLogs.map(log => (
@@ -101,11 +101,11 @@ export default function TrackingScreen() {
         <Card style={{ marginBottom: 12 }}>
           <View style={s.budgetRow}>
             <View>
-              <Text style={s.slabel}>Spent Today</Text>
+              <Text style={s.slabel}>Gasto hoje</Text>
               <Text style={[s.bigNum, { color: C.accent }]}>€{todayCost.toFixed(2)}</Text>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
-              <Text style={s.slabel}>Daily Limit</Text>
+              <Text style={s.slabel}>Limite Diário</Text>
               <Text style={[s.bigNum, { color: C.textMuted }]}>€{dailyLimit.toFixed(2)}</Text>
             </View>
           </View>
@@ -114,14 +114,14 @@ export default function TrackingScreen() {
           </View>
           <Text style={s.budgetSub}>
             {overBudget
-              ? `€${(todayCost - dailyLimit).toFixed(2)} over budget`
-              : `€${(dailyLimit - todayCost).toFixed(2)} remaining today`}
+              ? `€${(todayCost - dailyLimit).toFixed(2)} acima do budget hoje`
+              : `€${(dailyLimit - todayCost).toFixed(2)} restantes para hoje`}
           </Text>
         </Card>
 
         {/* Weekly chart */}
         <Card style={{ marginBottom: 14 }}>
-          <Text style={s.slabel}>Weekly Spending</Text>
+          <Text style={s.slabel}>Gastos Semanais</Text>
           <WeeklyBudgetChart logs={weekLogs} dailyLimit={dailyLimit} />
         </Card>
       </ScrollView>

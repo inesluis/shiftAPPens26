@@ -21,11 +21,11 @@ export default function RegisterScreen({ navigation }: Props) {
 
     const handleRegister = async () => {
         const nextErrors: { name?: string; email?: string; password?: string } = {};
-        if (!name.trim()) nextErrors.name = 'Name is required.';
-        if (!email.trim()) nextErrors.email = 'Email is required.';
-        else if (!isEmailValid(email)) nextErrors.email = 'Enter a valid email.';
-        if (!password.trim()) nextErrors.password = 'Password is required.';
-        else if (password.trim().length < 6) nextErrors.password = 'Use at least 6 characters.';
+        if (!name.trim()) nextErrors.name = 'Insira o nome.';
+        if (!email.trim()) nextErrors.email = 'Insira o email.';
+        else if (!isEmailValid(email)) nextErrors.email = 'Insira um email válido.';
+        if (!password.trim()) nextErrors.password = 'Insira a senha.';
+        else if (password.trim().length < 6) nextErrors.password = 'Use pelo menos 6 caracteres.';
 
         setErrors(nextErrors);
         if (Object.keys(nextErrors).length > 0) return;
@@ -65,17 +65,17 @@ export default function RegisterScreen({ navigation }: Props) {
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
             <View style={s.hdr}>
-                <Text style={s.title}>Create Account</Text>
-                <Text style={s.sub}>Start tracking your nutrition and budget</Text>
+                <Text style={s.title}>Criar Conta</Text>
+                <Text style={s.sub}>Comece a rastrear sua nutrição e orçamento</Text>
             </View>
 
             <View style={s.body}>
-                <Text style={s.label}>Name</Text>
+                <Text style={s.label}>Nome</Text>
                 <TextInput
                     style={[s.input, errors.name && s.inputError]}
                     value={name}
                     onChangeText={handleNameChange}
-                    placeholder="Your name"
+                    placeholder="O seu nome"
                     placeholderTextColor={C.textMuted}
                 />
                 {errors.name && <Text style={s.errorText}>{errors.name}</Text>}
@@ -85,7 +85,7 @@ export default function RegisterScreen({ navigation }: Props) {
                     style={[s.input, errors.email && s.inputError]}
                     value={email}
                     onChangeText={handleEmailChange}
-                    placeholder="you@email.com"
+                    placeholder="utilizador@email.com"
                     placeholderTextColor={C.textMuted}
                     autoCapitalize="none"
                     keyboardType="email-address"
@@ -97,7 +97,7 @@ export default function RegisterScreen({ navigation }: Props) {
                     style={[s.input, errors.password && s.inputError]}
                     value={password}
                     onChangeText={handlePasswordChange}
-                    placeholder="Create a password"
+                    placeholder="Crie uma palavra-passe"
                     placeholderTextColor={C.textMuted}
                     secureTextEntry
                 />
@@ -106,13 +106,13 @@ export default function RegisterScreen({ navigation }: Props) {
                 {formError && <Text style={s.errorText}>{formError}</Text>}
 
                 <TouchableOpacity style={[s.primaryBtn, loading && s.primaryBtnDisabled]} onPress={handleRegister} disabled={loading}>
-                    <Text style={s.primaryTxt}>{loading ? 'Creating...' : 'Create Account'}</Text>
+                    <Text style={s.primaryTxt}>{loading ? 'A criar...' : 'Criar Conta'}</Text>
                 </TouchableOpacity>
 
                 <View style={s.footerRow}>
-                    <Text style={s.footerTxt}>Already have an account?</Text>
+                    <Text style={s.footerTxt}>Já tem uma conta?</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                        <Text style={s.linkTxt}>Log in</Text>
+                        <Text style={s.linkTxt}>Iniciar sessão</Text>
                     </TouchableOpacity>
                 </View>
             </View>

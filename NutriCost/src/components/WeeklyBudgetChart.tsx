@@ -9,7 +9,7 @@ interface Props {
   dailyLimit: number;
 }
 
-const MEAL_ORDER: MealType[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+const MEAL_ORDER: MealType[] = ['Pequeno-Almoço', 'Almoço', 'Jantar', 'Snack'];
 
 function last7Days(): string[] {
   return Array.from({ length: 7 }, (_, i) => {
@@ -21,7 +21,7 @@ function last7Days(): string[] {
 
 function shortDay(ds: string) {
   const d = new Date(ds + 'T12:00:00');
-  return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+  return ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][d.getDay()];
 }
 
 export default function WeeklyBudgetChart({ logs, dailyLimit }: Props) {
@@ -72,7 +72,7 @@ export default function WeeklyBudgetChart({ logs, dailyLimit }: Props) {
         ))}
         <View style={s.legendItem}>
           <View style={s.dash} />
-          <Text style={s.legendText}>Limit</Text>
+          <Text style={s.legendText}>Limite</Text>
         </View>
       </View>
 
@@ -156,7 +156,7 @@ export default function WeeklyBudgetChart({ logs, dailyLimit }: Props) {
 
       {selected && (
         <View style={s.detail}>
-          <Text style={s.detailTitle}>Selected day</Text>
+          <Text style={s.detailTitle}>Dia</Text>
           <Text style={s.detailSub}>
             {new Date(selected.date + 'T12:00:00').toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'short' })}
             {' '}· €{selected.total.toFixed(2)}

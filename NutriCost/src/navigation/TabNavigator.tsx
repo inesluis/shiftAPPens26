@@ -11,10 +11,10 @@ import { C } from '../theme';
 const Tab = createBottomTabNavigator<TabParamList>();
 
 const ICONS: Record<string, string> = {
-  Home:     'home-outline',
-  Recipes:  'document-text-outline',
-  Tracking: 'pulse-outline',
-  Profile:  'person-outline',
+  Menu:     'home-outline',
+  Receitas:  'document-text-outline',
+  Registo: 'pulse-outline',
+  Perfil:  'person-outline',
 };
 
 export default function TabNavigator() {
@@ -38,10 +38,10 @@ export default function TabNavigator() {
         ),
       })}
     >
-      <Tab.Screen name="Home"     component={HomeScreen} />
-      <Tab.Screen name="Recipes"  component={RecipesScreen} />
-      <Tab.Screen name="Tracking" component={TrackingScreen} />
-      <Tab.Screen name="Profile"  component={ProfileScreen} />
+      <Tab.Screen name="Menu"     component={HomeScreen} />
+      <Tab.Screen name="Receitas"  component={RecipesScreen} />
+      <Tab.Screen name="Registo" component={TrackingScreen} />
+      <Tab.Screen name="Perfil"  component={ProfileScreen} />
     </Tab.Navigator>
   );
 }

@@ -6,11 +6,11 @@ import { C } from '../theme';
 
 const TAG_COLOR: Record<string, string> = {
   Vegan:         C.protein,
-  'High Protein': C.carbs,
+  Proteica:     C.carbs,
   Keto:          C.fat,
-  Mediterranean: C.accent,
+  Mediterrânea: C.accent,
   'Low Carb':    C.carbs,
-  'Gluten Free': C.protein,
+  'Sem Glúten': C.protein,
 };
 
 interface Props {
@@ -34,7 +34,7 @@ export default function RecipeCard({ recipe, onPress, onLog }: Props) {
         <View style={s.macroRow}>
           <Text style={[s.macro, { color: C.protein }]}>P <Text style={s.macroVal}>{recipe.macros.protein}g</Text></Text>
           <Text style={[s.macro, { color: C.carbs }]}>  C <Text style={s.macroVal}>{recipe.macros.carbs}g</Text></Text>
-          <Text style={[s.macro, { color: C.fat }]}>  F <Text style={s.macroVal}>{recipe.macros.fat}g</Text></Text>
+          <Text style={[s.macro, { color: C.fat }]}>  G <Text style={s.macroVal}>{recipe.macros.fat}g</Text></Text>
         </View>
 
         <View style={s.footer}>
@@ -47,7 +47,7 @@ export default function RecipeCard({ recipe, onPress, onLog }: Props) {
           </View>
           {onLog && (
             <TouchableOpacity style={s.logBtn} onPress={onLog}>
-              <Text style={s.logBtnText}>Log Meal</Text>
+              <Text style={s.logBtnText}>Registar Refeição</Text>
             </TouchableOpacity>
           )}
         </View>

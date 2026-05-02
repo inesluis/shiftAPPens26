@@ -18,10 +18,10 @@ import { supabase } from '../supabase';
 
 // ─── Factory defaults (never mutated) ───────────────────────────────────────
 const DEFAULT_PRESETS = {
-  'Muscle Gain': { calories: 2800, protein: 180, carbs: 300, fat: 80, budget: 90 },
-  'Fat Loss':    { calories: 1800, protein: 150, carbs: 120, fat: 60, budget: 70 },
-  'Maintenance': { calories: 2200, protein: 140, carbs: 220, fat: 70, budget: 80 },
-  'Performance': { calories: 2600, protein: 160, carbs: 280, fat: 75, budget: 85 },
+  'Aumento Muscular': { calories: 2800, protein: 180, carbs: 300, fat: 80, budget: 90 },
+  'Perda de Peso':    { calories: 1800, protein: 150, carbs: 120, fat: 60, budget: 70 },
+  'Manutenção': { calories: 2200, protein: 140, carbs: 220, fat: 70, budget: 80 },
+  'Desempenho': { calories: 2600, protein: 160, carbs: 280, fat: 75, budget: 85 },
 };
 
 type GoalKey = keyof typeof DEFAULT_PRESETS;
@@ -159,12 +159,12 @@ export default function ProfileScreen() {
   // ── Reset active goal to factory defaults ────────────────────────────────
   const handleReset = () => {
     Alert.alert(
-      'Reset to defaults',
-      `Restore factory values for "${goal}"?`,
+      'Resetar configurações',
+      `Resetar configurações para "${goal}"?`,
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: 'Cancelar', style: 'cancel' },
         {
-          text: 'Reset',
+          text: 'Resetar',
           style: 'destructive',
           onPress: () => {
             const def = DEFAULT_PRESETS[goal];
@@ -192,14 +192,14 @@ export default function ProfileScreen() {
       macroGoals: { calories: cal, protein, carbs, fat },
     };
     dispatch({ type: 'SET_PROFILE', payload: updated });
-    Alert.alert('Saved!', 'Profile updated.');
+    Alert.alert('Guardado!', 'Perfil atualizado.');
   };
 
   const handleLogout = () => {
-    Alert.alert('Log out', 'Do you want to log out?', [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert('Sair', 'Deseja sair?', [
+      { text: 'Cancelar', style: 'cancel' },
       {
-        text: 'Log out',
+        text: 'Sair',
         style: 'destructive',
         onPress: async () => {
           await supabase.auth.signOut();
@@ -263,13 +263,13 @@ export default function ProfileScreen() {
         </View>
 
         {/* ── Body Info ─────────────────────────────────────────────────── */}
-        <Text style={s.slabel}>Body Info</Text>
+        <Text style={s.slabel}>Perfil Corporal</Text>
         <Card style={{ marginBottom: 14 }}>
           <View style={s.infoGrid}>
             {[
-              { label: 'Age',    value: age,    set: setAge,    unit: 'yrs', type: 'numeric' },
-              { label: 'Weight', value: weight, set: setWeight, unit: 'kg',  type: 'decimal-pad' },
-              { label: 'Height', value: height, set: setHeight, unit: 'cm',  type: 'decimal-pad' },
+              { label: 'Idade',    value: age,    set: setAge,    unit: 'anos', type: 'numeric' },
+              { label: 'Peso', value: weight, set: setWeight, unit: 'kg',  type: 'decimal-pad' },
+              { label: 'Altura', value: height, set: setHeight, unit: 'cm',  type: 'decimal-pad' },
             ].map(({ label, value, set, unit, type }) => (
               <View key={label} style={s.infoItem}>
                 <Text style={s.infoLabel}>{label}</Text>
@@ -292,12 +292,12 @@ export default function ProfileScreen() {
         </Card>
 
         {/* ── Weekly Budget ─────────────────────────────────────────────── */}
-        <Text style={s.slabel}>Weekly Budget</Text>
+        <Text style={s.slabel}>Budget Semanal</Text>
         <Card style={{ marginBottom: 14 }}>
           <View style={s.budgetHdr}>
             <View>
-              <Text style={{ fontSize: 13, fontWeight: '500', color: C.text }}>Total Weekly</Text>
-              <Text style={{ fontSize: 11, color: C.textMuted }}>€{Math.round(tempBudget / 7)}/day</Text>
+              <Text style={{ fontSize: 13, fontWeight: '500', color: C.text }}>Total Semanal</Text>
+              <Text style={{ fontSize: 11, color: C.textMuted }}>€{Math.round(tempBudget / 7)}/dia</Text>
             </View>
             <Text style={{ fontSize: 22, fontWeight: '700', color: C.accent }}>€{Math.round(tempBudget)}</Text>
           </View>
@@ -321,26 +321,26 @@ export default function ProfileScreen() {
 
         {/* ── Daily Macro Goals ─────────────────────────────────────────── */}
         <View style={s.macroHdr}>
-          <Text style={s.slabel}>Daily Macro Goals</Text>
+          <Text style={s.slabel}>Objetivos diário de macros</Text>
           {/* Subtle reset link — not a primary action */}
           <TouchableOpacity onPress={handleReset}>
-            <Text style={s.resetLink}>Reset to defaults</Text>
+            <Text style={s.resetLink}>Resetar para padrões</Text>
           </TouchableOpacity>
         </View>
 
         <Card style={{ marginBottom: 14 }}>
-          <SliderControl label="Calories" value={cal}     set={(v) => { setCal(v);     updateCustomPreset({ calories: v }); }} color={C.accent}  min={1200} max={4000} unit="kcal" />
-          <SliderControl label="Protein"  value={protein} set={(v) => { setProtein(v); updateCustomPreset({ protein:  v }); }} color={C.protein} min={40}   max={300}  unit="g" />
-          <SliderControl label="Carbs"    value={carbs}   set={(v) => { setCarbs(v);   updateCustomPreset({ carbs:    v }); }} color={C.carbs}   min={50}   max={500}  unit="g" />
-          <SliderControl label="Fat"      value={fat}     set={(v) => { setFat(v);     updateCustomPreset({ fat:      v }); }} color={C.fat}     min={20}   max={200}  unit="g" />
+          <SliderControl label="Calorias" value={cal}     set={(v) => { setCal(v);     updateCustomPreset({ calories: v }); }} color={C.accent}  min={1200} max={4000} unit="kcal" />
+          <SliderControl label="Proteína"  value={protein} set={(v) => { setProtein(v); updateCustomPreset({ protein:  v }); }} color={C.protein} min={40}   max={300}  unit="g" />
+          <SliderControl label="Carboidratos"    value={carbs}   set={(v) => { setCarbs(v);   updateCustomPreset({ carbs:    v }); }} color={C.carbs}   min={50}   max={500}  unit="g" />
+          <SliderControl label="Gorduras"      value={fat}     set={(v) => { setFat(v);     updateCustomPreset({ fat:      v }); }} color={C.fat}     min={20}   max={200}  unit="g" />
         </Card>
 
         <TouchableOpacity style={s.saveBtn} onPress={handleSave}>
-          <Text style={s.saveBtnTxt}>Save Profile</Text>
+          <Text style={s.saveBtnTxt}>Guardar perfil</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={s.logoutBtn} onPress={handleLogout}>
-          <Text style={s.logoutTxt}>Log out</Text>
+          <Text style={s.logoutTxt}>Sair</Text>
         </TouchableOpacity>
 
         <View style={{ height: 30 }} />

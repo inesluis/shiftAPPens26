@@ -20,10 +20,10 @@ export default function LoginScreen({ navigation }: Props) {
 
     const handleLogin = async () => {
         const nextErrors: { email?: string; password?: string } = {};
-        if (!email.trim()) nextErrors.email = 'Email is required.';
-        else if (!isEmailValid(email)) nextErrors.email = 'Enter a valid email.';
-        if (!password.trim()) nextErrors.password = 'Password is required.';
-        else if (password.trim().length < 6) nextErrors.password = 'Use at least 6 characters.';
+        if (!email.trim()) nextErrors.email = 'Email é obrigatório.';
+        else if (!isEmailValid(email)) nextErrors.email = 'Insira um email válido.';
+        if (!password.trim()) nextErrors.password = 'Password é obrigatório.';
+        else if (password.trim().length < 6) nextErrors.password = 'Use pelo menos 6 caracteres.';
 
         setErrors(nextErrors);
         if (Object.keys(nextErrors).length > 0) return;
@@ -56,8 +56,8 @@ export default function LoginScreen({ navigation }: Props) {
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
             <View style={s.hdr}>
-                <Text style={s.title}>Welcome Back</Text>
-                <Text style={s.sub}>Log in to continue tracking your meals</Text>
+                <Text style={s.title}>Bem-vindo!</Text>
+                <Text style={s.sub}>Faça login para continuar a seguir as suas refeições</Text>
             </View>
 
             <View style={s.body}>
@@ -66,7 +66,7 @@ export default function LoginScreen({ navigation }: Props) {
                     style={[s.input, errors.email && s.inputError]}
                     value={email}
                     onChangeText={handleEmailChange}
-                    placeholder="you@email.com"
+                    placeholder="utilizador@email.com"
                     placeholderTextColor={C.textMuted}
                     autoCapitalize="none"
                     keyboardType="email-address"
@@ -85,19 +85,19 @@ export default function LoginScreen({ navigation }: Props) {
                 {errors.password && <Text style={s.errorText}>{errors.password}</Text>}
 
                 <TouchableOpacity style={s.link} onPress={() => navigation.navigate('ForgotPassword')}>
-                    <Text style={s.linkTxt}>Forgot password?</Text>
+                    <Text style={s.linkTxt}>Esqueceu-se da password?</Text>
                 </TouchableOpacity>
 
                 {formError && <Text style={s.errorText}>{formError}</Text>}
 
                 <TouchableOpacity style={[s.primaryBtn, loading && s.primaryBtnDisabled]} onPress={handleLogin} disabled={loading}>
-                    <Text style={s.primaryTxt}>{loading ? 'Logging in...' : 'Log In'}</Text>
+                    <Text style={s.primaryTxt}>{loading ? 'A fazer login...' : 'Log In'}</Text>
                 </TouchableOpacity>
 
                 <View style={s.footerRow}>
-                    <Text style={s.footerTxt}>New here?</Text>
+                    <Text style={s.footerTxt}>Novo à aplicação?</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                        <Text style={s.linkTxt}>Create an account</Text>
+                        <Text style={s.linkTxt}>Criar uma conta</Text>
                     </TouchableOpacity>
                 </View>
             </View>

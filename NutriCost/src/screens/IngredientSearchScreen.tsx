@@ -43,10 +43,9 @@ type PriceRow = {
 const STORE_META: Record<Store, { label: string; logo: any }> = {
   continente: { label: 'Continente', logo: require('../../assets/supermarkets/continente.png') },
   pingo_doce: { label: 'Pingo Doce', logo: require('../../assets/supermarkets/pingoDoce.png') },
-  lidl:       { label: 'Lidl',       logo: require('../../assets/supermarkets/lidl.png') },
 };
 
-const STORES: Store[] = ['continente', 'pingo_doce', 'lidl'];
+const STORES: Store[] = ['continente', 'pingo_doce'];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function resolveStore(name: string): Store | null {
@@ -202,9 +201,9 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
       <View style={s.hdr}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={s.back}>
           <Ionicons name="arrow-back" size={14} color={C.accent} />
-          <Text style={s.backTxt}>Back</Text>
+          <Text style={s.backTxt}>Voltar</Text>
         </TouchableOpacity>
-        <Text style={s.title}>Compare Prices</Text>
+        <Text style={s.title}>Comparar Preços</Text>
       </View>
 
       {/* Search */}
@@ -214,7 +213,7 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
           style={s.input}
           value={query}
           onChangeText={setQuery}
-          placeholder="e.g. Coconut milk, salmon, rice…"
+          placeholder="e.g. Arroz, salmão, leite..."
           placeholderTextColor={C.textMuted}
           autoFocus
         />
@@ -273,7 +272,7 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
                         <View style={s.priceWrap}>
                           {isBest && (
                             <View style={s.bestBadge}>
-                              <Text style={s.bestTxt}>BEST</Text>
+                              <Text style={s.bestTxt}>MELHOR</Text>
                             </View>
                           )}
                           <Text style={[s.price, isBest && s.priceBest]}>

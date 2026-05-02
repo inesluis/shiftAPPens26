@@ -1,6 +1,6 @@
-export type DietTag = 'Vegan' | 'High Protein' | 'Keto' | 'Mediterranean' | 'Low Carb' | 'Gluten Free';
-export type MealType = 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack';
-export type Store = 'continente' | 'pingo_doce' | 'lidl';
+export type DietTag = 'Vegan' | 'Proteica' | 'Keto' | 'Mediterrânica' | 'Low Carb' | 'Sem Glúten';
+export type MealType = 'Pequeno-Almoço' | 'Almoço' | 'Jantar' | 'Snack';
+export type Store = 'continente' | 'pingo_doce';
 
 export interface Macros {
   calories: number;
