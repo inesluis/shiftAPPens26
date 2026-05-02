@@ -8,7 +8,7 @@ import Card from '../components/Card';
 import { RootStackParamList } from '../navigation/types';
 import { C, R } from '../theme';
 import { ingredientPicker } from '../utils/ingredientPicker';
-import { MealType, RecipeIngredient, Store, MealLog } from '../types';
+import { MealType, RecipeIngredient, Store, MealLog, DietTag } from '../types';
 import { supabase } from '../supabase';
 import MealTypePicker from '../components/MealTypePicker';
 import ConfirmModal from '../components/ConfirmModal';
@@ -19,7 +19,6 @@ const STORE_LABEL: Record<Store, string> = {
 };
 
 const STORES: Store[] = ['continente', 'pingo_doce'];
-const MEAL_TYPES: MealType[] = ['Pequeno-Almoço', 'Almoço', 'Jantar', 'Snack'];
 const DIET_TAGS: DietTag[] = ['Vegan', 'Proteica', 'Keto', 'Mediterrânica', 'Low Carb', 'Sem Glúten'];
 
 type Props = NativeStackScreenProps<RootStackParamList, 'RecipeDetail'>;
