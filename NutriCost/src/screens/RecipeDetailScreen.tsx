@@ -44,8 +44,9 @@ function sumMacros(drafts: RecipeIngredient[]) {
 
 export default function RecipeDetailScreen({ navigation, route }: Props) {
     const insets = useSafeAreaInsets();
-    const { state, dispatch } = useApp();
+    const { state, updateRecipe } = useApp();
     const recipe = state.recipes.find(r => r.id === route.params.recipeId);
+    const canEdit = recipe?.isCustom ?? false;
     const [isEditing, setIsEditing] = useState(false);
     const [mealType, setMealType] = useState<MealType>('Lunch');
     const [instructions, setInstructions] = useState('');
@@ -103,7 +104,9 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
 
     const totalCost = drafts.reduce((sum, d) => sum + calcIngredientCost(d.weightG, d.pricePerKg), 0);
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        if (!recipe || !canEdit) return;
+
         const macros = sumMacros(drafts);
         const updated = {
             ...recipe,
@@ -119,8 +122,12 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
             instructions: instructions.trim() ? instructions.trim() : undefined,
         };
 
-        dispatch({ type: 'UPDATE_RECIPE', payload: updated });
-        setIsEditing(false);
+        try {
+            await updateRecipe(updated);
+            setIsEditing(false);
+        } catch {
+            // Keep editing state so user does not lose changes
+        }
     };
 
     return (
@@ -131,16 +138,18 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                         <Ionicons name="arrow-back" size={14} color={C.accent} />
                         <Text style={s.backTxt}>Back</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={s.editBtn} onPress={() => setIsEditing(prev => !prev)}>
-                        <Ionicons name="pencil" size={15} color={C.accent} />
-                    </TouchableOpacity>
+                    {canEdit && (
+                        <TouchableOpacity style={s.editBtn} onPress={() => setIsEditing(prev => !prev)}>
+                            <Ionicons name="pencil" size={15} color={C.accent} />
+                        </TouchableOpacity>
+                    )}
                 </View>
                 <Text style={s.title}>{recipe.name}</Text>
                 <Text style={s.sub}>{mealType} · €{totalCost.toFixed(2)}</Text>
             </View>
 
             <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-                {isEditing && (
+                {isEditing && canEdit && (
                     <>
                         <Text style={s.sectionTitle}>Meal type</Text>
                         <View style={s.chipRow}>
@@ -189,7 +198,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                         ))
                     )}
 
-                    {isEditing && (
+                    {isEditing && canEdit && (
                         <TouchableOpacity
                             style={s.addBtn}
                             onPress={() => navigation.navigate('IngredientSearch', { mode: 'addToRecipe' })}
@@ -201,7 +210,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
 
                 <Card>
                     <Text style={s.sectionTitle}>Instructions</Text>
-                    {isEditing ? (
+                    {isEditing && canEdit ? (
                         <TextInput
                             style={[s.instructionsInput, s.textInput]}
                             value={instructions}
@@ -218,7 +227,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                     )}
                 </Card>
 
-                {isEditing && (
+                {isEditing && canEdit && (
                     <TouchableOpacity style={s.saveBtn} onPress={handleSave}>
                         <Text style={s.saveBtnTxt}>Save alterations</Text>
                     </TouchableOpacity>

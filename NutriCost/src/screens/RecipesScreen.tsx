@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -15,9 +16,10 @@ const FILTERS: (DietTag | 'All')[] = [
 
 export default function RecipesScreen() {
   const insets = useSafeAreaInsets();
-  const { state, dispatch, todayDate } = useApp();
+  const { state, dispatch, todayDate, reloadRecipes } = useApp();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [active, setActive] = useState<DietTag | 'All'>('All');
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const filtered = useMemo(
     () => active === 'All' ? state.recipes : state.recipes.filter(r => r.dietTags.includes(active)),
@@ -40,11 +42,31 @@ export default function RecipesScreen() {
     Alert.alert('Logged!', `${recipe.name} added to today's log.`);
   };
 
+  const handleRefresh = async () => {
+    if (isRefreshing) return;
+    try {
+      setIsRefreshing(true);
+      await reloadRecipes();
+    } catch {
+      Alert.alert('Error', 'Could not refresh recipes.');
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   return (
     <View style={[s.container, { paddingTop: insets.top }]}>
       <View style={s.hdr}>
-        <Text style={s.title}>Recipes</Text>
-        <Text style={s.sub}>Curated meals for every goal</Text>
+        <View style={s.hdrTop}>
+          <View>
+            <Text style={s.title}>Recipes</Text>
+            <Text style={s.sub}>Curated meals for every goal</Text>
+          </View>
+          <TouchableOpacity style={s.refreshBtn} onPress={handleRefresh} disabled={isRefreshing}>
+            <Ionicons name="refresh" size={16} color={C.accent} />
+            <Text style={s.refreshTxt}>{isRefreshing ? 'Refreshing…' : 'Refresh'}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView
@@ -81,8 +103,11 @@ export default function RecipesScreen() {
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: C.bg },
   hdr:       { paddingHorizontal: 16, paddingBottom: 10 },
+  hdrTop:    { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
   title:     { fontSize: 21, fontWeight: '600', color: C.text },
   sub:       { fontSize: 12, color: C.textSub, marginTop: 2 },
+  refreshBtn:{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 14, borderWidth: 0.5, borderColor: C.borderMed },
+  refreshTxt:{ fontSize: 12, color: C.accent, fontWeight: '600' },
   chipsScroll: { flexGrow: 0, flexShrink: 0 },
   chips:     { paddingHorizontal: 16, paddingBottom: 12, paddingRight: 24, flexDirection: 'row', alignItems: 'center' },
   chip:      { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20, borderWidth: 0.5, borderColor: C.borderMed, marginRight: 8, flexShrink: 0 },

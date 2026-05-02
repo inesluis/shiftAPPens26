@@ -46,7 +46,7 @@ function sumMacros(drafts: Draft[]) {
 
 export default function CreateRecipeScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
-  const { dispatch, todayDate } = useApp();
+  const { addRecipe, dispatch, todayDate } = useApp();
 
   const [name, setName] = useState('');
   const [mealType, setMealType] = useState<MealType>('Lunch');
@@ -105,37 +105,47 @@ export default function CreateRecipeScreen({ navigation }: Props) {
     return recipe;
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const recipe = buildRecipe();
     if (!recipe) return;
 
-    dispatch({ type: 'ADD_RECIPE', payload: recipe });
-    Alert.alert('Saved!', `${recipe.name} added to your recipes.`, [
-      { text: 'OK', onPress: () => navigation.goBack() },
-    ]);
+    try {
+      const saved = await addRecipe(recipe);
+      if (!saved) return;
+      Alert.alert('Saved!', `${saved.name} added to your recipes.`, [
+        { text: 'OK', onPress: () => navigation.goBack() },
+      ]);
+    } catch {
+      Alert.alert('Error', 'Could not save recipe to Supabase.');
+    }
   };
 
-  const handleSaveAndLog = () => {
+  const handleSaveAndLog = async () => {
     const recipe = buildRecipe();
     if (!recipe) return;
 
-    dispatch({ type: 'ADD_RECIPE', payload: recipe });
-    dispatch({
-      type: 'ADD_MEAL_LOG',
-      payload: {
-        id: `log_${Date.now()}`,
-        date: todayDate,
-        recipeId: recipe.id,
-        recipeName: recipe.name,
-        mealType: recipe.mealType,
-        macros: recipe.macros,
-        cost: recipe.cost,
-      },
-    });
+    try {
+      const saved = await addRecipe(recipe);
+      if (!saved) return;
+      dispatch({
+        type: 'ADD_MEAL_LOG',
+        payload: {
+          id: `log_${Date.now()}`,
+          date: todayDate,
+          recipeId: saved.id,
+          recipeName: saved.name,
+          mealType: saved.mealType,
+          macros: saved.macros,
+          cost: saved.cost,
+        },
+      });
 
-    Alert.alert('Saved & logged!', `${recipe.name} was added and logged.`, [
-      { text: 'OK', onPress: () => navigation.goBack() },
-    ]);
+      Alert.alert('Saved & logged!', `${saved.name} was added and logged.`, [
+        { text: 'OK', onPress: () => navigation.goBack() },
+      ]);
+    } catch {
+      Alert.alert('Error', 'Could not save recipe to Supabase.');
+    }
   };
 
   return (
