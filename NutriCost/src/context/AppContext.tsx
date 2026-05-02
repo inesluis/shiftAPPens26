@@ -24,7 +24,7 @@ const DEFAULT_PROFILE: UserProfile = {
   age: 27,
   weightKg: 78,
   heightCm: 182,
-  goal: 'Muscle Gain',
+  goal: 'Aumento Muscular',
   weeklyBudget: 70,
   macroGoals: { calories: 2200, protein: 160, carbs: 220, fat: 65 },
 };

@@ -326,14 +326,19 @@ export default function ProfileScreen() {
           danger
           onCancel={() => setModal(null)}
           onConfirm={() => {
-            const def = DEFAULT_PRESETS[goal];
-            setCal(def.calories);
-            setProtein(def.protein);
-            setCarbs(def.carbs);
-            setFat(def.fat);
-            setBudget(def.budget);
-            setTempBudget(def.budget);
-            setCustomPresets(prev => ({ ...prev, [goal]: { ...def } }));
+            // Fallback to 'Aumento Muscular' if goal is invalid
+            const validGoal = (goal in DEFAULT_PRESETS) ? goal : 'Aumento Muscular' as GoalKey;
+            const def = DEFAULT_PRESETS[validGoal];
+            if (def) {
+              setCal(def.calories);
+              setProtein(def.protein);
+              setCarbs(def.carbs);
+              setFat(def.fat);
+              setBudget(def.budget);
+              setTempBudget(def.budget);
+              setCustomPresets(prev => ({ ...prev, [validGoal]: { ...def } }));
+              if (goal !== validGoal) setGoal(validGoal);
+            }
             setModal(null);
           }}
         />
