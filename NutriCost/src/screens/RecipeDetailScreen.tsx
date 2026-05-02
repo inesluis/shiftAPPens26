@@ -11,6 +11,7 @@ import { ingredientPicker } from '../utils/ingredientPicker';
 import { MealType, RecipeIngredient, Store, MealLog } from '../types';
 import { supabase } from '../supabase';
 import MealTypePicker from '../components/MealTypePicker';
+import ConfirmModal from '../components/ConfirmModal';
 
 const STORE_LABEL: Record<Store, string> = {
     continente: 'Continente',
@@ -130,7 +131,7 @@ function sumMacros(drafts: RecipeIngredient[]) {
 
 export default function RecipeDetailScreen({ navigation, route }: Props) {
     const insets = useSafeAreaInsets();
-    const { state, updateRecipe, dispatch, todayDate } = useApp();
+    const { state, updateRecipe, deleteRecipe, dispatch, todayDate } = useApp();
     const recipe = state.recipes.find(r => r.id === route.params.recipeId);
     const canEdit = recipe?.isCustom ?? false;
     const [isEditing, setIsEditing] = useState(false);
@@ -143,6 +144,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
     const [storeMissing, setStoreMissing] = useState<Record<Store, number>>({} as Record<Store, number>);
     const [bestStore, setBestStore] = useState<Store | null>(null);
     const [pickerVisible, setPickerVisible] = useState(false);
+    const [deleteVisible, setDeleteVisible] = useState(false);
 
     useEffect(() => {
         if (recipe) {
@@ -413,6 +415,17 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
         setPickerVisible(false);
     };
 
+    const handleDelete = async () => {
+        if (!recipe) return;
+        try {
+            await deleteRecipe(recipe.id);
+            setDeleteVisible(false);
+            navigation.goBack();
+        } catch {
+            // Error handling
+        }
+    };
+
     const toggleTag = (tag: DietTag) =>
         setTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
 
@@ -425,9 +438,14 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                         <Text style={s.backTxt}>Voltar</Text>
                     </TouchableOpacity>
                     {canEdit && (
-                        <TouchableOpacity style={s.editBtn} onPress={() => setIsEditing(prev => !prev)}>
-                            <Ionicons name="pencil" size={15} color={C.accent} />
-                        </TouchableOpacity>
+                        <View style={{ flexDirection: 'row', gap: 12 }}>
+                            <TouchableOpacity style={s.editBtn} onPress={() => setIsEditing(prev => !prev)}>
+                                <Ionicons name="pencil" size={15} color={C.accent} />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={s.editBtn} onPress={() => setDeleteVisible(true)}>
+                                <Ionicons name="trash-outline" size={16} color={C.danger} />
+                            </TouchableOpacity>
+                        </View>
                     )}
                 </View>
                 <Text style={s.title}>{recipe.name}</Text>
@@ -571,6 +589,17 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                 visible={pickerVisible}
                 onSelect={handleLogMeal}
                 onClose={() => setPickerVisible(false)}
+            />
+
+            <ConfirmModal
+                visible={deleteVisible}
+                title="Eliminar Receita"
+                message={`Tem a certeza que deseja eliminar "${recipe.name}"? Esta ação não pode ser desfeita.`}
+                confirmText="Eliminar"
+                cancelText="Cancelar"
+                danger
+                onConfirm={handleDelete}
+                onCancel={() => setDeleteVisible(false)}
             />
         </View>
     );
