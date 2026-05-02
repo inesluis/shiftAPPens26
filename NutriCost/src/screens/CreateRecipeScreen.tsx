@@ -16,7 +16,6 @@ import { C, R } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CreateRecipe'>;
 
-const MEAL_TYPES: MealType[] = ['Pequeno-Almoço', 'Almoço', 'Jantar', 'Snack'];
 const DIET_TAGS: DietTag[] = ['Vegan', 'Proteica', 'Keto', 'Mediterrânica', 'Low Carb', 'Sem Glúten'];
 const STORE_LABEL: Record<Store, string> = { continente: 'Continente', pingo_doce: 'Pingo Doce' };
 
@@ -50,7 +49,6 @@ export default function CreateRecipeScreen({ navigation }: Props) {
   const { addRecipe, dispatch, todayDate } = useApp();
 
   const [name, setName] = useState('');
-  const [mealType, setMealType] = useState<MealType>('Almoço');
   const [tags, setTags] = useState<DietTag[]>([]);
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [instructions, setInstructions] = useState('');
@@ -83,7 +81,7 @@ export default function CreateRecipeScreen({ navigation }: Props) {
     const recipe: Recipe = {
       id: `custom_${Date.now()}`,
       name: name.trim(),
-      mealType,
+      mealType: 'Almoço',
       dietTags: tags,
       macros: {
         calories: Math.round(macros.calories),
@@ -168,20 +166,6 @@ export default function CreateRecipeScreen({ navigation }: Props) {
           style={s.textInput} value={name} onChangeText={setName}
           placeholder="e.g. A minha salada de atum" placeholderTextColor={C.textMuted}
         />
-
-        {/* Meal type */}
-        <Text style={[s.fieldLabel, { marginTop: 12 }]}>Tipo de refeição</Text>
-        <View style={s.chipRow}>
-          {MEAL_TYPES.map(mt => (
-            <TouchableOpacity
-              key={mt}
-              style={[s.chip, mealType === mt && s.chipOn]}
-              onPress={() => setMealType(mt)}
-            >
-              <Text style={[s.chipTxt, mealType === mt && s.chipTxtOn]}>{mt}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
 
         {/* Diet tags */}
         <Text style={[s.fieldLabel, { marginTop: 12 }]}>Tipo de dieta</Text>
