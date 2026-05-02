@@ -5,4 +5,5 @@ import org.example.jakartapp.dto.RecipeResponse;
 
 public interface AiService {
     RecipeResponse generateRecipe(RecipeRequest request);
+    String simplequery(String prompt);
 }

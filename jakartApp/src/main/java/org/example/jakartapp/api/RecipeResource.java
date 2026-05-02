@@ -46,7 +46,17 @@ public class RecipeResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/AiGenerated")
     public RecipeResponse createRecipe(RecipeRequest request) {
         return aiService.generateRecipe(request);
+    }
+
+    @GET
+    @Path("/TestAI")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String testAI(@QueryParam("prompt") String prompt) {
+        String response = aiService.simplequery(prompt);
+        System.out.println(response);
+        return response;
     }
 }

@@ -10,12 +10,12 @@ import org.example.jakartapp.dto.RecipeResponse;
 import java.util.List;
 
 @ApplicationScoped
-@Alternative
 public class CloudAiService implements AiService {
     private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     
     private final OpenAiChatModel model = OpenAiChatModel.builder()
             .apiKey(getApiKey())
+            .modelName("gpt-4o-mini")
             .build();
 
     private String getApiKey() {
@@ -37,5 +37,10 @@ public class CloudAiService implements AiService {
                         "Cook everything step by step"
                 )
         );
+    }
+
+    @Override
+    public String simplequery(String prompt) {
+        return model.chat(prompt);
     }
 }
