@@ -1,0 +1,10 @@
+diet_id,diet_label,diet_category
+1,mediterranica,Equilibrada
+2,proteina,Alto Proteína
+3,criancas,Familiar
+4,juliana,Baixa Caloria
+5,sem_gluten,Restrição Alimentar
+6,sem_lactose,Restrição Alimentar
+7,sem_leite,Restrição Alimentar
+8,vegan,Plant-Based
+9,vegetariana,Plant-Based

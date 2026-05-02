@@ -1,0 +1,504 @@
+ingredient_id;ingredient_name;ingredient_search_term
+1;azeite virgem extra;azeite
+2;peito de frango;peito de frango
+3;alho em pó;alho
+4;sal;sal
+5;pimenta;pimenta
+6;manjericão fresco;manjericão
+7;melão verde;melão
+8;rabanete;rabanete
+9;pepino doce;pepino
+10;rúcula selvagem;rúcula
+11;tortilhas para wrap;tortilhas para wrap
+12;sumo de limão;sumo de limão
+13;beterraba com casca murcha;beterraba
+14;grão cozido;grão
+15;alho;alho
+16;tahini;tahini
+17;sementes de sésamo (opcional ao tahini);sementes de sésamo
+18;limão;limão
+19;azeite;azeite
+20;cominhos em pó;cominhos
+21;polpa de tomate com cebola e alho;polpa de tomate
+22;azeitona preta em rodelas;azeitona
+23;feijão-branco;feijão-branco
+24;esparguete integral Pura Vida;esparguete
+25;manjericão;manjericão
+26;pimenta preta de moinho;pimenta de moinho
+27;malagueta seca;malagueta seca
+28;peito de frango em tiras;peito de frango em tiras
+29;noz-moscada;noz-moscada
+30;caril em pó;caril
+31;pimenta de moinho;pimenta de moinho
+32;vinagre de sidra;vinagre de sidra
+33;alho-francês;alho-francês
+34;abóbora limpa;abóbora limpa
+35;curgete;curgete
+36;azeite;azeite
+37;grão-de-bico cozido;grão-de-bico
+38;tomilho fresco;tomilho
+39;sementes de abóbora Pura Vida;sementes de abóbora
+40;ovo;ovo
+41;sobras de espinafres;sobras de espinafres
+42;sobras de pimento;sobras de pimento
+43;sobras de brócolos;sobras de brócolos
+44;leite meio-gordo;leite meio-gordo
+45;sobras de curgete;sobras de curgete
+46;mistura de 4 queijos ralados;mistura de 4 queijos ralados
+47;camarão;camarão
+48;gota limão;gota limão
+49;mel;mel
+50;bacon em tiras;bacon em tiras
+51;fava congelada;fava
+52;arroz agulha;arroz agulha
+53;cebola em cubos congelada;cebola em cubos
+54;salteado tradicional embalado;salteado tradicional embalado
+55;tomate alongado mini;tomate alongado mini
+56;lata (2 x 120 g) filete de cavala de conserva;lata filete de cavala de conserva
+57;água;água
+58;couve-coração;couve-coração
+59;iogurte natural probióticos;iogurte natural probióticos
+60;coentros frescos;coentros
+61;croutons de azeite e alho;croutons de azeite e alho
+62;azeite virgem extra;azeite
+63;bacalhau demolhado desfiado;bacalhau demolhado desfiado
+64;batata palha;batata palha
+65;cebola;cebola
+66;alho picado;alho picado
+67;natas;natas
+68;molho bechamel;molho bechamel
+69;queijo ralado;queijo ralado
+70;pimenta preta;pimenta
+71;salsa;salsa
+72;postas de bacalhau;postas de bacalhau
+73;espinafres;espinafres
+74;batata;batata
+75;creme de soja culinária Pura Vida;creme de soja culinária
+76;queijo flamengo light;queijo flamengo light
+77;brócolos;brócolos
+78;cebola roxa;cebola roxa
+79;batata-doce laranja;batata- laranja
+80;grão-de-bico cozido em frasco;grão-de-bico em frasco
+81;paprika;paprika
+82;cominhos moídos;cominhos moídos
+83;alho moído;alho moído
+84;espinafre em folha;espinafre em folha
+85;queijo flamengo barra;queijo flamengo barra
+86;de sobremesa paprika;de sobremesa paprika
+87;de sobremesa sal;de sobremesa sal
+88;de sobremesa orégão;de sobremesa orégão
+89;corn flakes;corn flakes
+90;farinha de trigo;farinha de trigo
+91;de sobremesa pimenta preta;de sobremesa pimenta
+92;molho (320 g) espargo verde;molho espargo
+93;(1 emb.) cogumelos laminados;cogumelos laminados
+94;pétala (25 g) tomate seco;pétala tomate seco
+95;ravioli recheados com ricota e trufa;ravioli recheados com ricota e trufa
+96;miolo de noz;miolo de noz
+97;miolo de camarão;miolo de camarão
+98;mistura chinesa de vegetais congelados;mistura chinesa de vegetais
+99;arroz basmati (já cozido);arroz basmati
+100;molho de soja;molho de soja
+101;ovo M;ovo m
+102;lombo de bacalhau;lombo de bacalhau
+103;folha louro;folha louro
+104;pão da avó sem côdea;pão da avó sem côdea
+105;cenoura ralada;cenoura ralada
+106;+ 1 c. de sobremesa azeite virgem extra;+ 1 c. de sobremesa azeite
+107;ovo (gema);ovo
+108;preparado para sopa juliana;preparado para sopa juliana
+109;noodles wok;noodles wok
+110;ovo M;ovo m
+111;q.b. pimenta preta de moinho;q.b. pimenta de moinho
+112;pimenta em pó;pimenta
+113;cogumelos;cogumelos
+114;couve-roxa em juliana;couve-roxa em juliana
+115;noz-moscada em pó;noz-moscada
+116;canela em pó;canela
+117;vinagre balsâmico;vinagre balsâmico
+118;laranja;laranja
+119;beterraba cozida;beterraba
+120;carne picada;carne picada
+121;pão 8 cereais;pão 8 cereais
+122;tomilho;tomilho
+123;dl água;dl água
+124;cuscuz;cuscuz
+125;azeitona descaroçada;azeitona descaroçada
+126;farinha;farinha
+127;pão ralado;pão ralado
+128;bacalhau fresco;bacalhau
+129;leite meio-gordo;leite meio-gordo
+130;limão (sumo);limão
+131;flocos de aveia;flocos de aveia
+132;sementes de sésamo;sementes de sésamo
+133;jardineira de vegetais congelada;jardineira de vegetais
+134;maionese com baixo teor de sal;maionese com baixo teor de sal
+135;couve-flor;couve-flor
+136;maionese de alho;maionese de alho
+137;farinha de trigo integral;farinha de trigo
+138;fermento desidratado de padeiro;fermento desidratado de padeiro
+139;sal fino;sal fino
+140;açúcar;açúcar
+141;pimento vermelho;pimento vermelho
+142;pimento verde;pimento
+143;chouriço de carne;chouriço de carne
+144;azeitona preta;azeitona
+145;queijo de ovelha curado barrado seco de Seia;queijo de ovelha curado barrado seco de seia
+146;orégão;orégão
+147;baguete integral;baguete
+148;molho coentros;molho coentros
+149;chuchu verde;chuchu
+150;brócolos cozidos;brócolos
+151;tomate cherry com rama;tomate cherry com rama
+152;s alho;s alho
+153;espinafres em folha;espinafres em folha
+154;azeitona preta às rodelas;azeitona às rodelas
+155;burrata com leite de búfala;burrata com leite de búfala
+156;tostas de pão alentejano;tostas de pão alentejano
+157;miolo de camarão 80/100 congelado;miolo de camarão 80/100
+158;limão (sumo e casca);limão
+159;mistura de vegetais grelhados congelados;mistura de vegetais grelhados
+160;arroz agulha Europa;arroz agulha europa
+161;cebolinho fresco;cebolinho
+162;requeijão de vaca;requeijão de vaca
+163;puré de beterraba congelado;puré de beterraba
+164;cebolinho;cebolinho
+165;massa tenra;massa tenra
+166;molho pesto;molho pesto
+167;mix crocante de vegetais;mix crocante de vegetais
+168;amendoim torrado sem sal;amendoim torrado sem sal
+169;tagliatelle em novelos;tagliatelle em novelos
+170;molho pesto;molho pesto
+171;tomate seco;tomate seco
+172;azeitona às rodelas;azeitona às rodelas
+173;aneto;aneto
+174;salmão fumado;salmão fumado
+175;cenoura;cenoura
+176;azeitona;azeitona
+177;amêndoa laminada;amêndoa laminada
+178;beringela;beringela
+179;soja granulada;soja granulada
+180;curgete cortada em cubos;curgete cortada em cubos
+181;arroz basmati;arroz basmati
+182;puré de batata congelado;puré de batata
+183;broa (miolo);broa
+184;amêndoa palitada;amêndoa palitada
+185;tomate seco em conserva;tomate seco em conserva
+186;azeite do tomate seco em conserva;azeite do tomate seco em conserva
+187;lombo de bacalhau fresco;lombo de bacalhau
+188;de sobremesa pimentão doce;de sobremesa pimentão
+189;alho em pó;alho
+190;costeletas de porco do lombo;costeletas de porco do lombo
+191;espargos verdes;espargos
+192;nectarina;nectarina
+193;porção de bacalhau;porção de bacalhau
+194;queijo parmesão ralado;queijo parmesão ralado
+195;fatias de pão de mafra;fatias de pão de mafra
+196;folhas de manjericão;folhas de manjericão
+197;alheira de peru;alheira de peru
+198;salsa picada;salsa picada
+199;malagueta vermelha;malagueta vermelha
+200;maçã Royal Gala;maçã royal gala
+201;folha folhas de massa filo;folha folhas de massa filo
+202;salada ibéria;salada ibéria
+203;cebola picada;cebola picada
+204;castanha cozida;castanha
+205;pão fresco ralado;pão ralado
+206;ovos M;ovos m
+207;+ 3 para decoração alperce seco;+ 3 para decoração alperce seco
+208;salsa fresca;salsa fresca
+209;tomate maduro aos cubos;tomate maduro aos cubos
+210;concentrado de tomate;concentrado de tomate
+211;pão alentejano do dia anterior;pão alentejano do dia anterior
+212;molho (20 g) manjericão;molho manjericão
+213;gema de ovo M;gema de ovo m
+214;espargo;espargo
+215;lombo de salmão;lombo de salmão
+216;ervas aromáticas;ervas aromáticas
+217;peito de frango em tiras finas;peito de frango em tiras finas
+218;penne;penne
+219;tomate cherry;tomate cherry
+220;manteiga;manteiga
+221;fusilli tricolor;fusilli tricolor
+222;fusilli;fusilli
+223;açafrão-da-índia moído;açafrão-da-índia moído
+224;frango assado;frango assado
+225;cogumelo branco;cogumelo branco
+226;azeitona verde com pimento;azeitona com pimento
+227;lima;lima
+228;batata-doce;batata-
+229;queijo cottage;queijo cottage
+230;tomate cereja;tomate cereja
+231;coentros;coentros
+232;(1 emb.) croquetes de carne para preparar no forno;croquetes de carne para preparar no forno
+233;arroz carolino;arroz carolino
+234;(1 unid.) cebola;cebola
+235;tomate em pedaços com orégãos e manjericão;tomate em pedaços com orégãos e manjericão
+236;pimentão-doce;pimentão-
+237;manjericão fresco;manjericão
+238;feijão-frade em lata;feijão-frade em lata
+239;tomate cherry com rama;tomate cherry com rama
+240;pepino;pepino
+241;queijo feta;queijo feta
+242;rodela limão;rodela limão
+243;mel multifloral;mel multifloral
+244;bimi;bimi
+245;tomate maduro;tomate maduro
+246;quinoa cozida;quinoa
+247;massa bagos;massa bagos
+248;bagos de uva preta sem grainha;bagos de uva sem grainha
+249;(2 x 125 g) queijo mozzarella mini;queijo mozzarella mini
+250;espinafres frescos;espinafres
+251;de sobremesa creme com Vinagre Balsâmico de Modena;de sobremesa creme com vinagre balsâmico de modena
+252;tomate mini alongado;tomate mini alongado
+253;polpa de tomate com manjericão;polpa de tomate com manjericão
+254;molho espargo;molho espargo
+255;cebola branca;cebola branca
+256;q.b. pimenta rosa;q.b. pimenta rosa
+257;q.b. tomilho;q.b. tomilho
+258;arroz de jasmin ou basmati;arroz de jasmin ou basmati
+259;óleo de sésamo;óleo de sésamo
+260;chalota;chalota
+261;açúcar amarelo;açúcar amarelo
+262;molho de soja;molho de soja
+263;caldo de galinha;caldo de galinha
+264;molho manjericão;molho manjericão
+265;filete de peixe-gato riscado;filete de peixe-gato riscado
+266;lima (raspa e sumo);lima
+267;massa curvas riscadas;massa curvas riscadas
+268;pepino fino;pepino fino
+269;amido de milho;amido de milho
+270;vinho branco;vinho branco
+271;malagueta piripíri;malagueta piripíri
+272;postas médias de bacalhau;postas médias de bacalhau
+273;-3 unid. batata aos cubos ou rodelas;-3 unid. batata aos cubos ou rodelas
+274;cebola média;cebola média
+275;azeitona (opcional);azeitona
+276;molho manjericão fresco;molho manjericão
+277;linguine;linguine
+278;queijo parmesão;queijo parmesão
+279;+ 1 c. de chá sal;+ 1 c. de chá sal
+280;+ 40 g manteiga sem sal;+ 40 g manteiga sem sal
+281;gemas de ovo;gemas de ovo
+282;vinagre de vinho branco;vinagre de vinho branco
+283;chalota picada;chalota picada
+284;+ 1 c. de chá estragão;+ 1 c. de chá estragão
+285;filete de linguado;filete de linguado
+286;aveia;aveia
+287;mini Mozzarella;mini mozzarella
+288;maionese de trufa;maionese de trufa
+289;óleo;óleo
+290;molho branco;molho branco
+291;cenoura aos cubos;cenoura aos cubos
+292;haste alecrim;haste alecrim
+293;borrego sem ossos;borrego sem ossos
+294;s alho picado;s alho picado
+295;colorau;colorau
+296;+ 1 c. de sopa azeite;+ 1 c. de sopa azeite
+297;de sobremesa + 2 c. de sobremesa sal;de sobremesa + 2 c. de sobremesa sal
+298;-400 g dourada sem escamas e vísceras;-400 g dourada sem escamas e vísceras
+299;tomate-cereja cortado ao meio;tomate-cereja cortado ao meio
+300;-4 dente alho laminado finamente;-4 dente alho laminado finamente
+301;malagueta vermelha em rodelas finas;malagueta vermelha finas
+302;Azeitonas Pretas;azeitonas
+303;vinho branco seco;vinho branco seco
+304;pimenta preta moída;pimenta moída
+305;água (ou caldo de peixe q.b.);água
+306;maminha de bovino;maminha de bovino
+307;sal grosso;sal grosso
+308;chourição;chourição
+309;bacon;bacon
+310;maionese;maionese
+311;queijo Mozzarella ralado;queijo mozzarella ralado
+312;queijo flamengo;queijo flamengo
+313;broa;broa
+314;mostarda;mostarda
+315;molho picante;molho picante
+316;pimentão doce;pimentão
+317;tiras de entrecosto;tiras de entrecosto
+318;+ 1 c. de sopa sal;+ 1 c. de sopa sal
+319;costeleta de borrego;costeleta de borrego
+320;batata nova, bem lavada;batata nova, bem lavada
+321;cebola grande, cortada em meias-luas;cebola grande, cortada em meias-luas
+322;alho laminado;alho laminado
+323;hortelã fresca;hortelã fresca
+324;massa de pimentão (opcional);massa de pimentão
+325;louro;louro
+326;pimenta preta moída na hora;pimenta moída na hora
+327;água (ou caldo de carne);água
+328;banana;banana
+329;flocos de aveia grossos;flocos de aveia grossos
+330;maçã em cubos;maçã em cubos
+331;mirtilo;mirtilo
+332;iogurte natural;iogurte natural
+333;farinha integral;farinha
+334;fermento;fermento
+335;chocolate culinária 70% cacau;chocolate culinária 70% cacau
+336;q.b. sal;q.b. sal
+337;marshmallows;marshmallows
+338;tangerina;tangerina
+339;q.b. groselha;q.b. groselha
+340;bolachas butter cookies;bolachas butter cookies
+341;palitos salgados (tipo pretzel);palitos salgados
+342;pão brasileiro;pão brasileiro
+343;q.b. sementes de sésamo;q.b. sementes de sésamo
+344;talos aipo;talos aipo
+345;mini-pimento;mini-pimento
+346;q.b. aipo;q.b. aipo
+347;q.b. azeitona rodelas;q.b. azeitona rodelas
+348;beterraba;beterraba
+349;pão da avó familiar;pão da avó familiar
+350;sumo limão;sumo limão
+351;q.b. cominhos;q.b. cominhos
+352;q.b. pimenta;q.b. pimenta
+353;pão de Rio Maior;pão de rio maior
+354;iogurte grego;iogurte grego
+355;Mistura 4 Queijos Ralado;mistura 4 queijos ralado
+356;farinha com fermento;farinha com fermento
+357;lula limpa congelada;lula limpa
+358;preparado para sopa portuguesa;preparado para sopa portuguesa
+359;feijão-branco em lata;feijão-branco em lata
+360;cominhos moídos;cominhos moídos
+361;figo seco enfarinhado;figo seco enfarinhado
+362;vinho do Porto;vinho do porto
+363;canela;canela
+364;cravinho;cravinho
+365;pera (médias e grandes);pera
+366;requeijão de ovelha e cabra;requeijão de ovelha e cabra
+367;feijão-verde;feijão-
+368;batata para cozer pequena;batata para cozer pequena
+369;(2 x 250 g) tamboril em cubos congelado;tamboril em cubos
+370;vinagre;vinagre
+371;tomate redondo maduro;tomate redondo maduro
+372;lombos de bacalhau descongelado;lombos de bacalhau descongelado
+373;ervilhas cozidas;ervilhas
+374;Milho Doce em Conserva;milho em conserva
+375;broa de milho;broa de milho
+376;perna de borrego;perna de borrego
+377;batata primor;batata primor
+378;cabeça alho;cabeça alho
+379;azeitona verde sem caroço;azeitona sem caroço
+380;alho moído;alho moído
+381;tomilho seco;tomilho seco
+382;couve-roxa ripada;couve-roxa ripada
+383;abóbora em cubos;abóbora em cubos
+384;sultana;sultana
+385;arroz agulha;arroz agulha
+386;de sobremesa azeite;de sobremesa azeite
+387;espargos verdes fresco;espargos
+388;legumes em tomate;legumes em tomate
+389;amêijoa branca;amêijoa branca
+390;q.b. manjericão fresco;q.b. manjericão
+391;Molho pesto alla calabrese;molho pesto alla calabrese
+392;+ 1 c. de sopa azeite virgem extra;+ 1 c. de sopa azeite
+393;batata para cozer;batata para cozer
+394;iogurte grego;iogurte grego
+395;queijo feta;queijo feta
+396;iogurte grego natural;iogurte grego natural
+397;pimento vermelho assado;pimento vermelho assado
+398;malagueta em pó;malagueta
+399;molho (50 g) coentros frescos;molho coentros
+400;haste salsa fresca;haste salsa fresca
+401;cominhos;cominhos
+402;malagueta vermelha picada;malagueta vermelha picada
+403;vinagre de vinho tinto;vinagre de vinho tinto
+404;abacate;abacate
+405;unid (2 x 200 g) entrecôte;unid entrecôte
+406;kiwi;kiwi
+407;kiwi amarelo;kiwi amarelo
+408;molho hortelã fresca;molho hortelã fresca
+409;rum;rum
+410;refrigerante com gás lima limão;refrigerante com gás lima limão
+411;lata (390 g) tomate em pedaços;lata tomate em pedaços
+412;mexilhão fresco;mexilhão
+413;pêssego;pêssego
+414;melancia;melancia
+415;manga;manga
+416;licor Cointreau;licor cointreau
+417;refrigerante com gás lima-limão;refrigerante com gás lima-limão
+418;pau de canela;pau de canela
+419;garrafa (75 cl) vinho rosé;garrafa vinho rosé
+420;iogurte;iogurte
+421;mini pepino;mini pepino
+422;de sobremesa azeite virgem extra;de sobremesa azeite
+423;saqueta chá de hibisco;saqueta chá de hibisco
+424;de sobremesa mel;de sobremesa mel
+425;kombucha;kombucha
+426;lima (sumo);lima
+427;cháv. bebida de soja;cháv. bebida de soja
+428;maçã pequena;maçã pequena
+429;cháv. flocos de aveia finos;cháv. flocos de aveia finos
+430;cháv. flocos de aveia grossos;cháv. flocos de aveia grossos
+431;cháv. açúcar de coco;cháv. açúcar de coco
+432;fermento em pó;fermento
+433;cardamomo;cardamomo
+434;linhaça moída;linhaça moída
+435;limão (raspa e sumo);limão
+436;cháv. uva passa;cháv. uva passa
+437;⅓ cháv. amêndoa laminada;⅓ cháv. amêndoa laminada
+438;xarope de agave;xarope de agave
+439;camarão tigre;camarão tigre
+440;cebola pequena;cebola pequena
+441;arroz carolino (ou agulha);arroz carolino
+442;(+ 1 c. de chá) sal;sal
+443;pão de forma de Rio Maior fatiado;pão de forma de rio maior fatiado
+444;camarão 20/30 Vannamei;camarão 20/30 vannamei
+445;malagueta vermelha sem sementes;malagueta vermelha sem sementes
+446;haste salsa;haste salsa
+447;molho (25 g) coentros;molho coentros
+448;gelo;gelo
+449;vodka;vodka
+450;(+ 1 rodela) sumo de lima;sumo de lima
+451;ginger beer;ginger beer
+452;hortelã;hortelã
+453;farinha de trigo tipo 55;farinha de trigo tipo 55
+454;espinafre;espinafre
+455;alface iceberg picada;alface iceberg picada
+456;abacaxi em cubos;abacaxi em cubos
+457;molho de cocktail;molho de cocktail
+458;(+ 1 c. de sopa) farinha;farinha
+459;fermento de padeiro fresco;fermento de padeiro
+460;grão-de-bico;grão-de-bico
+461;alface;alface
+462;manga muito madura;manga muito madura
+463;coentros em pó;coentros
+464;curcuma;curcuma
+465;cravinho em pó;cravinho
+466;banana muito madura;banana muito madura
+467;vinagre de sidra;vinagre de sidra
+468;gengibre fresco;gengibre
+469;de sobremesa caril;de sobremesa caril
+470;sementes de funcho;sementes de funcho
+471;vagem cardamomo;vagem cardamomo
+472;maçã de Alcobaça muito madura;maçã de alcobaça muito madura
+473;sementes de cominhos;sementes de cominhos
+474;sementes de coentros;sementes de coentros
+475;sultana dourada;sultana dourada
+476;essência de baunilha;essência de baunilha
+477;bicarbonato de sódio;bicarbonato de sódio
+478;iogurte grego natural;iogurte grego natural
+479;raspa de laranja;raspa de laranja
+480;massa filo;massa filo
+481;sumo de laranja;sumo de laranja
+482;creme de pistacho;creme de pistacho
+483;manteiga sem sal;manteiga sem sal
+484;açúcar mascavado;açúcar mascavado
+485;açúcar branco;açúcar branco
+486;chocolate meio-amargo ou negro;chocolate meio-amargo ou negro
+487;pistachio;pistachio
+488;extrato de baunilha;extrato de baunilha
+489;banana madura congelada;banana madura
+490;manteiga de amendoim cremosa;manteiga de amendoim cremosa
+491;sementes de linhaça trituradas;sementes de linhaça trituradas
+492;vagem de baunilha (opcional);vagem de baunilha
+493;café expresso;café expresso
+494;lata (397 g) leite condensado;lata leite condensado
+495;gemas de ovo;gemas de ovo
+496;natas para bater;natas para bater
+497;gemas de ovo XL;gemas de ovo xl
+498;açúcar fino;açúcar fino
+499;chocolate culinária;chocolate culinária
+500;raspas de chocolate branco;raspas de chocolate branco
+501;frutos vermelhos;frutos vermelhos
+502;tomate rosa;tomate rosa
+503;miolo de pistáchio;miolo de pistáchio

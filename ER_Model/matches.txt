@@ -1,0 +1,503 @@
+   [1/503] 'azeite'... 2 matches.
+   [2/503] 'peito de frango'... 1 matches.
+   [3/503] 'alho'... 2 matches.
+   [4/503] 'sal'... 2 matches.
+   [5/503] 'pimenta'... 2 matches.
+   [6/503] 'manjericao'... 2 matches.
+   [7/503] 'melao'... 2 matches.
+   [8/503] 'rabanete'... 2 matches.
+   [9/503] 'pepino'... 2 matches.
+   [10/503] 'rucula'... 2 matches.
+   [11/503] 'tortilhas para wrap'... 2 matches.
+   [12/503] 'sumo de limao'... 2 matches.
+   [13/503] 'beterraba'... 1 matches.
+   [14/503] 'grao'... 2 matches.
+   [15/503] 'alho'... 2 matches.
+   [16/503] 'tahini'... 1 matches.
+   [17/503] 'sementes de sesamo'... 2 matches.
+   [18/503] 'limao'... 2 matches.
+   [19/503] 'azeite'... 2 matches.
+   [20/503] 'cominhos'... 2 matches.
+   [21/503] 'polpa de tomate'... 2 matches.
+   [22/503] 'azeitona'... 2 matches.
+   [23/503] 'feijaobranco'... 0 found.
+   [24/503] 'esparguete'... 2 matches.
+   [25/503] 'manjericao'... 2 matches.
+   [26/503] 'pimenta de moinho'... 2 matches.
+   [27/503] 'malagueta seca'... 2 matches.
+   [28/503] 'peito de frango em tiras'... 0 matches.
+   [29/503] 'nozmoscada'... 0 matches.
+   [30/503] 'caril'... 2 matches.
+   [31/503] 'pimenta de moinho'... 2 matches.
+   [32/503] 'vinagre de sidra'... 2 matches.
+   [33/503] 'alhofrances'... 0 found.
+   [34/503] 'abobora limpa'... 1 matches.
+   [35/503] 'curgete'... 2 matches.
+   [36/503] 'azeite'... 2 matches.
+   [37/503] 'graodebico'... 0 found.
+   [38/503] 'tomilho'... 2 matches.
+   [39/503] 'sementes de abobora'... 2 matches.
+   [40/503] 'ovo'... 1 matches.
+   [41/503] 'sobras de espinafres'... 0 matches.
+   [42/503] 'sobras de pimento'... 0 matches.
+   [43/503] 'sobras de brocolos'... 0 matches.
+   [44/503] 'leite meiogordo'... 2 matches.
+   [45/503] 'sobras de curgete'... 1 matches.
+   [46/503] 'mistura de queijos ralados'... 1 matches.
+   [47/503] 'camarao'... 2 matches.
+   [48/503] 'gota limao'... 2 matches.
+   [49/503] 'mel'... 2 matches.
+   [50/503] 'bacon em tiras'... 2 matches.
+   [51/503] 'fava'... 1 matches.
+   [52/503] 'arroz agulha'... 0 matches.
+   [53/503] 'cebola em cubos'... 2 matches.
+   [54/503] 'salteado tradicional embalado'... 1 matches.
+   [55/503] 'tomate alongado mini'... 2 matches.
+   [56/503] 'lata filete de cavala de conserva'... 2 matches.
+   [57/503] 'agua'... 2 matches.
+   [58/503] 'couvecoracao'... 0 found.
+   [59/503] 'iogurte natural probioticos'... 2 matches.
+   [60/503] 'coentros'... 2 matches.
+   [61/503] 'croutons de azeite e alho'... 2 matches.
+   [62/503] 'azeite'... 2 matches.
+   [63/503] 'bacalhau demolhado desfiado'... 1 matches.
+   [64/503] 'batata palha'... 0 matches.
+   [65/503] 'cebola'... 2 matches.
+   [66/503] 'alho picado'... 2 matches.
+   [67/503] 'natas'... 2 matches.
+   [68/503] 'molho bechamel'... 2 matches.
+   [69/503] 'queijo ralado'... 2 matches.
+   [70/503] 'pimenta'... 2 matches.
+   [71/503] 'salsa'... 2 matches.
+   [72/503] 'postas de bacalhau'... 1 matches.
+   [73/503] 'espinafres'... 2 matches.
+   [74/503] 'batata'... 0 matches.
+   [75/503] 'creme de soja culinaria'... 2 matches.
+   [76/503] 'queijo flamengo light'... 2 matches.
+   [77/503] 'brocolos'... 2 matches.
+   [78/503] 'cebola roxa'... 2 matches.
+   [79/503] 'batata laranja'... 1 matches.
+   [80/503] 'graodebico em frasco'... 0 matches.
+   [81/503] 'paprika'... 2 matches.
+   [82/503] 'cominhos moidos'... 2 matches.
+   [83/503] 'alho moido'... 1 matches.
+   [84/503] 'espinafre em folha'... 2 matches.
+   [85/503] 'queijo flamengo barra'... 2 matches.
+   [86/503] 'de sobremesa paprika'... 2 matches.
+   [87/503] 'de sobremesa sal'... 2 matches.
+   [88/503] 'de sobremesa oregao'... 2 matches.
+   [89/503] 'corn flakes'... 2 matches.
+   [90/503] 'farinha de trigo'... 1 matches.
+   [91/503] 'de sobremesa pimenta'... 2 matches.
+   [92/503] 'molho espargo'... 1 matches.
+   [93/503] 'cogumelos laminados'... 2 matches.
+   [94/503] 'petala tomate seco'... 0 matches.
+   [95/503] 'ravioli recheados com ricota e trufa'... 0 matches.
+   [96/503] 'miolo de noz'... 2 matches.
+   [97/503] 'miolo de camarao'... 1 matches.
+   [98/503] 'mistura chinesa de vegetais'... 0 matches.
+   [99/503] 'arroz basmati'... 0 matches.
+   [100/503] 'molho de soja'... 2 matches.
+   [101/503] 'ovo m'... 1 matches.
+   [102/503] 'lombo de bacalhau'... 2 matches.
+   [103/503] 'folha louro'... 2 matches.
+   [104/503] 'pao da avo sem codea'... 0 matches.
+   [105/503] 'cenoura ralada'... 0 matches.
+   [106/503] 'c de sobremesa azeite'... 1 matches.
+   [107/503] 'ovo'... 1 matches.
+   [108/503] 'preparado para sopa juliana'... 0 matches.
+   [109/503] 'noodles wok'... 2 matches.
+   [110/503] 'ovo m'... 1 matches.
+   [111/503] 'qb pimenta de moinho'... 2 matches.
+   [112/503] 'pimenta'... 2 matches.
+   [113/503] 'cogumelos'... 2 matches.
+   [114/503] 'frango assado'... 0 matches.
+   [115/503] 'couveroxa em juliana'... 0 matches.
+   [116/503] 'nozmoscada'... 0 matches.
+   [117/503] 'canela'... 2 matches.
+   [118/503] 'vinagre balsamico'... 2 matches.
+   [119/503] 'laranja'... 2 matches.
+   [120/503] 'beterraba'... 1 matches.
+   [121/503] 'carne picada'... 2 matches.
+   [122/503] 'pao cereais'... 2 matches.
+   [123/503] 'tomilho'... 2 matches.
+   [124/503] 'dl agua'... 0 matches.
+   [125/503] 'cuscuz'... 1 matches.
+   [126/503] 'azeitona descarocada'... 2 matches.
+   [127/503] 'farinha'... 2 matches.
+   [128/503] 'pao ralado'... 2 matches.
+   [129/503] 'bacalhau'... 2 matches.
+   [130/503] 'leite meiogordo'... 2 matches.
+   [131/503] 'limao'... 2 matches.
+   [132/503] 'flocos de aveia'... 2 matches.
+   [133/503] 'sementes de sesamo'... 2 matches.
+   [134/503] 'jardineira de vegetais'... 2 matches.
+   [135/503] 'maionese com baixo teor de sal'... 1 matches.
+   [136/503] 'couveflor'... 1 matches.
+   [137/503] 'maionese de alho'... 1 matches.
+   [138/503] 'farinha de trigo'... 1 matches.
+   [139/503] 'fermento desidratado de padeiro'... 2 matches.
+   [140/503] 'sal fino'... 2 matches.
+   [141/503] 'acucar'... 2 matches.
+   [142/503] 'pimento vermelho'... 2 matches.
+   [143/503] 'pimento'... 2 matches.
+   [144/503] 'chourico de carne'... 2 matches.
+   [145/503] 'azeitona'... 2 matches.
+   [146/503] 'queijo de ovelha curado barrado seco de seia'... 1 matches.
+   [147/503] 'oregao'... 0 matches.
+   [148/503] 'baguete'... 2 matches.
+   [149/503] 'molho coentros'... 2 matches.
+   [150/503] 'chuchu'... 2 matches.
+   [151/503] 'brocolos'... 2 matches.
+   [152/503] 'tomate cherry com rama'... 2 matches.
+   [153/503] 's alho'... 0 matches.
+   [154/503] 'espinafres em folha'... 2 matches.
+   [155/503] 'azeitona as rodelas'... 2 matches.
+   [156/503] 'burrata com leite de bufala'... 1 matches.
+   [157/503] 'tostas de pao alentejano'... 2 matches.
+   [158/503] 'miolo de camarao'... 1 matches.
+   [159/503] 'limao'... 2 matches.
+   [160/503] 'mistura de vegetais grelhados'... 2 matches.
+   [161/503] 'arroz agulha europa'... 1 matches.
+   [162/503] 'cebolinho'... 2 matches.
+   [163/503] 'requeijao de vaca'... 2 matches.
+   [164/503] 'pure de beterraba'... 1 matches.
+   [165/503] 'cebolinho'... 2 matches.
+   [166/503] 'massa tenra'... 1 matches.
+   [167/503] 'molho pesto'... 2 matches.
+   [168/503] 'mix crocante de vegetais'... 1 matches.
+   [169/503] 'amendoim torrado sem sal'... 2 matches.
+   [170/503] 'tagliatelle em novelos'... 2 matches.
+   [171/503] 'molho pesto'... 2 matches.
+   [172/503] 'tomate seco'... 2 matches.
+   [173/503] 'azeitona as rodelas'... 2 matches.
+   [174/503] 'aneto'... 1 matches.
+   [175/503] 'salmao fumado'... 2 matches.
+   [176/503] 'cenoura'... 2 matches.
+   [177/503] 'azeitona'... 2 matches.
+   [178/503] 'amendoa laminada'... 2 matches.
+   [179/503] 'beringela'... 2 matches.
+   [180/503] 'soja granulada'... 2 matches.
+   [181/503] 'curgete cortada em cubos'... 1 matches.
+   [182/503] 'arroz basmati'... 0 matches.
+   [183/503] 'pure de batata'... 2 matches.
+   [184/503] 'broa'... 2 matches.
+   [185/503] 'amendoa palitada'... 1 matches.
+   [186/503] 'tomate seco em conserva'... 2 matches.
+   [187/503] 'azeite do tomate seco em conserva'... 1 matches.
+   [188/503] 'lombo de bacalhau'... 2 matches.
+   [189/503] 'de sobremesa pimentao'... 2 matches.
+   [190/503] 'alho'... 2 matches.
+   [191/503] 'costeletas de porco do lombo'... 2 matches.
+   [192/503] 'espargos'... 2 matches.
+   [193/503] 'nectarina'... 1 matches.
+   [194/503] 'porcao de bacalhau'... 1 matches.
+   [195/503] 'queijo parmesao ralado'... 0 matches.
+   [196/503] 'fatias de pao de mafra'... 2 matches.
+   [197/503] 'folhas de manjericao'... 2 matches.
+   [198/503] 'alheira de peru'... 2 matches.
+   [199/503] 'salsa picada'... 2 matches.
+   [200/503] 'malagueta vermelha'... 2 matches.
+   [201/503] 'maca royal gala'... 1 matches.
+   [202/503] 'folha folhas de massa filo'... 0 matches.
+   [203/503] 'salada iberia'... 2 matches.
+   [204/503] 'cebola picada'... 1 matches.
+   [205/503] 'castanha'... 2 matches.
+   [206/503] 'pao ralado'... 2 matches.
+   [207/503] 'ovos m'... 2 matches.
+   [208/503] 'para decoracao alperce seco'... 0 matches.
+   [209/503] 'salsa fresca'... 2 matches.
+   [210/503] 'tomate maduro aos cubos'... 2 matches.
+   [211/503] 'concentrado de tomate'... 2 matches.
+   [212/503] 'pao alentejano do dia anterior'... 0 matches.
+   [213/503] 'molho manjericao'... 0 matches.
+   [214/503] 'gema de ovo m'... 2 matches.
+   [215/503] 'espargo'... 1 matches.
+   [216/503] 'lombo de salmao'... 2 matches.
+   [217/503] 'ervas aromaticas'... 2 matches.
+   [218/503] 'peito de frango em tiras finas'... 0 matches.
+   [219/503] 'penne'... 2 matches.
+   [220/503] 'tomate cherry'... 2 matches.
+   [221/503] 'manteiga'... 2 matches.
+   [222/503] 'fusilli tricolor'... 2 matches.
+   [223/503] 'fusilli'... 2 matches.
+   [224/503] 'acafraodaindia moido'... 0 matches.
+   [225/503] 'cogumelo branco'... 2 matches.
+   [226/503] 'azeitona com pimento'... 1 matches.
+   [227/503] 'lima'... 2 matches.
+   [228/503] 'batata'... 0 matches.
+   [229/503] 'queijo cottage'... 2 matches.
+   [230/503] 'tomate cereja'... 2 matches.
+   [231/503] 'coentros'... 2 matches.
+   [232/503] 'croquetes de carne para preparar no forno'... 1 matches.
+   [233/503] 'arroz carolino'... 0 matches.
+   [234/503] 'cebola'... 2 matches.
+   [235/503] 'tomate em pedacos com oregaos e manjericao'... 2 matches.
+   [236/503] 'pimentao'... 2 matches.
+   [237/503] 'manjericao'... 2 matches.
+   [238/503] 'feijaofrade em lata'... 2 matches.
+   [239/503] 'tomate cherry com rama'... 2 matches.
+   [240/503] 'pepino'... 2 matches.
+   [241/503] 'queijo feta'... 2 matches.
+   [242/503] 'rodela limao'... 1 matches.
+   [243/503] 'mel multifloral'... 2 matches.
+   [244/503] 'bimi'... 2 matches.
+   [245/503] 'tomate maduro'... 2 matches.
+   [246/503] 'quinoa'... 2 matches.
+   [247/503] 'massa bagos'... 1 matches.
+   [248/503] 'bagos de uva sem grainha'... 0 matches.
+   [249/503] 'queijo mozzarella mini'... 2 matches.
+   [250/503] 'espinafres'... 2 matches.
+   [251/503] 'de sobremesa creme com vinagre balsamico de modena'... 1 matches.
+   [252/503] 'tomate mini alongado'... 2 matches.
+   [253/503] 'polpa de tomate com manjericao'... 2 matches.
+   [254/503] 'molho espargo'... 1 matches.
+   [255/503] 'cebola branca'... 1 matches.
+   [256/503] 'qb pimenta rosa'... 2 matches.
+   [257/503] 'qb tomilho'... 2 matches.
+   [258/503] 'arroz de jasmin ou basmati'... 0 matches.
+   [259/503] 'oleo de sesamo'... 2 matches.
+   [260/503] 'chalota'... 2 matches.
+   [261/503] 'acucar amarelo'... 2 matches.
+   [262/503] 'molho de soja'... 2 matches.
+   [263/503] 'caldo de galinha'... 0 matches.
+   [264/503] 'molho manjericao'... 0 matches.
+   [265/503] 'filete de peixegato riscado'... 1 matches.
+   [266/503] 'lima'... 2 matches.
+   [267/503] 'massa curvas riscadas'... 1 matches.
+   [268/503] 'pepino fino'... 2 matches.
+   [269/503] 'amido de milho'... 2 matches.
+   [270/503] 'vinho branco'... 2 matches.
+   [271/503] 'malagueta piripiri'... 2 matches.
+   [272/503] 'postas medias de bacalhau'... 0 matches.
+   [273/503] 'unid batata aos cubos ou rodelas'... 0 matches.
+   [274/503] 'cebola media'... 2 matches.
+   [275/503] 'azeitona'... 2 matches.
+   [276/503] 'molho manjericao'... 0 matches.
+   [277/503] 'linguine'... 2 matches.
+   [278/503] 'queijo parmesao'... 1 matches.
+   [279/503] 'c de cha sal'... 0 matches.
+   [280/503] 'manteiga sem sal'... 2 matches.
+   [281/503] 'gemas de ovo'... 1 matches.
+   [282/503] 'vinagre de vinho branco'... 2 matches.
+   [283/503] 'chalota picada'... 2 matches.
+   [284/503] 'c de cha estragao'... 0 matches.
+   [285/503] 'filete de linguado'... 1 matches.
+   [286/503] 'aveia'... 1 matches.
+   [287/503] 'mini mozzarella'... 2 matches.
+   [288/503] 'maionese de trufa'... 0 matches.
+   [289/503] 'oleo'... 2 matches.
+   [290/503] 'molho branco'... 1 matches.
+   [291/503] 'cenoura aos cubos'... 0 matches.
+   [292/503] 'haste alecrim'... 0 matches.
+   [293/503] 'borrego sem ossos'... 0 matches.
+   [294/503] 's alho picado'... 0 matches.
+   [295/503] 'colorau'... 0 matches.
+   [296/503] 'c de sopa azeite'... 0 matches.
+   [297/503] 'de sobremesa c de sobremesa sal'... 1 matches.
+   [298/503] 'dourada sem escamas e visceras'... 2 matches.
+   [299/503] 'tomatecereja cortado ao meio'... 0 matches.
+   [300/503] 'dente alho laminado finamente'... 2 matches.
+   [301/503] 'malagueta vermelha finas'... 2 matches.
+   [302/503] 'azeitonas'... 2 matches.
+   [303/503] 'vinho branco seco'... 2 matches.
+   [304/503] 'pimenta moida'... 2 matches.
+   [305/503] 'agua'... 2 matches.
+   [306/503] 'maminha de bovino'... 2 matches.
+   [307/503] 'sal grosso'... 2 matches.
+   [308/503] 'chouricao'... 2 matches.
+   [309/503] 'bacon'... 2 matches.
+   [310/503] 'maionese'... 2 matches.
+   [311/503] 'queijo mozzarella ralado'... 2 matches.
+   [312/503] 'queijo flamengo'... 2 matches.
+   [313/503] 'broa'... 2 matches.
+   [314/503] 'mostarda'... 2 matches.
+   [315/503] 'molho picante'... 2 matches.
+   [316/503] 'pimentao'... 2 matches.
+   [317/503] 'tiras de entrecosto'... 2 matches.
+   [318/503] 'c de sopa sal'... 0 matches.
+   [319/503] 'costeleta de borrego'... 1 matches.
+   [320/503] 'batata nova bem lavada'... 0 matches.
+   [321/503] 'cebola grande cortada em meiasluas'... 2 matches.
+   [322/503] 'alho laminado'... 2 matches.
+   [323/503] 'hortela fresca'... 2 matches.
+   [324/503] 'massa de pimentao'... 0 matches.
+   [325/503] 'louro'... 2 matches.
+   [326/503] 'pimenta moida na hora'... 2 matches.
+   [327/503] 'agua'... 2 matches.
+   [328/503] 'banana'... 2 matches.
+   [329/503] 'flocos de aveia grossos'... 1 matches.
+   [330/503] 'maca em cubos'... 0 matches.
+   [331/503] 'mirtilo'... 2 matches.
+   [332/503] 'iogurte natural'... 2 matches.
+   [333/503] 'farinha'... 2 matches.
+   [334/503] 'fermento'... 2 matches.
+   [335/503] 'chocolate culinaria cacau'... 2 matches.
+   [336/503] 'qb sal'... 2 matches.
+   [337/503] 'marshmallows'... 2 matches.
+   [338/503] 'tangerina'... 2 matches.
+   [339/503] 'qb groselha'... 1 matches.
+   [340/503] 'bolachas butter cookies'... 2 matches.
+   [341/503] 'palitos salgados'... 1 matches.
+   [342/503] 'pao brasileiro'... 1 matches.
+   [343/503] 'qb sementes de sesamo'... 2 matches.
+   [344/503] 'talos aipo'... 0 matches.
+   [345/503] 'minipimento'... 0 found.
+   [346/503] 'qb aipo'... 1 matches.
+   [347/503] 'qb azeitona rodelas'... 2 matches.
+   [348/503] 'beterraba'... 1 matches.
+   [349/503] 'pao da avo familiar'... 1 matches.
+   [350/503] 'sumo limao'... 2 matches.
+   [351/503] 'qb cominhos'... 2 matches.
+   [352/503] 'qb pimenta'... 2 matches.
+   [353/503] 'pao de rio maior'... 2 matches.
+   [354/503] 'iogurte grego'... 2 matches.
+   [355/503] 'mistura queijos ralado'... 1 matches.
+   [356/503] 'farinha com fermento'... 2 matches.
+   [357/503] 'lula limpa'... 0 matches.
+   [358/503] 'preparado para sopa portuguesa'... 1 matches.
+   [359/503] 'feijaobranco em lata'... 2 matches.
+   [360/503] 'cominhos moidos'... 2 matches.
+   [361/503] 'figo seco enfarinhado'... 0 matches.
+   [362/503] 'vinho do porto'... 2 matches.
+   [363/503] 'canela'... 2 matches.
+   [364/503] 'cravinho'... 2 matches.
+   [365/503] 'pera'... 2 matches.
+   [366/503] 'requeijao de ovelha e cabra'... 2 matches.
+   [367/503] 'feijao'... 2 matches.
+   [368/503] 'batata para cozer pequena'... 0 matches.
+   [369/503] 'tamboril em cubos'... 0 matches.
+   [370/503] 'vinagre'... 2 matches.
+   [371/503] 'tomate redondo maduro'... 2 matches.
+   [372/503] 'lombos de bacalhau descongelado'... 2 matches.
+   [373/503] 'ervilhas'... 2 matches.
+   [374/503] 'milho em conserva'... 0 matches.
+   [375/503] 'broa de milho'... 0 matches.
+   [376/503] 'perna de borrego'... 2 matches.
+   [377/503] 'batata primor'... 0 matches.
+   [378/503] 'cabeca alho'... 2 matches.
+   [379/503] 'azeitona sem caroco'... 2 matches.
+   [380/503] 'alho moido'... 1 matches.
+   [381/503] 'tomilho seco'... 2 matches.
+   [382/503] 'couveroxa ripada'... 1 matches.
+   [383/503] 'abobora em cubos'... 2 matches.
+   [384/503] 'sultana'... 2 matches.
+   [385/503] 'arroz agulha'... 0 matches.
+   [386/503] 'de sobremesa azeite'... 1 matches.
+   [387/503] 'espargos'... 2 matches.
+   [388/503] 'legumes em tomate'... 1 matches.
+   [389/503] 'ameijoa branca'... 2 matches.
+   [390/503] 'qb manjericao'... 2 matches.
+   [391/503] 'molho pesto alla calabrese'... 1 matches.
+   [392/503] 'c de sopa azeite'... 0 matches.
+   [393/503] 'batata para cozer'... 0 matches.
+   [394/503] 'iogurte grego'... 2 matches.
+   [395/503] 'queijo feta'... 2 matches.
+   [396/503] 'iogurte grego natural'... 2 matches.
+   [397/503] 'pimento vermelho assado'... 2 matches.
+   [398/503] 'malagueta'... 2 matches.
+   [399/503] 'molho coentros'... 2 matches.
+   [400/503] 'haste salsa fresca'... 0 matches.
+   [401/503] 'cominhos'... 2 matches.
+   [402/503] 'malagueta vermelha picada'... 2 matches.
+   [403/503] 'vinagre de vinho tinto'... 2 matches.
+   [404/503] 'abacate'... 2 matches.
+   [405/503] 'unid entrecote'... 0 matches.
+   [406/503] 'kiwi'... 2 matches.
+   [407/503] 'kiwi amarelo'... 2 matches.
+   [408/503] 'molho hortela fresca'... 0 matches.
+   [409/503] 'rum'... 2 matches.
+   [410/503] 'refrigerante com gas lima limao'... 2 matches.
+   [411/503] 'lata tomate em pedacos'... 2 matches.
+   [412/503] 'mexilhao'... 2 matches.
+   [413/503] 'pessego'... 2 matches.
+   [414/503] 'melancia'... 2 matches.
+   [415/503] 'manga'... 2 matches.
+   [416/503] 'licor cointreau'... 2 matches.
+   [417/503] 'refrigerante com gas limalimao'... 2 matches.
+   [418/503] 'pau de canela'... 2 matches.
+   [419/503] 'garrafa vinho rose'... 1 matches.
+   [420/503] 'iogurte'... 2 matches.
+   [421/503] 'mini pepino'... 2 matches.
+   [422/503] 'de sobremesa azeite'... 1 matches.
+   [423/503] 'saqueta cha de hibisco'... 2 matches.
+   [424/503] 'de sobremesa mel'... 1 matches.
+   [425/503] 'kombucha'... 2 matches.
+   [426/503] 'lima'... 2 matches.
+   [427/503] 'chav bebida de soja'... 0 matches.
+   [428/503] 'maca pequena'... 0 matches.
+   [429/503] 'chav flocos de aveia finos'... 0 matches.
+   [430/503] 'chav flocos de aveia grossos'... 0 matches.
+   [431/503] 'chav acucar de coco'... 0 matches.
+   [432/503] 'fermento'... 2 matches.
+   [433/503] 'cardamomo'... 2 matches.
+   [434/503] 'linhaca moida'... 1 matches.
+   [435/503] 'limao'... 2 matches.
+   [436/503] 'chav uva passa'... 0 matches.
+   [437/503] 'chav amendoa laminada'... 1 matches.
+   [438/503] 'xarope de agave'... 2 matches.
+   [439/503] 'camarao tigre'... 2 matches.
+   [440/503] 'cebola pequena'... 2 matches.
+   [441/503] 'arroz carolino'... 0 matches.
+   [442/503] 'sal'... 2 matches.
+   [443/503] 'pao de forma de rio maior fatiado'... 2 matches.
+   [444/503] 'camarao vannamei'... 2 matches.
+   [445/503] 'malagueta vermelha sem sementes'... 2 matches.
+   [446/503] 'haste salsa'... 0 matches.
+   [447/503] 'molho coentros'... 2 matches.
+   [448/503] 'gelo'... 2 matches.
+   [449/503] 'vodka'... 2 matches.
+   [450/503] 'sumo de lima'... 2 matches.
+   [451/503] 'ginger beer'... 2 matches.
+   [452/503] 'hortela'... 2 matches.
+   [453/503] 'farinha de trigo tipo'... 0 matches.
+   [454/503] 'espinafre'... 2 matches.
+   [455/503] 'alface iceberg picada'... 2 matches.
+   [456/503] 'abacaxi em cubos'... 1 matches.
+   [457/503] 'molho de cocktail'... 2 matches.
+   [458/503] 'farinha'... 2 matches.
+   [459/503] 'fermento de padeiro'... 2 matches.
+   [460/503] 'graodebico'... 0 found.
+   [461/503] 'alface'... 1 matches.
+   [462/503] 'manga muito madura'... 0 matches.
+   [463/503] 'coentros'... 2 matches.
+   [464/503] 'curcuma'... 2 matches.
+   [465/503] 'cravinho'... 2 matches.
+   [466/503] 'banana muito madura'... 2 matches.
+   [467/503] 'vinagre de sidra'... 2 matches.
+   [468/503] 'gengibre'... 2 matches.
+   [469/503] 'de sobremesa caril'... 2 matches.
+   [470/503] 'sementes de funcho'... 2 matches.
+   [471/503] 'vagem cardamomo'... 0 matches.
+   [472/503] 'maca de alcobaca muito madura'... 1 matches.
+   [473/503] 'sementes de cominhos'... 2 matches.
+   [474/503] 'sementes de coentros'... 1 matches.
+   [475/503] 'sultana dourada'... 1 matches.
+   [476/503] 'essencia de baunilha'... 1 matches.
+   [477/503] 'bicarbonato de sodio'... 2 matches.
+   [478/503] 'iogurte grego natural'... 2 matches.
+   [479/503] 'raspa de laranja'... 0 matches.
+   [480/503] 'massa filo'... 2 matches.
+   [481/503] 'sumo de laranja'... 2 matches.
+   [482/503] 'creme de pistacho'... 1 matches.
+   [483/503] 'manteiga sem sal'... 2 matches.
+   [484/503] 'acucar mascavado'... 2 matches.
+   [485/503] 'acucar branco'... 2 matches.
+   [486/503] 'chocolate meioamargo ou negro'... 2 matches.
+   [487/503] 'pistachio'... 2 matches.
+   [488/503] 'extrato de baunilha'... 1 matches.
+   [489/503] 'banana madura'... 2 matches.
+   [490/503] 'manteiga de amendoim cremosa'... 2 matches.
+   [491/503] 'sementes de linhaca trituradas'... 2 matches.
+   [492/503] 'vagem de baunilha'... 2 matches.
+   [493/503] 'cafe expresso'... 2 matches.
+   [494/503] 'lata leite condensado'... 0 matches.
+   [495/503] 'gemas de ovo'... 1 matches.
+   [496/503] 'natas para bater'... 2 matches.
+   [497/503] 'gemas de ovo xl'... 1 matches.
+   [498/503] 'acucar fino'... 2 matches.
+   [499/503] 'chocolate culinaria'... 2 matches.
+   [500/503] 'raspas de chocolate branco'... 0 matches.
+   [501/503] 'frutos vermelhos'... 2 matches.
+   [502/503] 'tomate rosa'... 2 matches.
+   [503/503] 'miolo de pistachio'... 0 matches.

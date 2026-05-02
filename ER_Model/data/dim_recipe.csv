@@ -1,0 +1,100 @@
+recipe_id;recipe_name;cuisine_type;nutritional_value;protein;carbs;fat;fiber
+1;Frango com salada de melão e rúcula;Mediterrânica;337;29;30;10;3.4
+2;Hummus de beterraba;Mediterrânica;24;0.2;;1.4;1
+3;Esparguete com feijão e tomate;Mediterrânica;432;15.3;;10.5;12.3
+4;Frango com legumes e grão;Mediterrânica;305;28;;11.6;9.1
+5;Frittata com legumes na air fryer;Mediterrânica;244;16;4.6;18;1.9
+6;Camarão com bacon;Mediterrânica;331;40;5.8;17;0
+7;Salada de favas com cavala;Mediterrânica;464;23;48;18;11
+8;Salada de couve com frango grelhado;Mediterrânica;344;32;24;12;4.5
+9;Bacalhau com natas rápido;Mediterrânica;;;;;
+10;Bacalhau com espinafres;Mediterrânica;;;;;
+11;Legumes assados com molho tahini;Mediterrânica;276;10;28;12;8.3
+12;Cheese fingers;Mediterrânica;621;21;95;16;3.9
+13;Ravioli com espargos e cogumelos salteados;Mediterrânica;510;20.6;;20.8;9.7
+14;Arroz frito com camarão e ovo;Mediterrânica;301;25.4;;9.7;2.4
+15;Bacalhau espiritual com camarões;Mediterrânica;614;41.4;61.3;21.6;4.2
+16;Caldo de legumes com noodles e pesto;Mediterrânica;290;10.4;;15.6;2.7
+17;Rolo de carne com beterraba;Mediterrânica;423;24.5;;23.5;7
+18;Bolinhas de azeitona na air fryer;Mediterrânica;272;7.6;35;11;3.2
+19;Nuggets de bacalhau fresco;Mediterrânica;828;31.7;;56.6;9.1
+20;Couve-flor na Air Fryer;Mediterrânica;329;21;21;15;11
+21;Pizza rústica;Mediterrânica;;;;;
+22;Tosta com legumes e farofa;Mediterrânica;139;3.9;;6.8;3.3
+23;Tomate cherry com espinafres e burrata;Mediterrânica;242;;18;15;2.9
+24;Camarão ao alhinho com legumes;Mediterrânica;373;25;51;6.7;4
+25;Raviolis de beterraba e requeijão;Mediterrânica;294;6;35;14;2.9
+26;Tagliatelle com salmão e pesto;Mediterrânica;467;21.6;;17;3.2
+27;Alho-francês à brás;Mediterrânica;;;;;
+28;Beringelas recheadas;Mediterrânica;493;20;;12;6
+29;Bacalhau com broa e pesto;Mediterrânica;438;25;;10.8;4.7
+30;Costeletas de porco grelhadas com cuscuz;Mediterrânica;415;24;15;28;2.7
+31;Bacalhau com crosta de parmesão e pesto;Mediterrânica;345;36.3;;21;1.3
+32;Crepes de cogumelos e alheira de peru;Mediterrânica;195;8;;9;3
+33;Terrina de batata-doce e castanha;Mediterrânica;324;8.5;45;11;6.3
+34;Açorda de tomate e manjericão;Mediterrânica;374;10;58;10;4.5
+35;Salmão com espargos e batata-doce;Mediterrânica;740;35;68;35;8.6
+36;Palitos de curgete;Mediterrânica;103;5.6;11;3.7;0.9
+37;One pot pasta de frango e pimento;Mediterrânica;503;34.5;;14.5;4.8
+38;Massa com frango e pesto;Mediterrânica;568;37.6;;20.3;5.2
+39;Bowl de frango;Mediterrânica;326;26;29.8;12.4;6
+40;Croquetes com arroz de tomate e manjericão;Mediterrânica;591;14.2;;21.4;4.5
+41;Salada de feijão-frade com feta;Mediterrânica;360;17;25;19;7.5
+42;Peitos de frango no forno com limão;Mediterrânica;298;30;22;9.2;3.9
+43;Salada fria com massa bagos;Mediterrânica;431;17;53;16;2.7
+44;Legumes assados com grão e bacalhau fresco;Mediterrânica;385;30.9;;13.2;13.4
+45;Bacalhau no forno com legumes;Mediterrânica;195;28.5;;6.5;1.8
+46;Bagel na Air Fryer;Mediterrânica;222;7.5;27;8.9;1.6
+47;Frango à tailandesa;Mediterrânica;403;33.6;;10.8;1.8
+48;Filetes de peixe-gato riscado em molho de lima;Mediterrânica;381;26.2;;52.9;3.2
+49;Bacalhau na air fryer;Mediterrânica;;;;;
+50;Linguine com tomate cherry;Mediterrânica;413;16;62;10;4.1
+51;Filetes de linguado com molho béarnaise;Internacional;;;;;
+52;Torta de frango;Internacional;242;34.4;8;7.2;1.26
+53;Croquetes de borrego;Internacional;;;;;
+54;Dourada à Italiana;Internacional;;;;;
+55;Maminha grelhada na air fryer;Internacional;;;;;
+56;Broa recheada na air fryer;Internacional;;;;;
+57;Entrecosto com mostarda e mel;Internacional;;;;;
+58;Costeletas de borrego com batatas e hortelã;Internacional;;;;;
+59;Panquecas de aveia e maçã;Portuguesa;;;;;
+60;Panquecas de banana e mirtilos;Portuguesa;109;3.5;19;1.7;2.6
+61;Tábua doce com dip de chocolate e marshmallows;Portuguesa;;;;;
+62;Tábua de páscoa;Portuguesa;;;;;
+63;Ovos mexidos com pepino;Portuguesa;236;9.8;24;10.9;1.7
+64;Bolachas de cenoura;Portuguesa;;;;;
+66;Feijoada de lulas com legumes;Internacional;456;29;59;8.5;13
+67;Peras assadas com figos;Internacional;222;5.9;22;12;2.1
+68;Salada de feijão-verde e grão;Internacional;322;19;20;16;11
+69;Tamboril estufado;Internacional;263;23;27;6.3;3.7
+70;Salada de bacalhau com ervilhas;Internacional;376;22;46;8.9;11
+71;Perna de borrego no forno;Internacional;412;44;20;17;2.5
+72;Arroz de frango com couve roxa e abóbora;Internacional;372;29;49;7;
+73;Amêijoas com espargos;Internacional;;;;;
+74;Couve-flor grelhada com queijo;Internacional;396;12;6.6;35;4.1
+75;Dip de alho;Internacional;130;0.6;3.1;13;0.3
+76;Dip de feta picante;Internacional;99;4.7;4.1;6.9;0.9
+77;Entrecôte com molho de abacate;Internacional;639;45;2.4;50;0.7
+78;Mojito de kiwi e limão;Internacional;233;1.6;44;0.8;2.5
+79;Mexilhões à espanhola;Internacional;108;7.2;8.6;4.5;2.1
+80;Sangria de rosé;Internacional;256;1.3;25;0.5;1.8
+81;Gaspacho com iogurte;Internacional;182;4.7;7.6;15;1.3
+82;Kombucha com hibiscus;Internacional;;;;;
+83;Bolo de aveia com maçã;Internacional;;;;;
+84;Camarão tigre grelhado na frigideira;Internacional;;;;;
+85;Arroz de coentros;Internacional;;;;;
+86;Camarão salteado com molho chimichurri;Internacional;482;26;41;23;2.9
+87;Moscow mule;Internacional;;;;;
+88;Bolo podre;Internacional;;;;;
+89;Espinafres salteados;Internacional;;;;;
+90;Wraps de porco com abacaxi;Internacional;320;24;27;13;1.8
+91;Pão pita;Internacional;194;3.7;35;4.2;1.4
+92;Salada de falafel com molho de tahini;Internacional;333;11;19;22;10
+93;Chutney de manga com tomate;Internacional;58;0.8;7.4;2.5;1.6
+94;Chutney de banana com pimento vermelho;Internacional;121;0.9;22;2.7;2
+95;Chutney de abóbora e maçã;Internacional;97;0.6;18;2.3;1.4
+96;Bolo de laranja com massa filo;Internacional;779;7.2;104;37;2
+97;Bolachas de pistáchio;Internacional;;;;;
+98;Gelado de banana e manteiga de amendoim;Internacional;227;9.2;21;11;4.3
+99;Semifrio de chocolate e café;Internacional;370;7.2;26;26;1.5
+100;Sopa de tomate assado com pistáchio;Internacional;224;6.5;24;11;3.9
