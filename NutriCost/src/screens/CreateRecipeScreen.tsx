@@ -9,6 +9,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
 import Card from '../components/Card';
 import ConfirmModal from '../components/ConfirmModal';
+import AISuggestionsModal from '../components/AISuggestionsModal';
 import { ingredientPicker } from '../utils/ingredientPicker';
 import { RootStackParamList } from '../navigation/types';
 import { Ingredient, MealType, DietTag, Recipe, Store } from '../types';
@@ -53,6 +54,7 @@ export default function CreateRecipeScreen({ navigation }: Props) {
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [instructions, setInstructions] = useState('');
   const [modal, setModal] = useState<{ type: 'error' | 'success'; title: string; message: string; action?: () => void } | null>(null);
+  const [aiModalVisible, setAiModalVisible] = useState(false);
 
   // Register picker callback so IngredientSearch can call back with the selection
   useEffect(() => {
@@ -216,15 +218,27 @@ export default function CreateRecipeScreen({ navigation }: Props) {
         </TouchableOpacity>
 
         <Text style={[s.fieldLabel, { marginTop: 12 }]}>Instruções (opcionais)</Text>
-        <TextInput
-          style={[s.textInput, s.instructionsInput]}
-          value={instructions}
-          onChangeText={setInstructions}
-          placeholder="e.g. Mistura tudo e serve fresco"
-          placeholderTextColor={C.textMuted}
-          multiline
-          textAlignVertical="top"
-        />
+        <View style={s.instructionsContainer}>
+          <TextInput
+            style={[s.textInput, s.instructionsInput]}
+            value={instructions}
+            onChangeText={setInstructions}
+            placeholder="e.g. Mistura tudo e serve fresco"
+            placeholderTextColor={C.textMuted}
+            multiline
+            textAlignVertical="top"
+          />
+          {drafts.length > 0 && (
+            <TouchableOpacity
+              style={s.aiBtn}
+              onPress={() => setAiModalVisible(true)}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="sparkles" size={14} color={C.accent} />
+              <Text style={s.aiBtnTxt}>IA</Text>
+            </TouchableOpacity>
+          )}
+        </View>
 
         {drafts.length > 0 && (
           <>
@@ -264,6 +278,14 @@ export default function CreateRecipeScreen({ navigation }: Props) {
           setModal(null);
         }}
       />
+
+      <AISuggestionsModal
+        visible={aiModalVisible}
+        recipeName={name || 'Nova Receita'}
+        ingredients={drafts.map(d => ({ name: d.ingredient.name, weightG: d.weightG }))}
+        onClose={() => setAiModalVisible(false)}
+        onApply={(suggestionInstructions) => setInstructions(suggestionInstructions)}
+      />
     </KeyboardAvoidingView>
   );
 }
@@ -298,6 +320,26 @@ const s = StyleSheet.create({
   sumVal: { fontSize: 18, fontWeight: '600', color: C.text, marginTop: 2 },
   sumUnit: { fontSize: 11, color: C.textSub, fontWeight: '400' },
   instructionsInput: { minHeight: 90, marginBottom: 18 },
+  instructionsContainer: { position: 'relative', marginBottom: 18 },
+  aiBtn: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    backgroundColor: C.accentBg,
+    borderRadius: R.md,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    borderWidth: 0.5,
+    borderColor: C.accent + '40',
+  },
+  aiBtnTxt: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: C.accent,
+  },
   saveRow: { flexDirection: 'row', gap: 10 },
   saveBtn: { flex: 1, backgroundColor: C.accent, borderRadius: R.md, padding: 14, alignItems: 'center' },
   saveBtnTxt: { fontSize: 14, fontWeight: '600', color: '#1A1000' },

@@ -61,12 +61,12 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         <View style={s.grid}>
           <TouchableOpacity style={s.actionCard} onPress={() => navigation.navigate('Receitas')} activeOpacity={0.75}>
             <Ionicons name="document-text-outline" size={22} color={C.accent} style={{ marginBottom: 9 }} />
-            <Text style={s.actionTitle}>Ver Receitas</Text>
+            <Text style={s.actionTitle}>Ver receitas</Text>
             <Text style={s.actionSub}>Receitas selecionadas</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.actionCard} onPress={() => navigation.navigate('CreateRecipe')} activeOpacity={0.75}>
             <Ionicons name="add-circle-outline" size={22} color={C.protein} style={{ marginBottom: 9 }} />
-            <Text style={s.actionTitle}>Nova Receita</Text>
+            <Text style={s.actionTitle}>Nova receita</Text>
             <Text style={s.actionSub}>Criar uma nova receita</Text>
           </TouchableOpacity>
         </View>

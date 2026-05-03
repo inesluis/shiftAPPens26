@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
 import Card from '../components/Card';
+import AISuggestionsModal from '../components/AISuggestionsModal';
 import { RootStackParamList } from '../navigation/types';
 import { C, R } from '../theme';
 import { ingredientPicker } from '../utils/ingredientPicker';
@@ -144,6 +145,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
     const [bestStore, setBestStore] = useState<Store | null>(null);
     const [pickerVisible, setPickerVisible] = useState(false);
     const [deleteVisible, setDeleteVisible] = useState(false);
+    const [aiModalVisible, setAiModalVisible] = useState(false);
 
     useEffect(() => {
         if (recipe) {
@@ -547,8 +549,8 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                     <View style={s.sectionHeader}>
                         <Text style={s.sectionTitle}>Instruções</Text>
                         {recipe.isCustom && (
-                            <TouchableOpacity activeOpacity={0.7}>
-                                <MaterialCommunityIcons name="robot" size={18} color={C.accent} />
+                            <TouchableOpacity onPress={() => setAiModalVisible(true)} activeOpacity={0.7}>
+                                <Ionicons name="sparkles" size={16} color={C.accent} />
                             </TouchableOpacity>
                         )}
                     </View>
@@ -599,6 +601,14 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                 danger
                 onConfirm={handleDelete}
                 onCancel={() => setDeleteVisible(false)}
+            />
+
+            <AISuggestionsModal
+                visible={aiModalVisible}
+                recipeName={recipe.name}
+                ingredients={drafts.map(d => ({ name: d.name, weightG: d.weightG }))}
+                onClose={() => setAiModalVisible(false)}
+                onApply={(suggestionInstructions) => setInstructions(suggestionInstructions)}
             />
         </View>
     );
