@@ -171,46 +171,109 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
             if (!numericId) return;
 
             try {
-                const response = await fetch(`${API_BASE_URL}/recipes/${numericId}?isCustom=${recipe.isCustom}`);
-                if (!response.ok) throw new Error('Failed to fetch recipe details');
-                const data = await response.json();
-
                 if (recipe.isCustom) {
-                    const nextDrafts = (data.ingredients || []).map((ing: any) => ({
-                        ingredientId: ing.ingredientId || 'unknown',
-                        name: ing.name,
-                        weightG: parseQuantityToGrams(ing.quantity),
-                        // For user recipes, we don't have full macro/price info in the detail response yet
-                        // but we can fallback or update the API later.
-                        prices: {},
-                        macrosPer100g: { calories: 0, protein: 0, carbs: 0, fat: 0 },
-                    }));
-                    setDrafts(nextDrafts);
-                } else {
+                    const response = await fetch(`${API_BASE_URL}/recipes/${numericId}?isCustom=true`);
+                    if (!response.ok) throw new Error('Failed to fetch recipe details');
+                    const data = await response.json();
+
+                    // For custom recipes, we also need costs to get some ingredient info
+                    const costRes = await fetch(`${API_BASE_URL}/user-recipes/${numericId}/costs`);
+                    const costData = await costRes.json();
+
                     const groupMap: Record<Store, RecipeIngredient[]> = { continente: [], pingo_doce: [] };
                     const totalMap: Record<Store, number> = { continente: 0, pingo_doce: 0 };
                     const missingMap: Record<Store, number> = { continente: 0, pingo_doce: 0 };
 
-                    (data.costs || []).forEach((cost: any) => {
+                    (costData || []).forEach((cost: any) => {
+                        const store = resolveStore(cost.supermarketName);
+                        if (!store) return;
+                        totalMap[store] = cost.totalCost;
+                        missingMap[store] = cost.missingIngredientsCount;
+
+                        if (cost.selectedProducts) {
+                            groupMap[store] = cost.selectedProducts.map((p: any) => ({
+                                ingredientId: String(p.ingredientId),
+                                name: p.productName || p.ingredientName || 'Desconhecido',
+                                brand: p.productBrand || '',
+                                weightG: 100, // Fallback since weight isn't in cost API
+                                selectedStore: store,
+                                pricePerKg: (p.selectedPrice * 1000) / 100, 
+                                macrosPer100g: { calories: 0, protein: 0, carbs: 0, fat: 0 },
+                            }));
+                        }
+                    });
+
+                    // Use the products from the first store as drafts
+                    const firstStore = (Object.keys(groupMap) as Store[]).find(s => groupMap[s].length > 0);
+                    if (firstStore) {
+                        setDrafts(groupMap[firstStore]);
+                    }
+
+                    setStoreTotals(totalMap);
+                    setStoreMissing(missingMap);
+                    setStoreGroups(groupMap);
+                    if (costData?.[0]) setBestStore(resolveStore(costData[0].supermarketName));
+
+                } else {
+                    // Curated Recipe Path
+                    const [recipeRes, ingRes, costRes] = await Promise.all([
+                        fetch(`${API_BASE_URL}/recipes/${numericId}`),
+                        fetch(`${API_BASE_URL}/recipe-ingredients/recipe/${numericId}`),
+                        fetch(`${API_BASE_URL}/recipes/${numericId}/costs/detailed`)
+                    ]);
+
+                    if (!recipeRes.ok || !ingRes.ok || !costRes.ok) throw new Error('Failed to fetch recipe components');
+
+                    const recipeData = await recipeRes.json();
+                    const ingData = await ingRes.json();
+                    const costData = await costRes.json();
+
+                    setInstructions(recipeData.instructions || '');
+
+                    const quantities: Record<string, number> = {};
+                    ingData.forEach((i: any) => {
+                        quantities[String(i.ingredientId)] = parseQuantityToGrams(i.ingredientQuantity);
+                    });
+
+                    const groupMap: Record<Store, RecipeIngredient[]> = { continente: [], pingo_doce: [] };
+                    const totalMap: Record<Store, number> = { continente: 0, pingo_doce: 0 };
+                    const missingMap: Record<Store, number> = { continente: 0, pingo_doce: 0 };
+
+                    (costData || []).forEach((cost: any) => {
                         const store = resolveStore(cost.supermarketName);
                         if (!store) return;
                         totalMap[store] = cost.totalCost;
                         missingMap[store] = cost.missingIngredients;
+
+                        if (cost.selectedProducts) {
+                            groupMap[store] = cost.selectedProducts.map((p: any) => {
+                                const weightG = quantities[String(p.ingredientId)] || 100;
+                                return {
+                                    ingredientId: String(p.ingredientId),
+                                    name: p.productName || 'Desconhecido',
+                                    brand: p.productBrand || '',
+                                    weightG: weightG,
+                                    selectedStore: store,
+                                    // Set pricePerKg so that (pricePerKg/1000)*weightG == p.selectedPrice
+                                    pricePerKg: (p.selectedPrice * 1000) / weightG,
+                                };
+                            });
+                        }
                     });
 
-                    const nextDrafts = (data.ingredients || []).map((ing: any) => ({
-                        ingredientId: String(ing.ingredientId),
-                        name: ing.name,
-                        weightG: parseQuantityToGrams(ing.quantity),
-                    }));
+                    // Use the best store's products for the general list
+                    const best = costData[0];
+                    if (best) {
+                        const store = resolveStore(best.supermarketName);
+                        if (store) {
+                            setBestStore(store);
+                            setDrafts(groupMap[store]);
+                        }
+                    }
 
-                    setDrafts(nextDrafts);
                     setStoreTotals(totalMap);
                     setStoreMissing(missingMap);
-                    
-                    // Simple best store logic
-                    const best = (data.costs || [])[0];
-                    if (best) setBestStore(resolveStore(best.supermarketName));
+                    setStoreGroups(groupMap);
                 }
             } catch (err) {
                 console.error('Recipe detail load error:', err);
@@ -218,7 +281,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
         };
 
         loadIngredients();
-    }, [recipe]);
+    }, [recipe?.id]);
 
     useEffect(() => {
         ingredientPicker.set((ingredient, weightG, store) => {
