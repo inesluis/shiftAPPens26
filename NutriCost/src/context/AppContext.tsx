@@ -1,81 +1,35 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DietTag, MealLog, MealType, Recipe, Store, UserProfile } from '../types';
+import { MealLog, Recipe, UserProfile, MealType } from '../types';
 import { supabase } from '../supabase';
+import { 
+  normalizeMealType, 
+  normalizeDietTags,
+  toCuratedId,
+  toUserId,
+  parseUserRecipeId
+} from '../utils/normalization';
+import { 
+  fetchRecipes, 
+  fetchCuratedRecipeCost, 
+  createRecipe, 
+  updateRecipeApi, 
+  deleteRecipeApi 
+} from '../api/recipes';
+import { 
+  State, 
+  Action, 
+  reducer, 
+  initialState, 
+  DEFAULT_PROFILE 
+} from './reducer';
 
-interface State {
-  profile: UserProfile;
-  recipes: Recipe[];
-  mealLogs: MealLog[];
-  isLoading: boolean;
-}
-
-type Action =
-  | { type: 'HYDRATE'; payload: Partial<Omit<State, 'isLoading'>> }
-  | { type: 'SET_PROFILE'; payload: UserProfile }
-  | { type: 'SET_PROFILE_NAME'; payload: string }
-  | { type: 'ADD_RECIPE'; payload: Recipe }
-  | { type: 'UPDATE_RECIPE'; payload: Recipe }
-  | { type: 'DELETE_RECIPE'; payload: string }
-  | { type: 'ADD_MEAL_LOG'; payload: MealLog }
-  | { type: 'REMOVE_MEAL_LOG'; payload: string };
-
-const DEFAULT_PROFILE: UserProfile = {
-  name: 'João',
-  age: 27,
-  weightKg: 78,
-  heightCm: 182,
-  goal: 'Aumento Muscular',
-  weeklyBudget: 70,
-  macroGoals: { calories: 2200, protein: 160, carbs: 220, fat: 65 },
-};
-
-const initialState: State = {
-  profile: DEFAULT_PROFILE,
-  recipes: [],
-  mealLogs: [],
-  isLoading: true,
-};
-
-type AuthUserLike = {
-  user_metadata?: {
-    name?: string | null;
-    full_name?: string | null;
-  } | null;
-  email?: string | null;
-} | null | undefined;
-
-function getAuthDisplayName(user: AuthUserLike) {
-  const rawName = user?.user_metadata?.name ?? user?.user_metadata?.full_name ?? user?.email ?? '';
-  const name = typeof rawName === 'string' ? rawName.trim() : '';
-  return name || DEFAULT_PROFILE.name;
-}
-
-function reducer(state: State, action: Action): State {
-  switch (action.type) {
-    case 'HYDRATE':
-      return { ...state, ...action.payload, isLoading: false };
-    case 'SET_PROFILE':
-      return { ...state, profile: action.payload };
-    case 'SET_PROFILE_NAME':
-      return { ...state, profile: { ...state.profile, name: action.payload } };
-    case 'ADD_RECIPE':
-      return { ...state, recipes: [...state.recipes, action.payload] };
-    case 'UPDATE_RECIPE':
-      return {
-        ...state,
-        recipes: state.recipes.map(r => r.id === action.payload.id ? action.payload : r),
-      };
-    case 'DELETE_RECIPE':
-      return { ...state, recipes: state.recipes.filter(r => r.id !== action.payload) };
-    case 'ADD_MEAL_LOG':
-      return { ...state, mealLogs: [...state.mealLogs, action.payload] };
-    case 'REMOVE_MEAL_LOG':
-      return { ...state, mealLogs: state.mealLogs.filter(l => l.id !== action.payload) };
-    default:
-      return state;
-  }
-}
+import { 
+  getTodayDateString,
+  getTodayLogs as filterTodayLogs,
+  getWeekLogs as filterWeekLogs,
+  getDailyBudget as calculateDailyBudget
+} from '../utils/logs';
 
 interface ContextValue {
   state: State;
@@ -92,134 +46,32 @@ interface ContextValue {
 
 const AppContext = createContext<ContextValue | undefined>(undefined);
 const STORAGE_KEY = '@nutricost_v1';
-const RECIPE_ID_PREFIX = {
-  curated: 'c_',
-  user: 'u_',
-};
 
-const DIET_TAG_MAP: Record<string, DietTag> = {
-  vegan: 'Vegan',
-  high_protein: 'Proteica',
-  proteica: 'Proteica',
-  keto: 'Keto',
-  mediterranean: 'Mediterrânica',
-  mediterranica: 'Mediterrânica',
-  low_carb: 'Low Carb',
-  gluten_free: 'Sem Glúten',
-  sem_gluten: 'Sem Glúten',
-};
+type AuthUserLike = {
+  user_metadata?: {
+    name?: string | null;
+    full_name?: string | null;
+  } | null;
+  email?: string | null;
+} | null | undefined;
 
-function normalizeMealType(value?: string | null): MealType {
-  const raw = (value ?? '').toLowerCase();
-  const v = raw.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  if (v === 'breakfast' || v === 'pequeno-almoco') return 'Pequeno-Almoço';
-  if (v === 'lunch' || v === 'almoco') return 'Almoço';
-  if (v === 'dinner' || v === 'jantar') return 'Jantar';
-  if (v === 'snack') return 'Snack';
-  return 'Almoço';
-}
-
-function normalizeDietTags(value?: string | null): DietTag[] {
-  if (!value) return [];
-  const key = value
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/\s+/g, '_');
-  const mapped = DIET_TAG_MAP[key];
-  return mapped ? [mapped] : [];
-}
-
-function toCuratedId(id: number) {
-  return `${RECIPE_ID_PREFIX.curated}${id}`;
-}
-
-function toUserId(id: number) {
-  return `${RECIPE_ID_PREFIX.user}${id}`;
-}
-
-function parseUserRecipeId(id: string) {
-  if (id.startsWith(RECIPE_ID_PREFIX.user)) return Number(id.replace(RECIPE_ID_PREFIX.user, ''));
-  return null;
-}
-
-function resolveStore(name: string) {
-  const value = name.toLowerCase();
-  if (value.includes('continente')) return 'continente';
-  if (value.includes('pingo')) return 'pingo_doce';
-  return null;
-}
-
-function toPricePerKg(price?: number | null, pricePerUnit?: number | null, weight?: number | null) {
-  if (pricePerUnit && pricePerUnit > 0) return pricePerUnit;
-  if (price && weight && weight > 0) {
-    const p = price / weight;
-    if (p > 500) return p;
-    return p * 1000;
-  }
-  return null;
-}
-
-function parseQuantityToGrams(value?: string | null): number {
-  if (!value) return 100;
-  const num = parseFloat(value.replace(',', '.').match(/[0-9.]+/)?.[0] ?? '');
-  if (!Number.isFinite(num)) return 100;
-  const lower = value.toLowerCase();
-  if (lower.includes('kg')) return num * 1000;
-  if (lower.includes('g')) return num;
-  if (lower.includes('ml')) return num;
-  return num;
+function getAuthDisplayName(user: AuthUserLike) {
+  const rawName = user?.user_metadata?.name ?? user?.user_metadata?.full_name ?? user?.email ?? '';
+  const name = typeof rawName === 'string' ? rawName.trim() : '';
+  return name || DEFAULT_PROFILE.name;
 }
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const API_BASE_URL = 'http://192.168.20.79:8080/jakartApp/api';
-
-  const fetchCuratedRecipeCost = async (recipeId: number): Promise<number> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/recipes/${recipeId}/costs`);
-      if (!response.ok) return 0;
-
-      const costs = await response.json();
-      if (!Array.isArray(costs) || costs.length === 0) return 0;
-
-      const best = costs.reduce((currentBest: any, candidate: any) => {
-        const currentValue = Number(currentBest?.totalCost ?? Number.POSITIVE_INFINITY);
-        const candidateValue = Number(candidate?.totalCost ?? Number.POSITIVE_INFINITY);
-        return candidateValue < currentValue ? candidate : currentBest;
-      }, costs[0]);
-
-      return Number(best?.totalCost ?? 0);
-    } catch {
-      return 0;
-    }
-  };
-
-  const fetchRecipesFromApi = async () => {
+  const fetchRecipesFromApi = async (): Promise<Recipe[]> => {
     try {
       const { data: authData } = await supabase.auth.getUser();
       const userId = authData?.user?.id;
       
-      const url = `${API_BASE_URL}/recipes${userId ? `?userId=${userId}` : ''}`;
-      console.log('Fetching recipes from:', url);
-      const response = await fetch(url);
+      const data = await fetchRecipes(userId);
       
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('API Error Response:', errorText);
-        throw new Error(`Failed to fetch recipes: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      console.log('API Data received:', JSON.stringify(data).substring(0, 200) + '...');
-
-      if (!data || (typeof data !== 'object')) {
-        console.error('Invalid data format received:', data);
-        return [];
-      }
-      
-      const curated = await Promise.all((data.curated || []).map(async (r: any) => ({
+      const curated = await Promise.all((data.curated || []).map(async (r) => ({
         id: toCuratedId(r.recipeId),
         name: r.recipeName ?? 'Recipe',
         mealType: 'Almoço' as MealType,
@@ -236,7 +88,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         isCustom: false,
       })));
 
-      const user = (data.user || []).map((r: any) => ({
+      const user = (data.user || []).map((r) => ({
         id: toUserId(r.userRecipeId),
         name: r.recipeName ?? 'Recipe',
         mealType: normalizeMealType(r.mealType),
@@ -255,14 +107,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       return [...curated, ...user];
     } catch (err) {
-      console.error('fetchRecipesFromApi caught error:', err);
       throw err;
     }
   };
 
   const reloadRecipes = async () => {
-    const recipes = await fetchRecipesFromApi();
-    dispatch({ type: 'HYDRATE', payload: { recipes } });
+    try {
+      const recipes = await fetchRecipesFromApi();
+      dispatch({ type: 'SET_RECIPES', payload: recipes });
+    } catch {
+      // Silently fail or handle error
+    }
   };
 
   const addRecipe = async (recipe: Recipe) => {
@@ -282,14 +137,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       dietType: recipe.dietTags[0]?.toLowerCase() ?? null,
     };
 
-    const response = await fetch(`${API_BASE_URL}/recipes`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) throw new Error('Failed to add recipe');
-    const data = await response.json();
+    const data = await createRecipe(payload);
 
     const saved: Recipe = {
       ...recipe,
@@ -318,13 +166,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       dietType: recipe.dietTags[0]?.toLowerCase() ?? null,
     };
 
-    const response = await fetch(`${API_BASE_URL}/recipes/${userRecipeId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) throw new Error('Failed to update recipe');
+    await updateRecipeApi(userRecipeId, payload);
     
     dispatch({ type: 'UPDATE_RECIPE', payload: recipe });
   };
@@ -333,11 +175,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const userRecipeId = parseUserRecipeId(recipeId);
     if (!userRecipeId) return;
 
-    const response = await fetch(`${API_BASE_URL}/recipes/${userRecipeId}`, {
-      method: 'DELETE',
-    });
-
-    if (!response.ok) throw new Error('Failed to delete recipe');
+    await deleteRecipeApi(userRecipeId);
 
     dispatch({ type: 'DELETE_RECIPE', payload: recipeId });
   };
@@ -389,22 +227,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [state]);
 
-  const todayDate = new Date().toISOString().split('T')[0];
+  const todayDate = getTodayDateString();
 
-  const getTodayLogs = () => state.mealLogs.filter(l => l.date === todayDate);
+  const getTodayLogs = () => filterTodayLogs(state.mealLogs);
 
-  const getWeekLogs = () => {
-    const logs: MealLog[] = [];
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const ds = d.toISOString().split('T')[0];
-      logs.push(...state.mealLogs.filter(l => l.date === ds));
-    }
-    return logs;
-  };
+  const getWeekLogs = () => filterWeekLogs(state.mealLogs);
 
-  const getDailyBudget = () => parseFloat((state.profile.weeklyBudget / 7).toFixed(2));
+  const getDailyBudget = () => calculateDailyBudget(state.profile);
 
   return (
     <AppContext.Provider

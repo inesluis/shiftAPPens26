@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import { C, R } from '../theme';
 import { supabase } from '../supabase';
+import { API_BASE_URL } from '../config';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Register'>;
 
@@ -33,12 +34,17 @@ export default function RegisterScreen({ navigation }: Props) {
         setFormError(null);
         setLoading(true);
 
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
         try {
-            const response = await fetch('http://192.168.20.79:8080/jakartApp/api/auth/register', {
+            const response = await fetch(`${API_BASE_URL}/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: name.trim(), email: email.trim(), password: password.trim() }),
+                signal: controller.signal,
             });
+            clearTimeout(timeoutId);
 
             const data = await response.json();
             if (!response.ok) {

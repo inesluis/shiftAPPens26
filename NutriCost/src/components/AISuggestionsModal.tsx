@@ -5,8 +5,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { C, R } from '../theme';
-
-const API_BASE_URL = 'http://192.168.20.79:8080/jakartApp/api';
+import { generateRecipeInstructions } from '../api/ai';
 
 type Difficulty = 'easy' | 'medium' | 'hard';
 
@@ -34,28 +33,12 @@ export default function AISuggestionsModal({
   const handleGenerate = async () => {
     setGenerating(true);
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/recipes/AiGenerated`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: recipeName,
-            type: 'custom',
-            // Backend expects List<String> — send ingredient names with weight
-            ingredients: ingredients.map(i => `${i.name} (${i.weightG}g)`),
-            difficulty,
-          }),
-        }
-      );
-
-      if (!response.ok) throw new Error('Failed to generate suggestions');
-      const data = await response.json();
-
-      // RecipeResponse returns { name, type, instructions: string[] }
-      const instructionsText = Array.isArray(data.instructions)
-        ? data.instructions.join('\n')
-        : (data.instructions ?? '');
+      const instructionsText = await generateRecipeInstructions({
+        name: recipeName,
+        type: 'custom',
+        ingredients: ingredients.map(i => `${i.name} (${i.weightG}g)`),
+        difficulty,
+      });
 
       setSuggestions(instructionsText);
     } catch {
@@ -78,13 +61,24 @@ export default function AISuggestionsModal({
     onClose();
   };
 
+  const getDifficultyBadge = () => {
+    if (difficulty === 'easy') return { label: 'Fácil', color: '#4CAF50', icon: 'leaf' };
+    if (difficulty === 'medium') return { label: 'Médio', color: '#FF9800', icon: 'restaurant' };
+    return { label: 'Difícil', color: '#F44336', icon: 'flame' };
+  };
+
+  const badge = getDifficultyBadge();
+
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={s.overlay}>
         <View style={s.modal}>
           {/* Header */}
           <View style={s.header}>
-            <Text style={s.title}>Sugestões de IA</Text>
+            <View>
+              <Text style={s.title}>Sugestões de IA</Text>
+              <Text style={s.headerSubtitle}>Gera instruções passo-a-passo com base nos teus ingredientes</Text>
+            </View>
             <TouchableOpacity onPress={handleClose} hitSlop={8}>
               <Ionicons name="close" size={20} color={C.textMuted} />
             </TouchableOpacity>
@@ -145,7 +139,14 @@ export default function AISuggestionsModal({
               </>
             ) : (
               <>
-                <Text style={s.subtitle}>Sugestões Geradas</Text>
+                <View style={s.resultHeader}>
+                  <Text style={s.subtitle}>Sugestões Geradas</Text>
+                  <View style={[s.badge, { backgroundColor: badge.color + '20' }]}>
+                    <Ionicons name={badge.icon as any} size={12} color={badge.color} />
+                    <Text style={[s.badgeText, { color: badge.color }]}>{badge.label}</Text>
+                  </View>
+                </View>
+                
                 <View style={s.suggestionsBox}>
                   <Text style={s.suggestionsText}>{suggestions}</Text>
                 </View>
@@ -154,12 +155,30 @@ export default function AISuggestionsModal({
                   <TouchableOpacity
                     style={s.cancelBtn}
                     onPress={() => setSuggestions(null)}
+                    disabled={generating}
                   >
                     <Text style={s.cancelBtnTxt}>Voltar</Text>
                   </TouchableOpacity>
+                  
+                  <TouchableOpacity
+                    style={s.regenerateBtn}
+                    onPress={handleGenerate}
+                    disabled={generating}
+                  >
+                    {generating ? (
+                      <ActivityIndicator size="small" color={C.text} />
+                    ) : (
+                      <>
+                        <Ionicons name="refresh" size={16} color={C.text} />
+                        <Text style={s.regenerateBtnTxt}>Regenerar</Text>
+                      </>
+                    )}
+                  </TouchableOpacity>
+
                   <TouchableOpacity
                     style={s.applyBtn}
                     onPress={handleApply}
+                    disabled={generating}
                   >
                     <Ionicons name="checkmark-circle" size={16} color={C.bg} />
                     <Text style={s.applyBtnTxt}>Aplicar</Text>
@@ -199,6 +218,11 @@ const s = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: C.text,
+  },
+  headerSubtitle: {
+    fontSize: 11,
+    color: C.textSub,
+    marginTop: 2,
   },
   content: {
     padding: 16,
@@ -262,6 +286,25 @@ const s = StyleSheet.create({
     fontWeight: '600',
     color: '#000',
   },
+  resultHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  badge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    gap: 4,
+  },
+  badgeText: {
+    fontSize: 10,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
   suggestionsBox: {
     backgroundColor: C.surface2,
     borderRadius: R.md,
@@ -293,8 +336,24 @@ const s = StyleSheet.create({
     fontWeight: '500',
     color: C.text,
   },
+  regenerateBtn: {
+    flex: 1.2,
+    paddingVertical: 10,
+    borderRadius: R.md,
+    borderWidth: 0.5,
+    borderColor: C.borderMed,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  regenerateBtnTxt: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: C.text,
+  },
   applyBtn: {
-    flex: 1,
+    flex: 1.5,
     backgroundColor: C.protein,
     flexDirection: 'row',
     alignItems: 'center',
