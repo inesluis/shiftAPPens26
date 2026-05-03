@@ -6,6 +6,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { C, R } from '../theme';
 
+const API_BASE_URL = 'http://192.168.20.79:8080/jakartApp/api';
+
 type Difficulty = 'easy' | 'medium' | 'hard';
 
 interface AISuggestionsModalProps {
@@ -32,15 +34,16 @@ export default function AISuggestionsModal({
   const handleGenerate = async () => {
     setGenerating(true);
     try {
-      // Call backend endpoint (OpenAI handled by backend team)
       const response = await fetch(
-        'https://your-backend-url/api/ai/recipe-suggestions',
+        `${API_BASE_URL}/recipes/AiGenerated`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            recipeName,
-            ingredients: ingredients.map(i => ({ name: i.name, weightG: i.weightG })),
+            name: recipeName,
+            type: 'custom',
+            // Backend expects List<String> — send ingredient names with weight
+            ingredients: ingredients.map(i => `${i.name} (${i.weightG}g)`),
             difficulty,
           }),
         }
@@ -48,7 +51,13 @@ export default function AISuggestionsModal({
 
       if (!response.ok) throw new Error('Failed to generate suggestions');
       const data = await response.json();
-      setSuggestions(data.instructions || '');
+
+      // RecipeResponse returns { name, type, instructions: string[] }
+      const instructionsText = Array.isArray(data.instructions)
+        ? data.instructions.join('\n')
+        : (data.instructions ?? '');
+
+      setSuggestions(instructionsText);
     } catch {
       setSuggestions('Desculpa, não consegui gerar sugestões. Tenta novamente.');
     } finally {
