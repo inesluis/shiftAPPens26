@@ -1,9 +1,6 @@
 package org.example.jakartapp.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -14,6 +11,14 @@ public class ProductPrice {
     @Id
     @Column(name = "product_price_id")
     private Long productPriceId;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "supermarket_id", insertable = false, updatable = false)
+    private Supermarket supermarket;
 
     @Column(name = "product_id")
     private String productId;
@@ -45,6 +50,22 @@ public class ProductPrice {
 
     public void setProductPriceId(Long productPriceId) {
         this.productPriceId = productPriceId;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Supermarket getSupermarket() {
+        return supermarket;
+    }
+
+    public void setSupermarket(Supermarket supermarket) {
+        this.supermarket = supermarket;
     }
 
     public String getProductId() {

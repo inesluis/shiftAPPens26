@@ -32,13 +32,31 @@ export default function RegisterScreen({ navigation }: Props) {
 
         setFormError(null);
         setLoading(true);
-        const { error } = await supabase.auth.signUp({
-            email: email.trim(),
-            password: password.trim(),
-            options: { data: { name: name.trim() } },
-        });
-        if (error) setFormError(error.message);
-        setLoading(false);
+
+        try {
+            const response = await fetch('http://192.168.20.79:8080/jakartApp/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name.trim(), email: email.trim(), password: password.trim() }),
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+                setFormError(data.message || 'Erro ao criar conta.');
+            } else {
+                // In a real app, you would handle the session/token
+                const { error } = await supabase.auth.signUp({
+                    email: email.trim(),
+                    password: password.trim(),
+                    options: { data: { name: name.trim() } },
+                });
+                if (error) setFormError(error.message);
+            }
+        } catch (err) {
+            setFormError('Erro de conexão com o servidor.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleNameChange = (value: string) => {
