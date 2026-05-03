@@ -60,7 +60,7 @@ type RecipeIngredientRow = {
 };
 
 function calcIngredientCost(weightG: number, pricePerKg: number) {
-    return (pricePerKg / 1000) * weightG;
+    return pricePerKg;
 }
 
 function firstOrNull<T>(value: T | T[] | null | undefined): T | null {
@@ -197,7 +197,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                                 brand: p.productBrand || '',
                                 weightG: 100, // Fallback since weight isn't in cost API
                                 selectedStore: store,
-                                pricePerKg: (p.selectedPrice * 1000) / 100, 
+                                pricePerKg: p.selectedPrice, 
                                 macrosPer100g: { calories: 0, protein: 0, carbs: 0, fat: 0 },
                             }));
                         }
@@ -254,8 +254,7 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                                     brand: p.productBrand || '',
                                     weightG: weightG,
                                     selectedStore: store,
-                                    // Set pricePerKg so that (pricePerKg/1000)*weightG == p.selectedPrice
-                                    pricePerKg: (p.selectedPrice * 1000) / weightG,
+                                    pricePerKg: p.selectedPrice,
                                 };
                             });
                         }

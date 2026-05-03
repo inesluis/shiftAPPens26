@@ -28,7 +28,7 @@ interface Draft {
 }
 
 function calcCost(d: Draft) {
-  return ((d.ingredient.prices[d.store] ?? 0) / 1000) * d.weightG;
+  return d.ingredient.prices[d.store] ?? 0;
 }
 
 function sumMacros(drafts: Draft[]) {
