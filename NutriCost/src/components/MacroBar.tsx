@@ -29,6 +29,6 @@ const styles = StyleSheet.create({
   row:   { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
   label: { fontSize: 11, fontWeight: '500' },
   val:   { fontSize: 11, color: C.textSub },
-  track: { height: 5, backgroundColor: 'rgba(255,255,255,0.07)', borderRadius: 3, overflow: 'hidden' },
-  fill:  { height: 5, borderRadius: 3 },
+  track: { height: 6, backgroundColor: 'rgba(42,36,32,0.25)', borderRadius: 3, overflow: 'hidden' },
+  fill:  { height: 6, borderRadius: 3 },
 });

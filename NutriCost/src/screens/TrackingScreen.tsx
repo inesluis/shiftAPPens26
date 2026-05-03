@@ -161,7 +161,7 @@ const s = StyleSheet.create({
   addMealTxt:  { fontSize: 12, fontWeight: '500', color: C.text },
   budgetRow:   { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 11 },
   bigNum:      { fontSize: 22, fontWeight: '600', color: C.text },
-  budgetTrack: { height: 5, backgroundColor: 'rgba(255,255,255,0.07)', borderRadius: 3, overflow: 'hidden', marginBottom: 5 },
-  budgetFill:  { height: 5, borderRadius: 3 },
+  budgetTrack: { height: 6, backgroundColor: 'rgba(42,36,32,0.25)', borderRadius: 3, overflow: 'hidden', marginBottom: 5 },
+  budgetFill:  { height: 6, borderRadius: 3 },
   budgetSub:   { fontSize: 11, color: C.textSub },
 });

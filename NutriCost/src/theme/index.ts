@@ -1,22 +1,29 @@
 export const C = {
-  bg:         '#0D0D0D',
-  surface:    '#1A1A1A',
-  surface2:   '#242424',
-  border:     'rgba(255,255,255,0.08)',
-  borderMed:  'rgba(255,255,255,0.12)',
-  accent:     '#FFB800',
-  accentBg:   'rgba(255,184,0,0.14)',
-  text:       '#FFFFFF',
-  textSub:    '#B0B0B0',
-  textMuted:  '#696969',
-  protein:    '#22C55E',
-  carbs:      '#3B82F6',
-  fat:        '#FF4757',
-  breakfast:  '#FFB800',
-  lunch:      '#3B82F6',
-  dinner:     '#22C55E',
-  snack:      '#FF4757',
-  danger:     '#FF4757',
+  bg:         '#D4C4B0',
+  surface:    '#E8D9CB',
+  surface2:   '#F0E5DB',
+  border:     'rgba(42,36,32,0.08)',
+  borderMed:  'rgba(42,36,32,0.12)',
+  accent:     '#C4A574',
+  accentBg:   'rgba(196,165,116,0.12)',
+  text:       '#2A2420',
+  textSub:    '#4A4338',
+  textMuted:  '#7A6F65',
+  // Macro colors (muted and earthy)
+  protein:    '#C97586',
+  carbs:      '#9A9A6F',
+  fat:        '#9D8BA8',
+  // Meal colors (muted pastels)
+  breakfast:  '#C4A76B',
+  lunch:      '#6BA89E',
+  dinner:     '#9B8FB0',
+  snack:      '#B88A8A',
+  danger:     '#EF4444',
+  // Weekly spending colors (Cronometer-inspired, muted)
+  spending1:  '#7BA8A6',
+  spending2:  '#B4956D',
+  spending3:  '#9B8FA8',
+  spending4:  '#8FA79B',
 } as const;
 
 export const R = { sm: 8, md: 10, lg: 13, xl: 16, full: 9999 } as const;
@@ -31,3 +38,11 @@ export const MEAL_COLOR: Record<string, string> = {
   'Almoço':         C.lunch,
   'Jantar':         C.dinner,
 };
+
+// Cronometer-inspired spending colors (used in weekly chart)
+export const SPENDING_COLORS: string[] = [
+  '#7BA8A6',  // Teal
+  '#B4956D',  // Warm tan
+  '#9B8FA8',  // Muted mauve
+  '#8FA79B',  // Sage green
+];

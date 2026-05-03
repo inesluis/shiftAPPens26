@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import Svg, { Rect, Line, Text as ST, G } from 'react-native-svg';
 import { MealLog, MealType } from '../types';
-import { C, MEAL_COLOR } from '../theme';
+import { C, MEAL_COLOR, SPENDING_COLORS } from '../theme';
 
 interface Props {
   logs: MealLog[];
@@ -64,9 +64,9 @@ export default function WeeklyBudgetChart({ logs, dailyLimit }: Props) {
     <View>
       {/* Legend */}
       <View style={s.legend}>
-        {MEAL_ORDER.map(mt => (
+        {MEAL_ORDER.map((mt, idx) => (
           <View key={mt} style={s.legendItem}>
-            <View style={[s.dot, { backgroundColor: MEAL_COLOR[mt] }]} />
+            <View style={[s.dot, { backgroundColor: SPENDING_COLORS[idx % SPENDING_COLORS.length] }]} />
             <Text style={s.legendText}>{mt}</Text>
           </View>
         ))}
@@ -130,7 +130,7 @@ export default function WeeklyBudgetChart({ logs, dailyLimit }: Props) {
                 <Rect
                   key={mt}
                   x={barX} y={y} width={barW} height={h}
-                  fill={MEAL_COLOR[mt]}
+                  fill={SPENDING_COLORS[si % SPENDING_COLORS.length]}
                   rx={si === segments.length - 1 ? 2 : 0}
                 />
               ))}
@@ -162,9 +162,9 @@ export default function WeeklyBudgetChart({ logs, dailyLimit }: Props) {
             {' '}· €{selected.total.toFixed(2)}
           </Text>
           <View style={s.detailRow}>
-            {MEAL_ORDER.map(mt => (
+            {MEAL_ORDER.map((mt, idx) => (
               <View key={mt} style={s.detailItem}>
-                <View style={[s.dot, { backgroundColor: MEAL_COLOR[mt] }]} />
+                <View style={[s.dot, { backgroundColor: SPENDING_COLORS[idx % SPENDING_COLORS.length] }]} />
                 <Text style={s.detailText}>{mt}: €{(selected.byType[mt] ?? 0).toFixed(2)}</Text>
               </View>
             ))}
