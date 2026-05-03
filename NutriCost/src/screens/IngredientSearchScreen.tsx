@@ -12,6 +12,13 @@ import { ingredientPicker } from '../utils/ingredientPicker';
 import { RootStackParamList } from '../navigation/types';
 import { C, R } from '../theme';
 
+type Macros = {
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+};
+
 type Props = NativeStackScreenProps<RootStackParamList, 'IngredientSearch'>;
 
 const API_BASE_URL = 'http://192.168.20.79:8080/jakartApp/api';
@@ -42,6 +49,23 @@ function toPricePerKg(price?: number | null, pricePerUnit?: number | null, weigh
   if (pricePerUnit && pricePerUnit > 0) return pricePerUnit;
   if (price && weight && weight > 0) return (price / weight) * 1000;
   return null;
+}
+
+// The API's /ingredients/compare endpoint incorrectly applies
+// (nutrientPer100g / weight_stored) * 100, treating weight_stored as grams
+// when it may be stored in kg. The correct per-100g value is recovered with:
+//   correct = api_value * weight_stored / 100
+// If the API doesn't return `weight`, we default to 1 (covers 1 kg / 1 L products).
+function normalizeMacros(raw: any): Macros {
+  const w: number = typeof raw.weight === 'number' && raw.weight > 0 ? raw.weight : 1;
+  const fix = (v: number | null | undefined) =>
+    typeof v === 'number' ? (v * w) / 100 : 0;
+  return {
+    calories: fix(raw.macrosPer100g?.calories),
+    protein:  fix(raw.macrosPer100g?.protein),
+    carbs:    fix(raw.macrosPer100g?.carbs),
+    fat:      fix(raw.macrosPer100g?.fat),
+  };
 }
 
 function cheapestPrice(items: Ingredient[]): number | null {
@@ -78,22 +102,17 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
       try {
         const response = await fetch(`${API_BASE_URL}/ingredients/compare?term=${encodeURIComponent(query)}`);
         if (!response.ok) throw new Error('Failed to fetch ingredients');
-        const nextGroups = await response.json();
-        
-        // Fix for inflated prices (backend bug where weight in kg was treated as g)
-        const fixedGroups = nextGroups.map((group: any) => 
-          group.map((ing: any) => {
-            const fixedPrices = { ...ing.prices };
-            (Object.keys(fixedPrices) as Store[]).forEach(store => {
-              if (fixedPrices[store]! > 500) { 
-                fixedPrices[store] = fixedPrices[store]! / 1000;
-              }
-            });
-            return { ...ing, prices: fixedPrices };
-          })
+        const rawGroups: any[][] = await response.json();
+        // Normalize macros: the API misapplies a per-100g transformation using the
+        // stored product weight, so we reverse it here (see normalizeMacros above).
+        const nextGroups: Ingredient[][] = rawGroups.map(group =>
+          group.map(raw => ({
+            ...raw,
+            macrosPer100g: normalizeMacros(raw),
+          }))
         );
-
-        if (isMounted) setGroups(fixedGroups);
+        
+        if (isMounted) setGroups(nextGroups);
       } catch (err) {
         console.error('Ingredient search error:', err);
         if (isMounted) setGroups([]);

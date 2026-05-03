@@ -60,7 +60,7 @@ type RecipeIngredientRow = {
 };
 
 function calcIngredientCost(weightG: number, pricePerKg: number) {
-    return pricePerKg;
+    return (pricePerKg / 1000) * weightG;
 }
 
 function firstOrNull<T>(value: T | T[] | null | undefined): T | null {
@@ -101,14 +101,7 @@ function toPer100g(value?: number | null, weight?: number | null) {
 
 function toPricePerKg(price?: number | null, pricePerUnit?: number | null, weight?: number | null) {
     if (pricePerUnit && pricePerUnit > 0) return pricePerUnit;
-    if (price && weight && weight > 0) {
-        const p = price / weight;
-        // If weight was meant to be in kg but treated as g, p would be very high.
-        // We multiply by 1000 ONLY if the result looks like a normal per-gram price.
-        // But since we want per-kg, if price/weight is already a reasonable per-kg price, we keep it.
-        if (p > 500) return p; 
-        return p * 1000;
-    }
+    if (price && weight && weight > 0) return (price / weight) * 1000;
     return null;
 }
 
@@ -194,20 +187,30 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                     (costData || []).forEach((cost: any) => {
                         const store = resolveStore(cost.supermarketName);
                         if (!store) return;
-                        totalMap[store] = cost.totalCost;
                         missingMap[store] = cost.missingIngredientsCount;
 
                         if (cost.selectedProducts) {
-                            groupMap[store] = cost.selectedProducts.map((p: any) => ({
-                                ingredientId: String(p.ingredientId),
-                                name: p.productName || p.ingredientName || 'Desconhecido',
-                                brand: p.productBrand || '',
-                                weightG: 100, // Fallback since weight isn't in cost API
-                                selectedStore: store,
-                                pricePerKg: p.selectedPrice, 
-                                macrosPer100g: { calories: 0, protein: 0, carbs: 0, fat: 0 },
-                            }));
+                            groupMap[store] = cost.selectedProducts.map((p: any) => {
+                                const packageWeightG: number = p.productWeightG ?? p.packageWeight ?? 100;
+                                const pricePerKg = (p.selectedPrice / packageWeightG) * 1000;
+                                return {
+                                    ingredientId: String(p.ingredientId),
+                                    name: p.productName || p.ingredientName || 'Desconhecido',
+                                    brand: p.productBrand || '',
+                                    weightG: 100,
+                                    selectedStore: store,
+                                    pricePerKg,
+                                    macrosPer100g: { calories: 0, protein: 0, carbs: 0, fat: 0 },
+                                };
+                            });
                         }
+
+                        // Compute actual portion cost from ingredients instead of using
+                        // cost.totalCost (which is the full shopping cart price)
+                        totalMap[store] = groupMap[store].reduce(
+                            (sum, ing) => sum + calcIngredientCost(ing.weightG, ing.pricePerKg),
+                            0,
+                        );
                     });
 
                     // Use the products from the first store as drafts
@@ -249,22 +252,33 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
                     (costData || []).forEach((cost: any) => {
                         const store = resolveStore(cost.supermarketName);
                         if (!store) return;
-                        totalMap[store] = cost.totalCost;
                         missingMap[store] = cost.missingIngredients;
 
                         if (cost.selectedProducts) {
                             groupMap[store] = cost.selectedProducts.map((p: any) => {
                                 const weightG = quantities[String(p.ingredientId)] || 100;
+                                // pricePerKg is derived from selectedPrice (unit product price) and
+                                // the product's package weight (from the API), so that
+                                // calcIngredientCost(weightG, pricePerKg) returns the portion cost.
+                                const packageWeightG: number = p.productWeightG ?? p.packageWeight ?? weightG;
+                                const pricePerKg = (p.selectedPrice / packageWeightG) * 1000;
                                 return {
                                     ingredientId: String(p.ingredientId),
                                     name: p.productName || 'Desconhecido',
                                     brand: p.productBrand || '',
                                     weightG: weightG,
                                     selectedStore: store,
-                                    pricePerKg: p.selectedPrice,
+                                    pricePerKg,
                                 };
                             });
                         }
+
+                        // Compute actual recipe portion cost from individual ingredients
+                        // instead of using cost.totalCost (which is the full shopping cart cost)
+                        totalMap[store] = groupMap[store].reduce(
+                            (sum, ing) => sum + calcIngredientCost(ing.weightG, ing.pricePerKg),
+                            0,
+                        );
                     });
 
                     // Use the best store's products for the general list
