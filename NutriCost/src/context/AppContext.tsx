@@ -152,7 +152,11 @@ function resolveStore(name: string) {
 
 function toPricePerKg(price?: number | null, pricePerUnit?: number | null, weight?: number | null) {
   if (pricePerUnit && pricePerUnit > 0) return pricePerUnit;
-  if (price && weight && weight > 0) return (price / weight) * 1000;
+  if (price && weight && weight > 0) {
+    const p = price / weight;
+    if (p > 500) return p;
+    return p * 1000;
+  }
   return null;
 }
 

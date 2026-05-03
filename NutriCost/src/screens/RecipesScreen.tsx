@@ -28,9 +28,19 @@ export default function RecipesScreen() {
   const [errorModal, setErrorModal] = useState<{ title: string; message: string } | null>(null);
 
   const filtered = useMemo(() => {
-    if (active === 'Todas') return state.recipes;
-    if (active === 'Criadas') return state.recipes.filter(r => r.isCustom);
-    return state.recipes.filter(r => r.dietTags.includes(active as DietTag));
+    let list = state.recipes;
+    if (active === 'Criadas') list = state.recipes.filter(r => r.isCustom);
+    else if (active !== 'Todas') list = state.recipes.filter(r => r.dietTags.includes(active as DietTag));
+    
+    return [...list].sort((a, b) => {
+      // Prioritize user-created recipes at the top
+      if (a.isCustom !== b.isCustom) return a.isCustom ? -1 : 1;
+      
+      // Within the same group, sort by numeric ID descending (last inserted first)
+      const idA = parseInt(a.id.split('_')[1], 10);
+      const idB = parseInt(b.id.split('_')[1], 10);
+      return idB - idA;
+    });
   }, [state.recipes, active]);
 
   const handleLog = (recipeId: string) => {

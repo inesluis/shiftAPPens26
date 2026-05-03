@@ -80,7 +80,20 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
         if (!response.ok) throw new Error('Failed to fetch ingredients');
         const nextGroups = await response.json();
         
-        if (isMounted) setGroups(nextGroups);
+        // Fix for inflated prices (backend bug where weight in kg was treated as g)
+        const fixedGroups = nextGroups.map((group: any) => 
+          group.map((ing: any) => {
+            const fixedPrices = { ...ing.prices };
+            (Object.keys(fixedPrices) as Store[]).forEach(store => {
+              if (fixedPrices[store]! > 500) { 
+                fixedPrices[store] = fixedPrices[store]! / 1000;
+              }
+            });
+            return { ...ing, prices: fixedPrices };
+          })
+        );
+
+        if (isMounted) setGroups(fixedGroups);
       } catch (err) {
         console.error('Ingredient search error:', err);
         if (isMounted) setGroups([]);

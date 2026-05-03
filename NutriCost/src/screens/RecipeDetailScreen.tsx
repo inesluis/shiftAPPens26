@@ -101,7 +101,14 @@ function toPer100g(value?: number | null, weight?: number | null) {
 
 function toPricePerKg(price?: number | null, pricePerUnit?: number | null, weight?: number | null) {
     if (pricePerUnit && pricePerUnit > 0) return pricePerUnit;
-    if (price && weight && weight > 0) return (price / weight) * 1000;
+    if (price && weight && weight > 0) {
+        const p = price / weight;
+        // If weight was meant to be in kg but treated as g, p would be very high.
+        // We multiply by 1000 ONLY if the result looks like a normal per-gram price.
+        // But since we want per-kg, if price/weight is already a reasonable per-kg price, we keep it.
+        if (p > 500) return p; 
+        return p * 1000;
+    }
     return null;
 }
 
