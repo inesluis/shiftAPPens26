@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.jakartapp.dto.RecipeCostResponse;
 import org.example.jakartapp.dto.RecipeCostWithProductsResponse;
+import org.example.jakartapp.dto.RecipeDetailResponse;
 import org.example.jakartapp.dto.RecipeRequest;
 import org.example.jakartapp.dto.RecipeResponse;
 import org.example.jakartapp.entity.Recipe;
@@ -93,11 +94,35 @@ public class RecipeResource {
         if (isCustom) {
             UserRecipe ur = userRecipeRepository.findById(id);
             if (ur == null) return Response.status(Response.Status.NOT_FOUND).build();
-            return Response.ok(ur).build();
+            
+            // For user recipes, get ingredients from UserRecipeProduct
+            List<org.example.jakartapp.entity.UserRecipeProduct> products = userRecipeProductRepository.findByUserRecipeId(id);
+            List<RecipeDetailResponse.IngredientDetail> ingredientDetails = products.stream().map(urp -> 
+                new RecipeDetailResponse.IngredientDetail(
+                    urp.getProductId(),
+                    urp.getProductId().toString(),
+                    urp.getQuantity()
+                )
+            ).toList();
+            
+            return Response.ok(new RecipeDetailResponse(null, ur, ingredientDetails, List.of())).build();
         } else {
             Recipe r = recipeRepository.findById(id);
             if (r == null) return Response.status(Response.Status.NOT_FOUND).build();
-            return Response.ok(r).build();
+            
+            // Get ingredients for the recipe
+            List<org.example.jakartapp.entity.RecipeIngredient> ingredients = recipeIngredientRepository.findByRecipeId(id);
+            List<RecipeDetailResponse.IngredientDetail> ingredientDetails = ingredients.stream().map(ri -> {
+                org.example.jakartapp.entity.Ingredient ing = ingredientRepository.findById(ri.getIngredientId());
+                return new RecipeDetailResponse.IngredientDetail(
+                    ri.getIngredientId(),
+                    ing != null ? ing.getIngredientName() : "Unknown",
+                    ri.getIngredientQuantity()
+                );
+            }).toList();
+            
+            List<RecipeCostResponse> costs = recipeCostRepository.findCostsByRecipeId(id);
+            return Response.ok(new RecipeDetailResponse(r, null, ingredientDetails, costs)).build();
         }
     }
 
