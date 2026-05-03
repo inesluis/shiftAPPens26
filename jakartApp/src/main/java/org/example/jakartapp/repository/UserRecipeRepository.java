@@ -12,7 +12,7 @@ import java.util.List;
 @ApplicationScoped
 public class UserRecipeRepository {
 
-    public List<UserRecipe> findByUserId(String userId) {
+    public List<UserRecipe> findByUserId(java.util.UUID userId) {
         EntityManager em = createEntityManager();
         try {
             return em.createQuery("SELECT r FROM UserRecipe r WHERE r.userId = :userId", UserRecipe.class)

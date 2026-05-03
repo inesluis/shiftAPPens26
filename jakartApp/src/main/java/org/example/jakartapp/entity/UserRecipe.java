@@ -13,7 +13,7 @@ public class UserRecipe {
     private Long userRecipeId;
 
     @Column(name = "user_id")
-    private String userId; // UUID as String
+    private java.util.UUID userId;
 
     @Column(name = "recipe_name")
     private String recipeName;
@@ -53,8 +53,8 @@ public class UserRecipe {
     public Long getUserRecipeId() { return userRecipeId; }
     public void setUserRecipeId(Long userRecipeId) { this.userRecipeId = userRecipeId; }
 
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId = userId; }
+    public java.util.UUID getUserId() { return userId; }
+    public void setUserId(java.util.UUID userId) { this.userId = userId; }
 
     public String getRecipeName() { return recipeName; }
     public void setRecipeName(String recipeName) { this.recipeName = recipeName; }

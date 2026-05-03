@@ -44,7 +44,12 @@ public class RecipeResource {
         List<Recipe> curated = recipeRepository.findAll();
         List<UserRecipe> userRecipes = List.of();
         if (userId != null && !userId.isBlank()) {
-            userRecipes = userRecipeRepository.findByUserId(userId);
+            try {
+                java.util.UUID uuid = java.util.UUID.fromString(userId);
+                userRecipes = userRecipeRepository.findByUserId(uuid);
+            } catch (IllegalArgumentException e) {
+                // Ignore invalid UUID
+            }
         }
         return Response.ok(new RecipeListResponse(curated, userRecipes)).build();
     }
