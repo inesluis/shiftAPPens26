@@ -30,12 +30,32 @@ export default function LoginScreen({ navigation }: Props) {
 
         setFormError(null);
         setLoading(true);
-        const { error } = await supabase.auth.signInWithPassword({
-            email: email.trim(),
-            password: password.trim(),
-        });
-        if (error) setFormError(error.message);
-        setLoading(false);
+        
+        try {
+            const response = await fetch('http://192.168.20.79:8080/jakartApp/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email.trim(), password: password.trim() }),
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+                setFormError(data.message || 'Erro ao fazer login.');
+            } else {
+                // In a real app, you would save the token and use it for subsequent requests
+                // For now, we still rely on Supabase session for user ID in AppContext
+                // but we should ideally use the token from the Java API
+                const { error } = await supabase.auth.signInWithPassword({
+                    email: email.trim(),
+                    password: password.trim(),
+                });
+                if (error) setFormError(error.message);
+            }
+        } catch (err) {
+            setFormError('Erro de conexão com o servidor.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleEmailChange = (value: string) => {

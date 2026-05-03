@@ -10,9 +10,10 @@ import { RootStackParamList } from '../navigation/types';
 import { C, R } from '../theme';
 import { ingredientPicker } from '../utils/ingredientPicker';
 import { MealType, RecipeIngredient, Store, MealLog, DietTag } from '../types';
-import { supabase } from '../supabase';
 import MealTypePicker from '../components/MealTypePicker';
 import ConfirmModal from '../components/ConfirmModal';
+
+const API_BASE_URL = 'http://192.168.20.79:8080/jakartApp/api';
 
 const STORE_LABEL: Record<Store, string> = {
     continente: 'Continente',
@@ -119,10 +120,10 @@ function sumMacros(drafts: RecipeIngredient[]) {
             if (!source) return acc;
             const f = d.weightG / 100;
             return {
-                calories: acc.calories + source.calories * f,
-                protein: acc.protein + source.protein * f,
-                carbs: acc.carbs + source.carbs * f,
-                fat: acc.fat + source.fat * f,
+                calories: acc.calories + (source.calories ?? 0) * f,
+                protein: acc.protein + (source.protein ?? 0) * f,
+                carbs: acc.carbs + (source.carbs ?? 0) * f,
+                fat: acc.fat + (source.fat ?? 0) * f,
             };
         },
         { calories: 0, protein: 0, carbs: 0, fat: 0 },
@@ -166,163 +167,54 @@ export default function RecipeDetailScreen({ navigation, route }: Props) {
         if (recipe.ingredients.length > 0) return;
 
         const loadIngredients = async () => {
-            if (recipe.isCustom) {
-                const userRecipeId = parseUserId(recipe.id);
-                if (!userRecipeId) return;
+            const numericId = recipe.isCustom ? parseUserId(recipe.id) : parseCuratedId(recipe.id);
+            if (!numericId) return;
 
-                const { data, error } = await supabase
-                    .from('fact_user_recipe_product')
-                    .select('product_id, quantity_used, quantity_unit, product:dim_product(product_id, product_name, product_brand, energy_kcal, protein, carbohydrates, fats, weight)')
-                    .eq('user_recipe_id', userRecipeId);
+            try {
+                const response = await fetch(`${API_BASE_URL}/recipes/${numericId}?isCustom=${recipe.isCustom}`);
+                if (!response.ok) throw new Error('Failed to fetch recipe details');
+                const data = await response.json();
 
-                if (error || !data) return;
+                if (recipe.isCustom) {
+                    const nextDrafts = (data.ingredients || []).map((ing: any) => ({
+                        ingredientId: ing.ingredientId || 'unknown',
+                        name: ing.name,
+                        weightG: parseQuantityToGrams(ing.quantity),
+                        // For user recipes, we don't have full macro/price info in the detail response yet
+                        // but we can fallback or update the API later.
+                        prices: {},
+                        macrosPer100g: { calories: 0, protein: 0, carbs: 0, fat: 0 },
+                    }));
+                    setDrafts(nextDrafts);
+                } else {
+                    const groupMap: Record<Store, RecipeIngredient[]> = { continente: [], pingo_doce: [] };
+                    const totalMap: Record<Store, number> = { continente: 0, pingo_doce: 0 };
+                    const missingMap: Record<Store, number> = { continente: 0, pingo_doce: 0 };
 
-                const productIds = data.map(row => row.product_id).filter(Boolean);
-                const { data: prices } = await supabase
-                    .from('fact_productprice')
-                    .select('product_id, price, price_per_unit, product:dim_product(weight), supermarket:dim_supermarket(supermarket_name)')
-                    .in('product_id', productIds);
+                    (data.costs || []).forEach((cost: any) => {
+                        const store = resolveStore(cost.supermarketName);
+                        if (!store) return;
+                        totalMap[store] = cost.totalCost;
+                        missingMap[store] = cost.missingIngredients;
+                    });
 
-                const priceMap = new Map<string, number>();
-                (prices ?? []).forEach(row => {
-                    const product = firstOrNull(row.product);
-                    if (!row.product_id || !product) return;
-                    const pricePerKg = toPricePerKg(row.price, row.price_per_unit, product.weight);
-                    if (pricePerKg == null) return;
-                    const existing = priceMap.get(row.product_id);
-                    if (existing == null || pricePerKg < existing) {
-                        priceMap.set(row.product_id, pricePerKg);
-                    }
-                });
+                    const nextDrafts = (data.ingredients || []).map((ing: any) => ({
+                        ingredientId: String(ing.ingredientId),
+                        name: ing.name,
+                        weightG: parseQuantityToGrams(ing.quantity),
+                    }));
 
-                const nextDrafts = data.map(row => {
-                    const product = firstOrNull(row.product);
-                    if (!product) return null;
-                    const store = storeFromProductId(row.product_id) ?? 'continente';
-                    const weightG = row.quantity_unit === 'kg'
-                        ? (row.quantity_used ?? 0) * 1000
-                        : (row.quantity_used ?? 0);
-                    const pricePerKg = priceMap.get(row.product_id) ?? 0;
-
-                    return {
-                        ingredientId: row.product_id,
-                        productId: row.product_id,
-                        name: product.product_name ?? 'Ingrediente',
-                        brand: product.product_brand ?? product.product_name ?? 'Produto',
-                        weightG,
-                        selectedStore: store,
-                        pricePerKg,
-                        macrosPer100g: {
-                            calories: toPer100g(product.energy_kcal, product.weight),
-                            protein: toPer100g(product.protein, product.weight),
-                            carbs: toPer100g(product.carbohydrates, product.weight),
-                            fat: toPer100g(product.fats, product.weight),
-                        },
-                    } as RecipeIngredient;
-                }).filter(Boolean) as RecipeIngredient[];
-
-                setDrafts(nextDrafts);
-                return;
-            }
-
-            const curatedId = parseCuratedId(recipe.id);
-            if (!curatedId) return;
-
-            const { data: recipeIngredients, error: recipeIngError } = await supabase
-                .from('fact_recipeingredient')
-                .select('ingredient_id, ingredient_quantity')
-                .eq('recipe_id', curatedId);
-
-            if (recipeIngError || !recipeIngredients?.length) return;
-
-            const ingredientIds = Array.from(new Set(recipeIngredients.map(r => r.ingredient_id)));
-            const { data: ingredientRows } = await supabase
-                .from('dim_ingredient')
-                .select('ingredient_id, ingredient_name')
-                .in('ingredient_id', ingredientIds);
-
-            const ingredientNameById = new Map(
-                (ingredientRows as IngredientRow[] | null ?? []).map(i => [i.ingredient_id, i.ingredient_name ?? 'Ingrediente']),
-            );
-
-            const { data: priceRows, error: priceError } = await supabase
-                .from('fact_productprice')
-                .select('ingredient_id, price, price_per_unit, product:dim_product(product_id, product_name, product_brand, energy_kcal, protein, carbohydrates, fats, weight), supermarket:dim_supermarket(supermarket_id, supermarket_name)')
-                .in('ingredient_id', ingredientIds);
-
-            if (priceError || !priceRows) return;
-
-            const bestByIngredientStore = new Map<string, { pricePerKg: number; product: SupabaseProduct }>();
-
-            ((priceRows ?? []) as unknown as PriceRow[]).forEach(row => {
-                const product = firstOrNull(row.product);
-                const supermarket = firstOrNull(row.supermarket);
-                if (!product || !supermarket) return;
-
-                const store = resolveStore(supermarket.supermarket_name ?? '');
-                if (!store) return;
-
-                if (!product.product_id) return;
-                const pricePerKg = toPricePerKg(row.price, row.price_per_unit, product.weight);
-                if (pricePerKg == null) return;
-
-                const key = `${row.ingredient_id}:${store}`;
-                const existing = bestByIngredientStore.get(key);
-                if (!existing || pricePerKg < existing.pricePerKg) {
-                    bestByIngredientStore.set(key, { pricePerKg, product });
+                    setDrafts(nextDrafts);
+                    setStoreTotals(totalMap);
+                    setStoreMissing(missingMap);
+                    
+                    // Simple best store logic
+                    const best = (data.costs || [])[0];
+                    if (best) setBestStore(resolveStore(best.supermarketName));
                 }
-            });
-
-            const groupMap: Record<Store, RecipeIngredient[]> = { continente: [], pingo_doce: [] };
-            const totalMap: Record<Store, number> = { continente: 0, pingo_doce: 0 };
-            const missingMap: Record<Store, number> = { continente: 0, pingo_doce: 0 };
-
-            (recipeIngredients as RecipeIngredientRow[]).forEach(ing => {
-                const weightG = parseQuantityToGrams(ing.ingredient_quantity);
-                STORES.forEach(store => {
-                    const best = bestByIngredientStore.get(`${ing.ingredient_id}:${store}`);
-                    if (!best) {
-                        missingMap[store] = (missingMap[store] ?? 0) + 1;
-                        return;
-                    }
-
-                    const product = best.product;
-                    const ingredientName = ingredientNameById.get(ing.ingredient_id) ?? product.product_name ?? 'Ingrediente';
-                    const item: RecipeIngredient = {
-                        ingredientId: String(ing.ingredient_id),
-                        productId: product.product_id ?? undefined,
-                        name: ingredientName,
-                        brand: product.product_brand ?? product.product_name ?? ingredientName,
-                        weightG,
-                        selectedStore: store,
-                        pricePerKg: best.pricePerKg,
-                        macrosPer100g: {
-                            calories: toPer100g(product.energy_kcal, product.weight),
-                            protein: toPer100g(product.protein, product.weight),
-                            carbs: toPer100g(product.carbohydrates, product.weight),
-                            fat: toPer100g(product.fats, product.weight),
-                        },
-                    };
-
-                    groupMap[store].push(item);
-                    totalMap[store] += calcIngredientCost(weightG, best.pricePerKg);
-                });
-            });
-
-            const totals = Object.entries(totalMap) as [Store, number][];
-            const counts = totals.map(([store]) => ({ store, count: groupMap[store]?.length ?? 0 }));
-            const best = totals.reduce<Store | null>((acc, [store, total]) => {
-                if (acc == null) return store;
-                const accCount = counts.find(c => c.store === acc)?.count ?? 0;
-                const curCount = counts.find(c => c.store === store)?.count ?? 0;
-                if (curCount !== accCount) return curCount > accCount ? store : acc;
-                return total < (totalMap[acc] ?? Infinity) ? store : acc;
-            }, null);
-
-            setStoreGroups(groupMap);
-            setStoreTotals(totalMap);
-            setStoreMissing(missingMap);
-            setBestStore(best);
+            } catch (err) {
+                console.error('Recipe detail load error:', err);
+            }
         };
 
         loadIngredients();

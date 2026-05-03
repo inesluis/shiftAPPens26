@@ -10,34 +10,11 @@ import { Ingredient, Store } from '../types';
 import Card from '../components/Card';
 import { ingredientPicker } from '../utils/ingredientPicker';
 import { RootStackParamList } from '../navigation/types';
-import { supabase } from '../supabase';
 import { C, R } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'IngredientSearch'>;
 
-type SupabaseProduct = {
-  product_id: string | null;
-  product_name: string | null;
-  product_brand: string | null;
-  energy_kcal: number | null;
-  protein: number | null;
-  carbohydrates: number | null;
-  fats: number | null;
-  weight: number | null;
-};
-
-type SupabaseSupermarket = {
-  supermarket_id: number | null;
-  supermarket_name: string | null;
-};
-
-type PriceRow = {
-  ingredient_id: number;
-  price: number | null;
-  price_per_unit: number | null;
-  product: SupabaseProduct | SupabaseProduct[] | null;
-  supermarket: SupabaseSupermarket | SupabaseSupermarket[] | null;
-};
+const API_BASE_URL = 'http://192.168.20.79:8080/jakartApp/api';
 
 // ─── Store metadata with logos ───────────────────────────────────────────────
 const STORE_META: Record<Store, { label: string; logo: any }> = {
@@ -99,87 +76,13 @@ export default function IngredientSearchScreen({ navigation, route }: Props) {
 
       setIsLoading(true);
       try {
-        const search = `%${query}%`;
-        const { data: ingredients, error: ingredientError } = await supabase
-          .from('dim_ingredient')
-          .select('ingredient_id, ingredient_name, ingredient_search_term')
-          .or(`ingredient_name.ilike.${search},ingredient_search_term.ilike.${search}`)
-          .limit(40);
-
-        if (ingredientError) throw ingredientError;
-
-        const ingredientIds = (ingredients ?? []).map(i => i.ingredient_id);
-        if (!ingredientIds.length) {
-          if (isMounted) setGroups([]);
-          return;
-        }
-
-        const ingredientNameById = new Map(
-          (ingredients ?? []).map(i => [i.ingredient_id, i.ingredient_name ?? 'Ingredient']),
-        );
-
-        const { data: priceRows, error: priceError } = await supabase
-          .from('fact_productprice')
-          .select('ingredient_id, price, price_per_unit, product:dim_product(product_id, product_name, product_brand, energy_kcal, protein, carbohydrates, fats, weight), supermarket:dim_supermarket(supermarket_id, supermarket_name)')
-          .in('ingredient_id', ingredientIds);
-
-        if (priceError) throw priceError;
-
-        const grouped: Record<string, Record<string, Ingredient>> = {};
-
-        ((priceRows ?? []) as unknown as PriceRow[]).forEach(row => {
-          const product = firstOrNull(row.product);
-          const supermarket = firstOrNull(row.supermarket);
-          if (!product || !supermarket) return;
-
-          const store = resolveStore(supermarket.supermarket_name ?? '');
-          if (!store) return;
-
-          const ingredientName = ingredientNameById.get(row.ingredient_id) ?? product.product_name ?? 'Ingredient';
-          const productId = product.product_id;
-          if (!productId) return;
-
-          const pricePerKg = toPricePerKg(row.price, row.price_per_unit, product.weight);
-          if (pricePerKg == null) return;
-
-          const macrosPer100g = {
-            calories: toPer100g(product.energy_kcal, product.weight),
-            protein: toPer100g(product.protein, product.weight),
-            carbs: toPer100g(product.carbohydrates, product.weight),
-            fat: toPer100g(product.fats, product.weight),
-          };
-
-          const brand = product.product_brand ?? product.product_name ?? ingredientName;
-          const byIngredient = grouped[ingredientName] ?? (grouped[ingredientName] = {});
-          const existing = byIngredient[productId];
-
-          if (existing) {
-            const current = existing.prices[store];
-            if (current == null || pricePerKg < current) {
-              existing.prices[store] = pricePerKg;
-            }
-            return;
-          }
-
-          byIngredient[productId] = {
-            id: productId,
-            name: ingredientName,
-            productName: product.product_name ?? ingredientName,
-            brand,
-            prices: { [store]: pricePerKg },
-            macrosPer100g,
-          };
-        });
-
-        const nextGroups = Object.values(grouped).map(productMap =>
-          Object.values(productMap).sort((a, b) => {
-            const priceA = cheapestPrice([a]) ?? Infinity;
-            const priceB = cheapestPrice([b]) ?? Infinity;
-            return priceA - priceB;
-          }),
-        );
+        const response = await fetch(`${API_BASE_URL}/ingredients/compare?term=${encodeURIComponent(query)}`);
+        if (!response.ok) throw new Error('Failed to fetch ingredients');
+        const nextGroups = await response.json();
+        
         if (isMounted) setGroups(nextGroups);
-      } catch {
+      } catch (err) {
+        console.error('Ingredient search error:', err);
         if (isMounted) setGroups([]);
       } finally {
         if (isMounted) setIsLoading(false);

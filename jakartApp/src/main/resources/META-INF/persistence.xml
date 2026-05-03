@@ -10,6 +10,8 @@
         <class>org.example.jakartapp.entity.Product</class>
         <class>org.example.jakartapp.entity.ProductPrice</class>
         <class>org.example.jakartapp.entity.RecipeIngredient</class>
+        <class>org.example.jakartapp.entity.UserRecipe</class>
+        <class>org.example.jakartapp.entity.UserRecipeProduct</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
     </persistence-unit>
 </persistence>

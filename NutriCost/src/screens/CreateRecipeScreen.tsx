@@ -34,12 +34,14 @@ function calcCost(d: Draft) {
 function sumMacros(drafts: Draft[]) {
   return drafts.reduce(
     (acc, d) => {
+      const source = d.ingredient.macrosPer100g;
+      if (!source) return acc;
       const f = d.weightG / 100;
       return {
-        calories: acc.calories + d.ingredient.macrosPer100g.calories * f,
-        protein: acc.protein + d.ingredient.macrosPer100g.protein * f,
-        carbs: acc.carbs + d.ingredient.macrosPer100g.carbs * f,
-        fat: acc.fat + d.ingredient.macrosPer100g.fat * f,
+        calories: acc.calories + (source.calories ?? 0) * f,
+        protein: acc.protein + (source.protein ?? 0) * f,
+        carbs: acc.carbs + (source.carbs ?? 0) * f,
+        fat: acc.fat + (source.fat ?? 0) * f,
       };
     },
     { calories: 0, protein: 0, carbs: 0, fat: 0 },
