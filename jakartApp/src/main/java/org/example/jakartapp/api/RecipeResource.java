@@ -89,42 +89,9 @@ public class RecipeResource {
     @GET
     @Path("/{id}")
     public Response getRecipeById(@PathParam("id") Long id, @QueryParam("isCustom") @DefaultValue("false") boolean isCustom) {
-        if (isCustom) {
-            UserRecipe ur = userRecipeRepository.findById(id);
-            if (ur == null) return Response.status(Response.Status.NOT_FOUND).build();
-            
-            List<org.example.jakartapp.entity.UserRecipeProduct> products = userRecipeProductRepository.findByUserRecipeId(id);
-            List<org.example.jakartapp.dto.RecipeDetailResponse.IngredientDetail> ingredientDetails = products.stream().map(urp -> 
-                new org.example.jakartapp.dto.RecipeDetailResponse.IngredientDetail(
-                    null, // user recipes use product IDs
-                    urp.getProduct() != null ? urp.getProduct().getProductName() : "Unknown",
-                    urp.getQuantityUsed() + " " + urp.getQuantityUnit()
-                )
-            ).toList();
-
-            List<RecipeCostResponse> costs = recipeCostRepository.findUserCostsByRecipeId(id);
-
-            return Response.ok(new org.example.jakartapp.dto.RecipeDetailResponse(null, ur, ingredientDetails, costs)).build();
-        }
-
         Recipe r = recipeRepository.findById(id);
         if (r == null) return Response.status(Response.Status.NOT_FOUND).build();
-
-        List<org.example.jakartapp.entity.RecipeIngredient> ingredients = recipeIngredientRepository.findByRecipeId(id);
-        List<org.example.jakartapp.dto.RecipeDetailResponse.IngredientDetail> ingredientDetails = ingredients.stream().map(ri -> {
-            org.example.jakartapp.entity.Ingredient ing = ingredientRepository.search(null).stream()
-                    .filter(i -> i.getIngredientId().equals(ri.getIngredientId()))
-                    .findFirst().orElse(null);
-            return new org.example.jakartapp.dto.RecipeDetailResponse.IngredientDetail(
-                    ri.getIngredientId(),
-                    ing != null ? ing.getIngredientName() : "Unknown",
-                    ri.getIngredientQuantity()
-            );
-        }).toList();
-
-        List<RecipeCostResponse> costs = recipeCostRepository.findCostsByRecipeId(id);
-
-        return Response.ok(new org.example.jakartapp.dto.RecipeDetailResponse(r, null, ingredientDetails, costs)).build();
+        return Response.ok(r).build();
     }
 
     @GET
@@ -143,6 +110,17 @@ public class RecipeResource {
         }
 
         List<RecipeCostResponse> costs = recipeCostRepository.findCostsByRecipeId(id);
+        return Response.ok(costs).build();
+    }
+
+    @GET
+    @Path("/{id}/costs/detailed")
+    public Response getRecipeCostsDetailed(@PathParam("id") Long id){
+        Recipe recipe = recipeRepository.findById(id);
+        if(recipe==null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        List<RecipeCostWithProductsResponse> costs = recipeCostRepository.findCostsByRecipeIdWithProdcuts(id);
         return Response.ok(costs).build();
     }
 
