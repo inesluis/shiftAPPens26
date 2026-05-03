@@ -42,13 +42,11 @@ public class RecipeResource {
     @GET
     public Response getAllRecipes(@QueryParam("userId") String userId) {
         List<Recipe> curated = recipeRepository.findAll();
+        List<UserRecipe> userRecipes = List.of();
         if (userId != null && !userId.isBlank()) {
-            List<UserRecipe> userRecipes = userRecipeRepository.findByUserId(userId);
-            // We can return a combined list or a wrapper. For simplicity, let's return a Map or a custom DTO.
-            // But the user expects a single list. We might need to map UserRecipe to a common format.
-            return Response.ok(new RecipeListResponse(curated, userRecipes)).build();
+            userRecipes = userRecipeRepository.findByUserId(userId);
         }
-        return Response.ok(curated).build();
+        return Response.ok(new RecipeListResponse(curated, userRecipes)).build();
     }
 
     @POST

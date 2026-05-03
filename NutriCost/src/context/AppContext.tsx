@@ -173,50 +173,67 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const API_BASE_URL = 'http://192.168.20.79:8080/jakartApp/api';
 
   const fetchRecipesFromApi = async () => {
-    const { data: authData } = await supabase.auth.getUser();
-    const userId = authData?.user?.id;
-    
-    const url = `${API_BASE_URL}/recipes${userId ? `?userId=${userId}` : ''}`;
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Failed to fetch recipes');
-    
-    const data = await response.json();
-    
-    const curated = (data.curated || []).map((r: any) => ({
-      id: toCuratedId(r.recipeId),
-      name: r.recipeName ?? 'Recipe',
-      mealType: 'Almoço' as MealType,
-      dietTags: [],
-      macros: {
-        calories: Math.round(r.nutritionalValue ?? 0),
-        protein: Math.round(r.protein ?? 0),
-        carbs: Math.round(r.carbs ?? 0),
-        fat: Math.round(r.fat ?? 0),
-      },
-      cost: 0,
-      ingredients: [],
-      instructions: r.instructions ?? undefined,
-      isCustom: false,
-    }));
+    try {
+      const { data: authData } = await supabase.auth.getUser();
+      const userId = authData?.user?.id;
+      
+      const url = `${API_BASE_URL}/recipes${userId ? `?userId=${userId}` : ''}`;
+      console.log('Fetching recipes from:', url);
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error Response:', errorText);
+        throw new Error(`Failed to fetch recipes: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('API Data received:', JSON.stringify(data).substring(0, 200) + '...');
 
-    const user = (data.user || []).map((r: any) => ({
-      id: toUserId(r.userRecipeId),
-      name: r.recipeName ?? 'Recipe',
-      mealType: normalizeMealType(r.mealType),
-      dietTags: normalizeDietTags(r.dietType),
-      macros: {
-        calories: Math.round(r.totalEnergyKcal ?? 0),
-        protein: Math.round(r.totalProtein ?? 0),
-        carbs: Math.round(r.totalCarbohydrates ?? 0),
-        fat: Math.round(r.totalFats ?? 0),
-      },
-      cost: parseFloat((r.totalCost ?? 0).toFixed(2)),
-      ingredients: [],
-      instructions: r.instructions ?? undefined,
-      isCustom: true,
-    }));
+      if (!data || (typeof data !== 'object')) {
+        console.error('Invalid data format received:', data);
+        return [];
+      }
+      
+      const curated = (data.curated || []).map((r: any) => ({
+        id: toCuratedId(r.recipeId),
+        name: r.recipeName ?? 'Recipe',
+        mealType: 'Almoço' as MealType,
+        dietTags: [],
+        macros: {
+          calories: Math.round(r.nutritionalValue ?? 0),
+          protein: Math.round(r.protein ?? 0),
+          carbs: Math.round(r.carbs ?? 0),
+          fat: Math.round(r.fat ?? 0),
+        },
+        cost: 0,
+        ingredients: [],
+        instructions: r.instructions ?? undefined,
+        isCustom: false,
+      }));
 
-    return [...curated, ...user];
+      const user = (data.user || []).map((r: any) => ({
+        id: toUserId(r.userRecipeId),
+        name: r.recipeName ?? 'Recipe',
+        mealType: normalizeMealType(r.mealType),
+        dietTags: normalizeDietTags(r.dietType),
+        macros: {
+          calories: Math.round(r.totalEnergyKcal ?? 0),
+          protein: Math.round(r.totalProtein ?? 0),
+          carbs: Math.round(r.totalCarbohydrates ?? 0),
+          fat: Math.round(r.totalFats ?? 0),
+        },
+        cost: parseFloat((r.totalCost ?? 0).toFixed(2)),
+        ingredients: [],
+        instructions: r.instructions ?? undefined,
+        isCustom: true,
+      }));
+
+      return [...curated, ...user];
+    } catch (err) {
+      console.error('fetchRecipesFromApi caught error:', err);
+      throw err;
+    }
   };
 
   const reloadRecipes = async () => {
