@@ -12,8 +12,8 @@ import { ingredientPicker } from '../utils/ingredientPicker';
 import { MealType, RecipeIngredient, Store, MealLog, DietTag } from '../types';
 import MealTypePicker from '../components/MealTypePicker';
 import ConfirmModal from '../components/ConfirmModal';
-
-const API_BASE_URL = 'http://192.168.20.79:8080/jakartApp/api';
+import { API_BASE_URL } from '../config';
+// import { resolveStore, toPricePerKg, parseQuantityToGrams } from '../utils/normalization';
 
 const STORE_LABEL: Record<Store, string> = {
     continente: 'Continente',

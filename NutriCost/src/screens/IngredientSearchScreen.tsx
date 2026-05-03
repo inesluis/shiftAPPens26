@@ -11,6 +11,7 @@ import Card from '../components/Card';
 import { ingredientPicker } from '../utils/ingredientPicker';
 import { RootStackParamList } from '../navigation/types';
 import { C, R } from '../theme';
+import { API_BASE_URL } from '../config';
 
 type Macros = {
   calories: number;
@@ -20,8 +21,6 @@ type Macros = {
 };
 
 type Props = NativeStackScreenProps<RootStackParamList, 'IngredientSearch'>;
-
-const API_BASE_URL = 'http://192.168.20.79:8080/jakartApp/api';
 
 // ─── Store metadata with logos ───────────────────────────────────────────────
 const STORE_META: Record<Store, { label: string; logo: any }> = {
