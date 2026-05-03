@@ -10,6 +10,7 @@ import { useApp } from '../context/AppContext';
 import Card from '../components/Card';
 import ConfirmModal from '../components/ConfirmModal';
 import AISuggestionsModal from '../components/AISuggestionsModal';
+import MealTypePicker from '../components/MealTypePicker';
 import { ingredientPicker } from '../utils/ingredientPicker';
 import { RootStackParamList } from '../navigation/types';
 import { Ingredient, MealType, DietTag, Recipe, Store } from '../types';
@@ -55,6 +56,8 @@ export default function CreateRecipeScreen({ navigation }: Props) {
   const [instructions, setInstructions] = useState('');
   const [modal, setModal] = useState<{ type: 'error' | 'success'; title: string; message: string; action?: () => void } | null>(null);
   const [aiModalVisible, setAiModalVisible] = useState(false);
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const [pendingAction, setPendingAction] = useState<'save' | 'saveAndLog' | null>(null);
 
   // Register picker callback so IngredientSearch can call back with the selection
   useEffect(() => {
@@ -76,14 +79,14 @@ export default function CreateRecipeScreen({ navigation }: Props) {
   const remove = (idx: number) =>
     setDrafts(prev => prev.filter((_, i) => i !== idx));
 
-  const buildRecipe = () => {
+  const buildRecipe = (selectedMealType: MealType) => {
     if (!name.trim()) { setModal({ type: 'error', title: 'Erro', message: 'Adiciona um nome para a receita.' }); return null; }
     if (!drafts.length) { setModal({ type: 'error', title: 'Erro', message: 'Adiciona pelo menos um ingrediente.' }); return null; }
 
     const recipe: Recipe = {
       id: `custom_${Date.now()}`,
       name: name.trim(),
-      mealType: 'Almoço',
+      mealType: selectedMealType,
       dietTags: tags,
       macros: {
         calories: Math.round(macros.calories),
@@ -110,41 +113,49 @@ export default function CreateRecipeScreen({ navigation }: Props) {
   };
 
   const handleSave = async () => {
-    const recipe = buildRecipe();
-    if (!recipe) return;
-
-    try {
-      const saved = await addRecipe(recipe);
-      if (!saved) return;
-      setModal({ type: 'success', title: 'Guardado!', message: `${saved.name} adicionada às tuas receitas.`, action: () => navigation.goBack() });
-    } catch {
-      setModal({ type: 'error', title: 'Erro', message: 'Não foi possível guardar a receita no Supabase.' });
-    }
+    if (!name.trim()) { setModal({ type: 'error', title: 'Erro', message: 'Adiciona um nome para a receita.' }); return; }
+    if (!drafts.length) { setModal({ type: 'error', title: 'Erro', message: 'Adiciona pelo menos um ingrediente.' }); return; }
+    setPendingAction('save');
+    setPickerVisible(true);
   };
 
   const handleSaveAndLog = async () => {
-    const recipe = buildRecipe();
+    if (!name.trim()) { setModal({ type: 'error', title: 'Erro', message: 'Adiciona um nome para a receita.' }); return; }
+    if (!drafts.length) { setModal({ type: 'error', title: 'Erro', message: 'Adiciona pelo menos um ingrediente.' }); return; }
+    setPendingAction('saveAndLog');
+    setPickerVisible(true);
+  };
+
+  const onMealTypeSelect = async (selectedMealType: MealType) => {
+    setPickerVisible(false);
+    const recipe = buildRecipe(selectedMealType);
     if (!recipe) return;
 
     try {
       const saved = await addRecipe(recipe);
       if (!saved) return;
-      dispatch({
-        type: 'ADD_MEAL_LOG',
-        payload: {
-          id: `log_${Date.now()}`,
-          date: todayDate,
-          recipeId: saved.id,
-          recipeName: saved.name,
-          mealType: saved.mealType,
-          macros: saved.macros,
-          cost: saved.cost,
-        },
-      });
 
-      setModal({ type: 'success', title: 'Guardado & registado!', message: `${saved.name} foi adicionada e registada.`, action: () => navigation.goBack() });
+      if (pendingAction === 'saveAndLog') {
+        dispatch({
+          type: 'ADD_MEAL_LOG',
+          payload: {
+            id: `log_${Date.now()}`,
+            date: todayDate,
+            recipeId: saved.id,
+            recipeName: saved.name,
+            mealType: saved.mealType,
+            macros: saved.macros,
+            cost: saved.cost,
+          },
+        });
+        setModal({ type: 'success', title: 'Guardado & registado!', message: `${saved.name} foi adicionada e registada.`, action: () => navigation.goBack() });
+      } else {
+        setModal({ type: 'success', title: 'Guardado!', message: `${saved.name} adicionada às tuas receitas.`, action: () => navigation.goBack() });
+      }
     } catch {
       setModal({ type: 'error', title: 'Erro', message: 'Não foi possível guardar a receita no Supabase.' });
+    } finally {
+      setPendingAction(null);
     }
   };
 
@@ -285,6 +296,15 @@ export default function CreateRecipeScreen({ navigation }: Props) {
         ingredients={drafts.map(d => ({ name: d.ingredient.name, weightG: d.weightG }))}
         onClose={() => setAiModalVisible(false)}
         onApply={(suggestionInstructions) => setInstructions(suggestionInstructions)}
+      />
+
+      <MealTypePicker
+        visible={pickerVisible}
+        onSelect={onMealTypeSelect}
+        onClose={() => {
+          setPickerVisible(false);
+          setPendingAction(null);
+        }}
       />
     </KeyboardAvoidingView>
   );
