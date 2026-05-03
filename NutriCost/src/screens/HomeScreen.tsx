@@ -6,6 +6,7 @@ import { useApp } from '../context/AppContext';
 import Card from '../components/Card';
 import { HomeScreenProps } from '../navigation/types';
 import { C, R, MEAL_COLOR } from '../theme';
+import { getFirstName } from '../utils/name';
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   const insets = useSafeAreaInsets();
@@ -27,7 +28,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       <StatusBar barStyle="light-content" />
       <View style={s.hdr}>
         <Text style={s.greeting}>{greeting()}</Text>
-        <Text style={s.name}>{state.profile.name}</Text>
+        <Text style={s.name}>{getFirstName(state.profile.name)}</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={s.scroll}>

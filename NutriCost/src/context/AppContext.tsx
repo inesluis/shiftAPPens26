@@ -13,6 +13,7 @@ interface State {
 type Action =
   | { type: 'HYDRATE'; payload: Partial<Omit<State, 'isLoading'>> }
   | { type: 'SET_PROFILE'; payload: UserProfile }
+  | { type: 'SET_PROFILE_NAME'; payload: string }
   | { type: 'ADD_RECIPE'; payload: Recipe }
   | { type: 'UPDATE_RECIPE'; payload: Recipe }
   | { type: 'DELETE_RECIPE'; payload: string }
@@ -36,12 +37,28 @@ const initialState: State = {
   isLoading: true,
 };
 
+type AuthUserLike = {
+  user_metadata?: {
+    name?: string | null;
+    full_name?: string | null;
+  } | null;
+  email?: string | null;
+} | null | undefined;
+
+function getAuthDisplayName(user: AuthUserLike) {
+  const rawName = user?.user_metadata?.name ?? user?.user_metadata?.full_name ?? user?.email ?? '';
+  const name = typeof rawName === 'string' ? rawName.trim() : '';
+  return name || DEFAULT_PROFILE.name;
+}
+
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'HYDRATE':
       return { ...state, ...action.payload, isLoading: false };
     case 'SET_PROFILE':
       return { ...state, profile: action.payload };
+    case 'SET_PROFILE_NAME':
+      return { ...state, profile: { ...state.profile, name: action.payload } };
     case 'ADD_RECIPE':
       return { ...state, recipes: [...state.recipes, action.payload] };
     case 'UPDATE_RECIPE':
@@ -447,11 +464,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       try {
         const raw = await AsyncStorage.getItem(STORAGE_KEY);
         const saved = raw ? (JSON.parse(raw) as Partial<Omit<State, 'isLoading'>>) : {};
+        const { data: authData } = await supabase.auth.getUser();
         const recipes = await fetchSupabaseRecipes();
         if (!isMounted) return;
+
+        const profile = saved.profile ?? DEFAULT_PROFILE;
         dispatch({
           type: 'HYDRATE',
-          payload: { ...saved, recipes },
+          payload: {
+            ...saved,
+            profile: { ...profile, name: getAuthDisplayName(authData.user ?? null) },
+            recipes,
+          },
         });
       } catch {
         if (!isMounted) return;
@@ -463,6 +487,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return () => {
       isMounted = false;
     };
+  }, []);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      dispatch({ type: 'SET_PROFILE_NAME', payload: getAuthDisplayName(session?.user ?? null) });
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   useEffect(() => {

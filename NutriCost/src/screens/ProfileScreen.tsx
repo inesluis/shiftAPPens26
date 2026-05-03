@@ -171,6 +171,9 @@ export default function ProfileScreen() {
       heightCm: parseFloat(height) || 0,
       macroGoals: { calories: cal, protein, carbs, fat },
     };
+    supabase.auth.updateUser({
+      data: { name: name.trim() },
+    }).catch(() => null);
     dispatch({ type: 'SET_PROFILE', payload: updated });
     setModal({ type: 'save', title: 'Guardado!', message: 'Perfil atualizado.' });
   };
