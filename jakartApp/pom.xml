@@ -150,7 +150,7 @@
                 <configuration>
                     <executable>java</executable>
                     <arguments>
-                        <argument>-Djavax.net.ssl.trustStore=C:/Program Files/Java/jdk-25.0.2/lib/security/cacerts</argument>
+                        <argument>-Djavax.net.ssl.trustStore=${env.JAVA_HOME}/lib/security/cacerts</argument>
                         <argument>-jar</argument>
                         <argument>${project.build.directory}/glassfish-embedded.jar</argument>
                         <argument>deploy --contextroot=/jakartApp target/${project.build.finalName}.war</argument>

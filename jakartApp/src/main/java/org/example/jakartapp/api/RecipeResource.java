@@ -5,6 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.jakartapp.dto.RecipeCostResponse;
+import org.example.jakartapp.dto.RecipeCostWithProductsResponse;
 import org.example.jakartapp.dto.RecipeRequest;
 import org.example.jakartapp.dto.RecipeResponse;
 import org.example.jakartapp.entity.Recipe;
@@ -89,9 +90,15 @@ public class RecipeResource {
     @GET
     @Path("/{id}")
     public Response getRecipeById(@PathParam("id") Long id, @QueryParam("isCustom") @DefaultValue("false") boolean isCustom) {
-        Recipe r = recipeRepository.findById(id);
-        if (r == null) return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.ok(r).build();
+        if (isCustom) {
+            UserRecipe ur = userRecipeRepository.findById(id);
+            if (ur == null) return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.ok(ur).build();
+        } else {
+            Recipe r = recipeRepository.findById(id);
+            if (r == null) return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.ok(r).build();
+        }
     }
 
     @GET
@@ -110,17 +117,6 @@ public class RecipeResource {
         }
 
         List<RecipeCostResponse> costs = recipeCostRepository.findCostsByRecipeId(id);
-        return Response.ok(costs).build();
-    }
-
-    @GET
-    @Path("/{id}/costs/detailed")
-    public Response getRecipeCostsDetailed(@PathParam("id") Long id){
-        Recipe recipe = recipeRepository.findById(id);
-        if(recipe==null){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        List<RecipeCostWithProductsResponse> costs = recipeCostRepository.findCostsByRecipeIdWithProdcuts(id);
         return Response.ok(costs).build();
     }
 

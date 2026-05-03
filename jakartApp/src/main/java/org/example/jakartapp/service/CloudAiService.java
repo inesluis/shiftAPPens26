@@ -29,15 +29,21 @@ public class CloudAiService implements AiService {
 
     @Override
     public RecipeResponse generateRecipe(RecipeRequest request) {
-        // This is a placeholder implementation as seen in the original code
-        return new RecipeResponse(
-                request.name(),
-                request.type(),
-                List.of(
-                        "Prepare Ingredients: " + String.join(", ", request.ingredients()),
-                        "Cook everything step by step"
-                )
+        String prompt = String.format(
+                "Act as a professional chef. Generate a detailed cooking recipe for '%s' which is a '%s' dish.\n" +
+                "Ingredients to use: %s.\n" +
+                "Provide the instructions as a simple list of steps, one step per line. Do not include numbers or bullet points.",
+                request.name(), request.type(), String.join(", ", request.ingredients())
         );
+
+        String response = model.chat(prompt);
+        
+        List<String> instructions = java.util.Arrays.stream(response.split("\n"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+
+        return new RecipeResponse(request.name(), request.type(), instructions);
     }
 
     @Override

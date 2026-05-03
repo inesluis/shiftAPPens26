@@ -1,21 +1,28 @@
 @echo off
-set JAVA_HOME=C:\Program Files\Java\jdk-25.0.2
-set PATH=%JAVA_HOME%\bin;%PATH%
+setlocal enabledelayedexpansion
 
-:: Database Variables
-set DB_URL=jdbc:postgresql://aws-0-eu-west-1.pooler.supabase.com:5432/postgres
-set DB_USER=postgres.gcdqszdosvvhxcxczgzt
-set DB_PASSWORD=shift26maquinas
+:: Detect Local IP Address
+for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /c:"IPv4 Address"') do (
+    set IP=%%a
+    set IP=!IP: =!
+)
 
 echo ------------------------------------------
 echo Starting Jakarta App Restructuring Project
-echo Using Java from: %JAVA_HOME%
+if "%JAVA_HOME%"=="" (
+    echo WARNING: JAVA_HOME is not set. Using system default 'java'.
+) else (
+    echo Using Java from: %JAVA_HOME%
+)
 echo.
 echo ACCESS URLS:
 echo Local:    http://localhost:8080/jakartApp/api
-echo External: http://192.168.20.79:8080/jakartApp/api
+if not "%IP%"=="" (
+    echo External: http://%IP%:8080/jakartApp/api
+)
 echo ------------------------------------------
 
+:: Display java version for debugging
 java -version
 
 :: Run the application using the Maven Wrapper
