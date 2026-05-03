@@ -172,6 +172,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const API_BASE_URL = 'http://192.168.20.79:8080/jakartApp/api';
 
+  const fetchCuratedRecipeCost = async (recipeId: number): Promise<number> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/recipes/${recipeId}/costs`);
+      if (!response.ok) return 0;
+
+      const costs = await response.json();
+      if (!Array.isArray(costs) || costs.length === 0) return 0;
+
+      const best = costs.reduce((currentBest: any, candidate: any) => {
+        const currentValue = Number(currentBest?.totalCost ?? Number.POSITIVE_INFINITY);
+        const candidateValue = Number(candidate?.totalCost ?? Number.POSITIVE_INFINITY);
+        return candidateValue < currentValue ? candidate : currentBest;
+      }, costs[0]);
+
+      return Number(best?.totalCost ?? 0);
+    } catch {
+      return 0;
+    }
+  };
+
   const fetchRecipesFromApi = async () => {
     try {
       const { data: authData } = await supabase.auth.getUser();
@@ -195,7 +215,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         return [];
       }
       
-      const curated = (data.curated || []).map((r: any) => ({
+      const curated = await Promise.all((data.curated || []).map(async (r: any) => ({
         id: toCuratedId(r.recipeId),
         name: r.recipeName ?? 'Recipe',
         mealType: 'Almoço' as MealType,
@@ -206,11 +226,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           carbs: Math.round(r.carbs ?? 0),
           fat: Math.round(r.fat ?? 0),
         },
-        cost: 0,
+        cost: await fetchCuratedRecipeCost(r.recipeId),
         ingredients: [],
         instructions: r.instructions ?? undefined,
         isCustom: false,
-      }));
+      })));
 
       const user = (data.user || []).map((r: any) => ({
         id: toUserId(r.userRecipeId),
