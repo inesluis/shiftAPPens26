@@ -102,7 +102,9 @@ public class RecipeResource {
                 )
             ).toList();
 
-            return Response.ok(new org.example.jakartapp.dto.RecipeDetailResponse(null, ur, ingredientDetails, List.of())).build();
+            List<RecipeCostResponse> costs = recipeCostRepository.findUserCostsByRecipeId(id);
+
+            return Response.ok(new org.example.jakartapp.dto.RecipeDetailResponse(null, ur, ingredientDetails, costs)).build();
         }
 
         Recipe r = recipeRepository.findById(id);
