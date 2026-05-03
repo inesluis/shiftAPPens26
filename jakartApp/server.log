@@ -1,0 +1,112 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< org.example:jakartApp >------------------------
+[INFO] Building jakartApp 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO] 
+[INFO] --- exec:3.1.0:exec (default-cli) @ jakartApp ---
+GlassFish will start now. Welcome!
+mai. 02, 2026 10:35:16 DA TARDE com.sun.enterprise.v3.server.CommonClassLoaderServiceImpl findDerbyJars
+INFO: Cannot find javadb client jar file, derby jdbc driver will not be available by default: DerbyDB home is not set.
+mai. 02, 2026 10:35:16 DA TARDE com.sun.enterprise.v3.server.SystemTasksImpl postConstruct
+INFO: Loaded embedded server named: server
+mai. 02, 2026 10:35:16 DA TARDE org.glassfish.security.services.impl.authorization.AuthorizationServiceImpl initialize
+INFO: Authorization Service has successfully initialized.
+mai. 02, 2026 10:35:17 DA TARDE org.hibernate.validator.internal.util.Version <clinit>
+INFO: HV000001: Hibernate Validator 9.1.0.Final
+mai. 02, 2026 10:35:17 DA TARDE org.glassfish.main.boot.embedded.AutoDisposableGlassFish <init>
+INFO: Setting system property org.glassfish.embeddable.autoDelete from GlassFish properties, it doesn't match any known property
+mai. 02, 2026 10:35:18 DA TARDE com.sun.enterprise.v3.services.impl.GrizzlyProxy start0
+INFO: Grizzly Framework 5.0.0 started in: 74 ms - bound to [/0.0.0.0:8080]
+mai. 02, 2026 10:35:18 DA TARDE com.sun.enterprise.v3.services.impl.GrizzlyService createNetworkProxy
+INFO: Network listener https-listener on port 0 disabled per domain.xml
+mai. 02, 2026 10:35:18 DA TARDE com.sun.enterprise.v3.admin.adapter.AdminEndpointDecider setGuiContextRoot
+INFO: Admin Console Adapter: context root: /admin
+mai. 02, 2026 10:35:18 DA TARDE com.sun.enterprise.v3.admin.adapter.AdminEndpointDecider setGuiContextRoot
+INFO: Admin Console Adapter: context root: /admin
+mai. 02, 2026 10:35:18 DA TARDE com.sun.enterprise.v3.admin.adapter.AdminEndpointDecider setGuiContextRoot
+INFO: Admin Console Adapter: context root: /admin
+mai. 02, 2026 10:35:18 DA TARDE com.sun.enterprise.v3.server.AppServerStartup postStartupJob
+INFO: GlassFish  (commit: null) startup time: Embedded (1 862 ms), startup services (546 ms), total (2 408 ms)
+mai. 02, 2026 10:35:18 DA TARDE com.sun.enterprise.connectors.jms.util.JmsRaUtil upgradeIfNecessary
+INFO: No JMS RA installation RAR found on path C:\Users\carol\AppData\Local\Temp\gfembed15352453687147663998tmp\lib\install\applications\jmsra\imqjmsra.rar. Nothing for upgrade.
+mai. 02, 2026 10:35:18 DA TARDE org.glassfish.admin.mbeanserver.JMXStartupService$JMXConnectorsStarterThread run
+INFO: JMXStartupService has disabled JMXConnector system
+mai. 02, 2026 10:35:19 DA TARDE com.sun.enterprise.security.ee.authorization.PolicyLoader loadPolicy
+INFO: Loading policy provider org.glassfish.exousia.modules.def.DefaultPolicy.
+mai. 02, 2026 10:35:19 DA TARDE com.sun.enterprise.security.SecurityLifecycle onInitialization
+INFO: Entering Security Startup Service.
+mai. 02, 2026 10:35:19 DA TARDE com.sun.enterprise.security.auth.realm.Realm doInstantiate
+INFO: Realm [admin-realm] of classtype [com.sun.enterprise.security.auth.realm.file.FileRealm] successfully created.
+mai. 02, 2026 10:35:19 DA TARDE com.sun.enterprise.security.auth.realm.Realm doInstantiate
+INFO: Realm [file] of classtype [com.sun.enterprise.security.auth.realm.file.FileRealm] successfully created.
+mai. 02, 2026 10:35:19 DA TARDE com.sun.enterprise.security.auth.realm.Realm doInstantiate
+INFO: Realm [certificate] of classtype [com.sun.enterprise.security.auth.realm.certificate.CertificateRealm] successfully created.
+mai. 02, 2026 10:35:19 DA TARDE com.sun.enterprise.security.SecurityLifecycle onInitialization
+INFO: Security Service(s) started successfully.
+mai. 02, 2026 10:35:19 DA TARDE com.sun.enterprise.server.logging.ServerLogFileService getCurrentLogFile
+WARNING: The GlassFishLogHandler was not found, returning null
+mai. 02, 2026 10:35:20 DA TARDE com.sun.enterprise.web.WebContainer createHttpListener
+INFO: Created HTTP listener http-listener on host/port 0.0.0.0:8080
+mai. 02, 2026 10:35:20 DA TARDE jakarta.enterprise.web.vs.server
+SEVERE: Error adding HttpProbes. NetworkListener https-listeners GrizzlyProxy is NULL
+mai. 02, 2026 10:35:20 DA TARDE com.sun.enterprise.web.WebContainer createHosts
+INFO: Created virtual server server
+mai. 02, 2026 10:35:20 DA TARDE org.apache.catalina.realm.JAASRealm setContainer
+INFO: Setting JAAS app name glassfish-web
+mai. 02, 2026 10:35:20 DA TARDE com.sun.enterprise.web.WebContainer loadSystemDefaultWebModules
+INFO: Virtual server server loaded default web module 
+mai. 02, 2026 10:35:20 DA TARDE jakarta.enterprise.resource.resourceadapter.com.sun.enterprise.connectors.service
+INFO: Probably the pool PoolInfo[jndiName=DerbyPool, applicationName=null, moduleName=null] is not yet initialized (lazy-loading), trying to check ...
+mai. 02, 2026 10:35:20 DA TARDE jakarta.enterprise.resource.resourceadapter.com.sun.enterprise.resource.pool
+INFO: Created connection pool and added it to PoolManager: Pool [PoolInfo[jndiName=DerbyPool, applicationName=null, moduleName=null]] PoolSize=0  FreeResources=0  QueueSize=0 matching=off validation=off
+mai. 02, 2026 10:35:21 DA TARDE org.glassfish.web.loader.WebappClassLoader close
+INFO: close(), this:
+org.glassfish.web.loader.WebappClassLoader@14b95942[name=jakartApp-1.0-SNAPSHOT], urls=[
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/classes/
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/checker-qual-3.42.0.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/dotenv-java-3.0.2.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/jackson-annotations-2.21.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/jackson-core-2.21.1.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/jackson-databind-2.21.1.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/jspecify-1.0.0.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/jtokkit-1.1.0.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/langchain4j-1.13.1.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/langchain4j-core-1.13.1.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/langchain4j-http-client-1.13.1.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/langchain4j-http-client-jdk-1.13.1.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/langchain4j-open-ai-1.13.1.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/opennlp-tools-2.5.4.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/postgresql-42.7.2.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/lib/slf4j-api-2.0.17.jar
+file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/generated/ejb/jakartApp-1.0-SNAPSHOT/
+][delegate=true, context=jakartApp-1.0-SNAPSHOT, status=RUNNING, antiJARLocking=false, repositories=RepositoryManager[WEB-INF/classes/], notFound.size=37, pathTimestamps.size=43, resourceEntryCache.size=31]
+mai. 02, 2026 10:35:21 DA TARDE org.eclipse.persistence.session./file:/C:/Users/carol/AppData/Local/Temp/gfembed15352453687147663998tmp/applications/jakartApp-1.0-SNAPSHOT/WEB-INF/classes/_shiftappensPU
+INFO: EclipseLink, version: Eclipse Persistence Services - 5.0.0.v202603230926-bc4f4eb36eb1dcce223533d87890ba458628a2f9
+mai. 02, 2026 10:35:22 DA TARDE org.jboss.weld.bootstrap.WeldStartup <clinit>
+INFO: WELD-000900: 6.0.4 (Final)
+mai. 02, 2026 10:35:22 DA TARDE org.glassfish.weld.WeldDeployer enable
+INFO: Enabling Weld for ApplicationInfo[name=jakartApp-1.0-SNAPSHOT]
+mai. 02, 2026 10:35:22 DA TARDE org.jboss.weld.event.ExtensionObserverMethodImpl checkRequiredTypeAnnotations
+INFO: WELD-000411: Observer method [BackedAnnotatedMethod] public org.glassfish.jersey.ext.cdi1x.internal.ProcessAllAnnotatedTypes.processAnnotatedType(@Observes ProcessAnnotatedType<?>, BeanManager) receives events for all annotated types. Consider restricting events using @WithAnnotations or a generic type with bounds.
+mai. 02, 2026 10:35:23 DA TARDE org.glassfish.soteria.servlet.SamRegistrationInstaller onStartup
+INFO: Initializing Soteria null for context '/jakartApp'
+mai. 02, 2026 10:35:23 DA TARDE com.sun.enterprise.web.WebApplication start
+INFO: Loading application [jakartApp-1.0-SNAPSHOT] at [/jakartApp]
+mai. 02, 2026 10:35:23 DA TARDE org.glassfish.deployment.admin.DeployCommand execute
+INFO: jakartApp-1.0-SNAPSHOT was successfully deployed in 5 345 milliseconds.
+mai. 02, 2026 10:35:23 DA TARDE org.glassfish.runnablejar.UberMain executeCommandFromString
+INFO: SUCCESS: PlainTextActionReporterSUCCESSDescription: deploy AdminCommandApplication deployed with name jakartApp-1.0-SNAPSHOT.
+    [name=jakartApp-1.0-SNAPSHOT
+
+
+
+########################## GLASSFISH STARTED ##########################
+#                                                                     #
+# jakartApp-1.0-SNAPSHOT deployed at: http://localhost:8080/jakartApp #
+#                                                                     #
+#######################################################################
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.

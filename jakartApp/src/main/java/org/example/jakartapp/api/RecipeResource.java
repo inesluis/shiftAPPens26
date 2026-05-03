@@ -124,6 +124,18 @@ public class RecipeResource {
         return Response.ok(costs).build();
     }
 
+    @GET
+    @Path("/{id}/costs/detailed")
+    public Response getRecipeCostsDetailed(@PathParam("id") Long id) {
+        Recipe recipe = recipeRepository.findById(id);
+        if (recipe == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        List<RecipeCostWithProductsResponse> costs = recipeCostRepository.findCostsByRecipeIdWithProducts(id);
+        return Response.ok(costs).build();
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
