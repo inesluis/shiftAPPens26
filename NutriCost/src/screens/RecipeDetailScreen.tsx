@@ -120,10 +120,10 @@ function sumMacros(drafts: RecipeIngredient[]) {
             if (!source) return acc;
             const f = d.weightG / 100;
             return {
-                calories: acc.calories + source.calories * f,
-                protein: acc.protein + source.protein * f,
-                carbs: acc.carbs + source.carbs * f,
-                fat: acc.fat + source.fat * f,
+                calories: acc.calories + (source.calories ?? 0) * f,
+                protein: acc.protein + (source.protein ?? 0) * f,
+                carbs: acc.carbs + (source.carbs ?? 0) * f,
+                fat: acc.fat + (source.fat ?? 0) * f,
             };
         },
         { calories: 0, protein: 0, carbs: 0, fat: 0 },

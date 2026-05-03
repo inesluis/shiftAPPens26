@@ -75,7 +75,7 @@ public class IngredientResource {
                 Map<String, Double> storePrices = new HashMap<>();
                 storePrices.put(store, pricePerKg);
                 
-                org.example.jakartapp.dto.ProductSearchResponse.Macros macros = new org.example.jakartapp.dto.ProductSearchResponse.Macros(
+                org.example.jakartapp.dto.ProductSearchResponse.Macros macrosPer100g = new org.example.jakartapp.dto.ProductSearchResponse.Macros(
                     toPer100g(pp.getProduct().getEnergyKcal(), pp.getProduct().getWeight()),
                     toPer100g(pp.getProduct().getProtein(), pp.getProduct().getWeight()),
                     toPer100g(pp.getProduct().getCarbohydrates(), pp.getProduct().getWeight()),
@@ -88,7 +88,7 @@ public class IngredientResource {
                     pp.getProduct().getProductName(),
                     pp.getProduct().getProductBrand() != null ? pp.getProduct().getProductBrand() : pp.getProduct().getProductName(),
                     storePrices,
-                    macros
+                    macrosPer100g
                 ));
             }
         }

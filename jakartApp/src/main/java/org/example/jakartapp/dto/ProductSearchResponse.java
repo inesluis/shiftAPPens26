@@ -8,7 +8,7 @@ public record ProductSearchResponse(
     String productName,
     String brand,
     Map<String, Double> prices,
-    Macros macros
+    Macros macrosPer100g
 ) {
     public record Macros(
         Double calories,
