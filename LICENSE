@@ -1,0 +1,136 @@
+Eclipse Public License - v 2.0
+
+    THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS ECLIPSE
+    PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF
+    THE PROGRAM CONSTITUTES RECIPIENT'S ACCEPTANCE OF THIS AGREEMENT.
+
+1. DEFINITIONS
+
+"Contribution" means:
+  a) in the case of the initial Contributor, the initial content
+     Distributed under this Agreement, and
+  b) in the case of each subsequent Contributor:
+     i) changes to the Program, and
+     ii) additions to the Program;
+     where such changes and/or additions to the Program originate from
+     and are Distributed by that particular Contributor. A Contribution
+     "originates" from a Contributor if it is created by such the
+     Contributor itself or anyone acting on such Contributor's behalf.
+     Contributions do not include changes or additions to the Program that
+     are not Modified Works.
+
+"Contributor" means any person or entity that Distributes the Program.
+
+"Licensed Patents" mean patent claims licensable by a Contributor which
+are necessarily infringed by the use or sale of its Contribution alone
+or when combined with the Program.
+
+"Program" means the Contributions Distributed in accordance with this
+Agreement.
+
+"Recipient" means anyone who receives the Program under this Agreement,
+including all Contributors.
+
+"Derivative Works" means the Program and any modifications, enhancements,
+improvements, or other changes to the Program.
+
+2. GRANT OF RIGHTS
+
+Subject to the terms of this Agreement, each Contributor hereby grants
+Recipient a non-exclusive, worldwide, royalty-free license to:
+
+  a) reproduce the Contribution in unmodified form,
+  b) prepare Derivative Works based on the Contribution,
+  c) distribute copies of the Contribution,
+  d) distribute copies of the Derivative Works based on the Contribution,
+  e) publicly display, publicly perform, sublicense and distribute the
+     Contribution and Derivative Works thereof, and
+  f) grant recipients of the Program/Derivative Works a license to the
+     Licensed Patents to the extent necessary to utilize, reproduce,
+     prepare Derivative Works of, publicly display, publicly perform,
+     sublicense and distribute the Contribution and Derivative Works
+     thereof.
+
+3. REQUIREMENTS
+
+A Contributor may choose to distribute the Program (including its
+Contributions) under this Agreement ("Incompatible License" shall mean
+any license that requires as a condition of use, modification and/or
+distribution of the Program, that the Program (or any Derivative Works
+of it) be made available in source code form and that any such program
+be licensed to third parties under terms compatible with the terms of
+this Agreement) either:
+
+  a) under the terms of this Agreement, as Contributor or
+  b) under the terms of any license that is compatible with the terms of
+     this Agreement, provided that the license preserves the provisions
+     of this Agreement.
+
+Recipient may not use the Program under an Incompatible License.
+
+3.1 If Recipient elects to distribute the Program under the terms of an
+Incompatible License, then Recipient agrees to:
+
+  a) indemnify and hold harmless each Contributor for any damages
+     (direct, indirect, special, incidental and consequential damages,
+     including lost profits) arising out of such Recipient's use of the
+     Program under an Incompatible License,
+  b) provide a copy of the Incompatible License to each Contributor, and
+  c) provide a prominent notice that the Program is distributed under an
+     Incompatible License.
+
+4. COMMERCIAL DISTRIBUTION
+
+Commercial distributors of software may accept certain responsibilities
+with respect to end users, business partners and the like. While this
+license applies to legal entities, the individual may deem additional
+or different license terms and conditions for use, reproduction or
+distribution of the modifications when such modification is distributed
+by such entity.
+
+5. NO WARRANTY
+
+EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, THE PROGRAM IS PROVIDED
+ON AN "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER
+EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR
+CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+PARTICULAR PURPOSE. Each Recipient is solely responsible for determining
+the appropriateness of using and distributing the Program and assumes all
+risks associated with its exercise of rights under this Agreement,
+including but not limited to the risks and costs of program errors,
+compliance with applicable laws, damage to or loss of data, programs or
+equipment, and unavailability or interruption of operations.
+
+6. LIMITATION OF LIABILITY
+
+EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, EXCEPT FOR CLAIMS
+ARISING UNDER INDEMNIFICATION OBLIGATIONS HEREIN, NEITHER RECIPIENT NOR
+ANY CONTRIBUTOR SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, CONSEQUENTIAL OR PUNITIVE DAMAGES, INCLUDING LOST
+PROFITS, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+7. GENERAL
+
+If any provision of this Agreement is invalid or unenforceable under
+applicable law, it shall not affect the validity or enforceability of
+the remainder of the terms of this Agreement, and without further action
+by the parties hereto, such provision shall be reformed to the minimum
+extent necessary to make such provision valid and enforceable.
+
+If Recipient institutes patent litigation against any entity (including a
+cross-claim or counterclaim in a lawsuit) alleging that the Program
+itself infringes such Recipient's patent(s), then such Recipient's rights
+granted by Section 2(b) shall terminate as of the date such litigation is
+filed.
+
+8. MISCELLANEOUS
+
+This Agreement constitutes the entire agreement between the parties and
+supersedes all prior negotiations, representations or agreements, whether
+written or oral. This Agreement may be amended only by a written document
+signed by both parties.
+
+---
+
+Copyright 2026 - Shift APPens Team
+Licensed under the Eclipse Public License 2.0
